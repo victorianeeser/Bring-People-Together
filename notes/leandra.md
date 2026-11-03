@@ -6,6 +6,7 @@
 - While people are drawing the prompt, their avatar will show the "..." in a chat bubble.
 - At the end of a round, it'll show a recap/timelapse of everyone's drawings.
 
+![Gartic Phone album recap showing Nina's "blue flower" prompt and Hayley's drawing](images/gartic-phone.gif)
 
 # 2. Netflix Party/Teleparty, a free Google Chrome Extension that allows for people who are long distance to watch the same show at the same time.
 *Design Choices*
