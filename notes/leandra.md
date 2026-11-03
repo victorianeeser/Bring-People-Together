@@ -22,3 +22,6 @@
 - It will show all users and their profile pictures at the top. 
 - You can see who added what song, their profile picture will be beside the song on queue.
 - When it is paused, it is paused for everyone. When a song is skipped, it skips for everyone. 
+
+![alt text](image.png)
+
