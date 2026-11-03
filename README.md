@@ -3,3 +3,4 @@
 ## Group Members
 
 - Maya Walsh
+- Leandra Ho
