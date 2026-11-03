@@ -14,6 +14,7 @@
 - When someone is buffering, it will notify everyone. Also if the other person is buffering, you will be paused so that the other person can catch up and that way it still is in sync.
 - You can see when someone is typing in the chat and when people join the party.
 
+![Teleparty chat sidebar showing people joining and chatting while watching together](images/teleparty.gif)
 
 # 3. Spotify Jam, a feature on Spotify where you can listen to music with other people at the same time from anywhere.
 *Design Choices*
