@@ -10,7 +10,7 @@ We're designing for college and grad students who want to spend time with their 
 
 ### Leandra
 
-TBD
+We're designing for busy students and young workers who care about their friends but don't have the time or energy to keep up with them. Across my three interviews (a physical therapy grad student, a sporting goods salesperson and a pre-optometry senior), nobody struggled to enjoy time with friends. The problem was the effort around it. One won't reply to a text until she has the energy to match it, one never reaches out first and waits for friends to make plans, and one is so locked into exams that her friends describe her as "school and grades." What they valued most was easy, low-pressure time together: friends dropping by while they study, seeing that someone is online and hopping into a call, or playing a casual game where nothing is at stake. Big or mismatched groups felt stressful, and quick interactions like sending a reel got used far more than long messages. So we want to design a shared space that lets people feel close through simple presence and light interactions, fits into what they're already doing, and nudges them to connect without adding another thing to schedule or reply to.
 
 ### Victoria
 
