@@ -6,7 +6,7 @@
 - While people are drawing the prompt, their avatar will show the "..." in a chat bubble.
 - At the end of a round, it'll show a recap/timelapse of everyone's drawings.
 
-![Gartic Phone album recap showing Nina's "blue flower" prompt and Hayley's drawing](../images/gartic-phone.gif)
+![Gartic Phone album recap showing Nina's "blue flower" prompt and Hayley's drawing](../../images/gartic-phone.gif)
 
 # 2. Netflix Party/Teleparty, a free Google Chrome Extension that allows for people who are long distance to watch the same show at the same time.
 *Design Choices*
@@ -14,7 +14,7 @@
 - When someone is buffering, it will notify everyone. Also if the other person is buffering, you will be paused so that the other person can catch up and that way it still is in sync.
 - You can see when someone is typing in the chat and when people join the party.
 
-![Teleparty chat sidebar showing people joining and chatting while watching together](../images/teleparty.gif)
+![Teleparty chat sidebar showing people joining and chatting while watching together](../../images/teleparty.gif)
 
 # 3. Spotify Jam, a feature on Spotify where you can listen to music with other people at the same time from anywhere.
 *Design Choices*
@@ -23,4 +23,4 @@
 - You can see who added what song, their profile picture will be beside the song on queue.
 - When it is paused, it is paused for everyone. When a song is skipped, it skips for everyone. 
 
-![alt text](../images/image.png)
+![alt text](../../images/image.png)
