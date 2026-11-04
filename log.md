@@ -15,4 +15,4 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 
 ## Nov 4
 
-- **Victoria:** organized the README by name, added interview folders
+- **Victoria:** organized the README by name and the notes by person, tried 3 multiplayer products, added notes and transcripts from 3 interviews, wrote README paragraph, updated numbers and log
