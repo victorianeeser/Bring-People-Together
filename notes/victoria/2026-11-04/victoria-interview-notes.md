@@ -1,6 +1,6 @@
 # 11/4 | Victoria's Interview Notes
 
-Three interviews: Niko, Stacy and [Person 3].
+Three interviews: Niko, Stacy and Lex.
 
 ## Notes per interview
 
@@ -52,6 +52,30 @@ Three interviews: Niko, Stacy and [Person 3].
 | Walks | When weather is nice | Being outside | Weather |
 | Faraway friends | Months between visits | Talking regularly | Distance |
 
+### 3. Lex
+
+#### Main points
+- **Friends and fun matter alongside school.** Lex is a high school student who cares about family, friends and grades, and doesn't want to miss out on being a teenager.
+- **School makes friendship easy.** Most of Lex's social life comes from seeing people every day, with no planning needed.
+- **Time and transportation are the main barriers.** Homework, sports and different schedules get in the way, and most of the group can't drive yet. Money is also an issue.
+- **Deciding is the hard part.** The group spends more time working out what to do than doing it, and it's easier when someone just suggests something.
+- **In person beats online.** Social media helps people keep up, but it isn't the same as being together.
+- **Social media can leave people out.** Seeing friends post from something you weren't invited to can hurt, and posts and messages can cause drama.
+- **Graduation is coming.** Lex expects staying close to take more effort once friends leave for different colleges.
+
+#### Group activities Lex mentioned
+
+| Activity | How often | What Lex likes | What's hard |
+|---|---|---|---|
+| Close friends at school | Daily | Similar schedules and classes | Seeing them outside school |
+| Friends' group chat | Almost daily | Keeping the conversation going | Never deciding on plans |
+| School activities and sports | Regularly | Something in common with people | Takes up weeknights |
+| Food, shopping and movies | Not specified | Making memories | Cost |
+| Football games | Not specified | Hanging out with friends | Getting a ride |
+| Hanging out at someone's house | Sometimes | Easy and free | Getting a ride |
+| Snapchat and TikTok | A lot | Seeing what friends are doing | Feeling left out, drama |
+| Friends at other schools | Less often than before | Still talking | Seeing each other |
+
 ## Important quotes
 
 ### Niko
@@ -64,10 +88,18 @@ Three interviews: Niko, Stacy and [Person 3].
 - "I would love to have something where you could see when people are available and make plans without going back and forth through 50 text messages."
 - "don't wait until life slows down because I don't think it ever really does"
 
+### Lex
+- "A lot of times, we spend more time trying to figure out what everyone wants to do than actually doing something."
+- "Right now, we see each other at school without even having to plan anything."
+- "Just because someone is busy doesn't mean they don't want to spend time with you."
+
 ## Patterns across all 3
-- **[Pattern] ([how many]/3).** [What you heard and who said it.]
-- **[Pattern] ([how many]/3).** [What you heard and who said it.]
-- **[Pattern] ([how many]/3).** [What you heard and who said it.]
+- **Time is the biggest barrier (3/3).** Trading hours for Niko, work and family for Stacy, and homework and sports for Lex.
+- **Finding a time is hard for groups (3/3).** Niko aims for what works for most people, Stacy wants to avoid long text threads, and Lex's group struggles to decide.
+- **Money gets in the way too (3/3).** Niko's friends are focused on loans and houses, Stacy finds going out expensive, and Lex wants things to do that don't cost much.
+- **Regular contact makes friendship easier (3/3).** Niko has weekly routines, Stacy wishes for a monthly plan, and Lex sees friends at school every day.
+- **Small check-ins keep people close (3/3).** Niko and Lex both use group chats daily, and Stacy texts a daughter at college nearly every day.
+- **Being together still matters most (2/3).** Stacy says chats don't replace seeing someone, and Lex prefers in person.
 
 ## Design opportunities
 
@@ -85,6 +117,14 @@ Three interviews: Niko, Stacy and [Person 3].
 - **Keep it low effort:** make a coffee or a walk feel like enough, so getting together doesn't need a big event or budget.
 - **Easy check-ins:** make it simple to send a quick message between visits, especially to someone who's hard to see.
 
+### Lex
+- **Help groups decide:** suggest ideas and let the group choose quickly, so "we should hang out" turns into a plan.
+- **See when everyone is free:** show availability alongside ideas that work for the whole group.
+- **Free things to do:** point teens to low-cost options that aren't aimed at little kids or adults.
+- **Plan around rides:** make it clear how everyone will get there, since most of the group can't drive yet.
+- **Help people feel included:** make it easier to invite people and harder to feel left out by what gets posted.
+- **Stay close after graduation:** make it easy to plan weekends when everyone comes home.
+
 ## Big question
 
 ### Niko
@@ -92,3 +132,6 @@ When someone's time is taken up by work, how can a small, quick action feel like
 
 ### Stacy
 How might we turn "we should get together" into plans that actually happen, without adding more back-and-forth to already full lives?
+
+### Lex
+School brings friends together without any planning, so how might we keep that easy closeness when schedules, rides and eventually graduation pull them apart?
