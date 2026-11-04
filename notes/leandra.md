@@ -23,6 +23,6 @@
 - You can see who added what song, their profile picture will be beside the song on queue.
 - When it is paused, it is paused for everyone. When a song is skipped, it skips for everyone. 
 
-![alt text](image.png)
+![alt text](images/image.png)
 
 # 11/3 Interview Transcripts
