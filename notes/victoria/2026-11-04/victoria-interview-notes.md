@@ -2,6 +2,8 @@
 
 Three interviews: Dimitri, Stacy and Lex.
 
+📄 **Full transcripts:** [victoria-interview-transcripts.pdf](transcripts/victoria-interview-transcripts.pdf)
+
 ## Notes per interview
 
 ### 1. Dimitri
@@ -79,8 +81,8 @@ Three interviews: Dimitri, Stacy and Lex.
 ## Important quotes
 
 ### Dimitri
-- "A click of a button can show somebody that you still care about them."
-- "there's always going to be someone that can't make it"
+- "a click of a button can show somebody that you still care about them"
+- "there's always going to be someone who can't make it"
 - "the biggest thing that will help anyone connect with people is just thinking about yourself less"
 
 ### Stacy
