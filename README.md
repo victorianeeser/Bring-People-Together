@@ -14,7 +14,7 @@ We're designing for busy students and young workers who care about their friends
 
 ### Victoria
 
-TBD
+We might design for busy friend groups who care about each other but struggle to turn "we should get together" into real plans. A working 24-year-old, a mom of two and a high school student all told us the same thing: time is short, and finding a time that works is too hard. So we want to design something inside the group chats they already use that makes it easy to see who's free, decide what to do and keep getting together.
 
 ## Group Members
 
