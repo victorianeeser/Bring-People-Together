@@ -8,13 +8,13 @@ Running tally. Update every week.
 
 | | Count | Goal | Progress |
 |---|---|---|---|
-| People interviewed | 6 | 100 | 6% |
+| People interviewed | 9 | 100 | 9% |
 
 ## Weekly breakdown
 
 | Week of | Interviewed this week | Interviewed total |
 |---|---|---|
-| 2026-11-03 | 6 | 6 |
+| 2026-11-03 | 9 | 9 |
 
 ## What counts
 
