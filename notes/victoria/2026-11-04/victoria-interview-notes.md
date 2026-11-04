@@ -28,15 +28,12 @@ Three interviews: Niko, [Person 2] and [Person 3].
 | College friends' group chat | Almost every day | Staying in touch across distance | Hasn't seen them in about a year and a half |
 | Texts and calls with friends | Every once in a while | Catching up | — |
 
-#### 💬 Important quotes
-- **On balance:** "life is just about finding a balance between all those things"
-- **On planning:** "there's always going to be someone that can't make it"
-- **On what's in the way:** "But I'm just busier working."
-- **On this stage of life:** "this is definitely like a strange time in my life"
-- **On distance:** "that makes me feel terrible"
-- **On small gestures:** "A click of a button can show somebody that you still care about them."
-- **On connecting:** "the biggest thing that will help anyone connect with people is just thinking about yourself less"
-- **On reaching out:** "You have to be somebody that extends, you know, the invitation to talk or to hang out."
+## Important quotes
+
+### Niko
+- "A click of a button can show somebody that you still care about them."
+- "there's always going to be someone that can't make it"
+- "the biggest thing that will help anyone connect with people is just thinking about yourself less"
 
 ## Patterns across all 3
 - **[Pattern] ([how many]/3).** [What you heard and who said it.]
