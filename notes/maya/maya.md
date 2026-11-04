@@ -11,7 +11,7 @@
 - Spotlight and follow. Click someone's avatar to follow their view, or spotlight yourself so everyone follows you. You know you're being watched because your avatar shows who's following.
 - Comments pinned to specific spots on the canvas, with names and timestamps.
 
-![Figma file open in the editor, with the avatar of everyone in the file in the top right](images/figma.jpg)
+![Figma file open in the editor, with the avatar of everyone in the file in the top right](../images/figma.jpg)
 
 # 2. Slack, a messaging app for teams with channels, threads and calls
 *Signals that others are here*
@@ -25,7 +25,7 @@
 - Threads show a reply count and the tiny avatars of who replied.
 - No read receipts in channels. Unlike iMessage, Slack doesn't tell you who has seen a message. You only know someone read it if they react or reply, so reactions basically fill the gap read receipts would.
 
-![Slack channel with member avatars and count, the huddle headphones icon, and a green presence dot on my profile](images/slack.jpg)
+![Slack channel with member avatars and count, the huddle headphones icon, and a green presence dot on my profile](../images/slack.jpg)
 
 # 3. GamePigeon, a set of free mini games you play inside iMessage
 *Signals that others are here*
@@ -37,4 +37,4 @@
 - Replayed shots. When you open their move, you watch their shot play out before you take yours.
 - Read receipts (if turned on) show whether they've seen your move yet.
 
-![GamePigeon 8 Ball invite sent as a message bubble inside an iMessage chat, with Read under the last message](images/gamepigeon.jpg)
+![GamePigeon 8 Ball invite sent as a message bubble inside an iMessage chat, with Read under the last message](../images/gamepigeon.jpg)
