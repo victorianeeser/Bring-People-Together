@@ -140,3 +140,9 @@ How might we turn "we should get together" into plans that actually happen, with
 
 ### Lex
 School brings friends together without any planning, so how might we keep that easy closeness when schedules, rides and eventually graduation pull them apart?
+
+## Possible directions
+- **From "we should" to a real plan:** a group chat tool that shows who's free, helps the group decide and locks in the plan. (Stacy, Lex)
+- **Plans that repeat on their own:** a standing lunch, game or meetup that keeps happening even when not everyone can come. (Niko, Stacy)
+- **Small actions that feel like showing up:** quick shared moments that help friends feel together when they can't meet, including across distance. (Niko, Stacy, Lex)
+- **Easy, unplanned time together:** a way to see who's around right now and join them, like running into friends at school. (Niko, Lex)
