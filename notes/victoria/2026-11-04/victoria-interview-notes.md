@@ -104,26 +104,29 @@ Three interviews: Dimitri, Stacy and Lex.
 ## Design opportunities
 
 ### Dimitri
-- **Plan around the majority:** find the time that works for most of the group and make it easy for whoever can come, rather than waiting for everyone to be free.
-- **Build on routines people already have:** attach connection to things that already repeat, like a weekly pickleball game or a gym session, instead of asking busy people to plan something new.
-- **Fast ways to show you care:** let someone send a quick sign that they're thinking of a friend, especially when they have to say no to a plan.
-- **Keep long-distance friends in the loop:** give a daily group chat something more to do together, so friends who haven't met up in over a year still share moments.
-- **Work with what people already use:** he already has Discord, texting and group chats, so a new idea should fit in there.
+- **Plan around the majority:** pick the time that works for most people.
+- **Build on routines:** attach connection to things that already repeat.
+- **Quick ways to show you care:** send a small sign, especially when saying no to a plan.
 
 ### Stacy
-- **See when people are free:** show the group's availability so plans don't take a long text thread.
-- **Standing plans:** set up a repeating lunch or girls' night that still happens even if not everyone can come.
-- **Reminders that help plans happen:** nudge people before a plan so it doesn't get forgotten.
-- **Keep it low effort:** make a coffee or a walk feel like enough, so getting together doesn't need a big event or budget.
-- **Easy check-ins:** make it simple to send a quick message between visits, especially to someone who's hard to see.
+- **See when people are free:** skip the long text thread.
+- **Standing plans:** set up a repeating lunch or girls' night.
+- **Reminders:** nudge people so plans don't get forgotten.
 
 ### Lex
-- **Help groups decide:** suggest ideas and let the group choose quickly, so "we should hang out" turns into a plan.
-- **See when everyone is free:** show availability alongside ideas that work for the whole group.
-- **Free things to do:** point teens to low-cost options that aren't aimed at little kids or adults.
-- **Plan around rides:** make it clear how everyone will get there, since most of the group can't drive yet.
-- **Help people feel included:** make it easier to invite people and harder to feel left out by what gets posted.
-- **Stay close after graduation:** make it easy to plan weekends when everyone comes home.
+- **Help groups decide:** suggest ideas and let the group choose quickly.
+- **Low-cost things to do:** find options that work for teens.
+- **Help people feel included:** make it easier to invite people and harder to feel left out.
+
+### Combined
+- **Make finding a time easy (Dimitri, Stacy, Lex):** show who's free and pick what works for most people.
+- **Help groups decide and follow through (Stacy, Lex):** suggest ideas, choose quickly and remind people.
+- **Build on what repeats (Dimitri, Stacy):** use routines and standing plans, so nobody has to start from scratch.
+- **Make small gestures count (Dimitri, Stacy, Lex):** let people check in quickly between hangouts.
+- **Keep hangouts simple and affordable (Stacy, Lex):** make coffee, a walk or a free activity feel like enough.
+- **Stay close across distance (Dimitri, Stacy, Lex):** keep friends connected when they live far apart.
+- **Work with what people already use (Dimitri, Lex):** fit into group chats instead of adding another app.
+- **Help people feel included (Lex):** make it easier to invite people and harder to feel left out.
 
 ## Big question
 
