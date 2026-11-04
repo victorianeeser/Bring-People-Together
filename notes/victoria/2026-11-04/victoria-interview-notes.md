@@ -1,10 +1,10 @@
 # 11/4 | Victoria's Interview Notes
 
-Three interviews: Dimitri, [Person 2] and [Person 3].
+Three interviews: Niko, [Person 2] and [Person 3].
 
 ## Notes per interview
 
-### 1. Dimitri
+### 1. Niko
 
 #### Main points
 - **Balance matters most.** He cares about family, friends, his girlfriend, hobbies and work. Overworking as both an engineer and a trader left him exhausted and took attention away from people.
@@ -45,7 +45,7 @@ Three interviews: Dimitri, [Person 2] and [Person 3].
 
 ## Design opportunities
 
-### Dimitri
+### Niko
 - **Plan around the majority:** find the time that works for most of the group and make it easy for whoever can come, rather than waiting for everyone to be free.
 - **Build on routines people already have:** attach connection to things that already repeat, like a weekly pickleball game or a gym session, instead of asking busy people to plan something new.
 - **Fast ways to show you care:** let someone send a quick sign that they're thinking of a friend, especially when they have to say no to a plan.
@@ -54,5 +54,5 @@ Three interviews: Dimitri, [Person 2] and [Person 3].
 
 ## Big question
 
-### Dimitri
+### Niko
 When someone's time is taken up by work, how can a small, quick action feel like real presence for the people they care about, and not just a substitute for showing up?
