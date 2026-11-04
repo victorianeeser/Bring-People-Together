@@ -1,3 +1,74 @@
+# 11/3 | Overall Takeaways (Interviews #1–3)
+
+**Who I talked to:**
+1. DPT grad student who's also a new server (very involved, studies 3–4 hrs/day)
+2. Sporting goods salesperson who golfs and games with friends
+3. Pre-optometry undergrad senior who works a food job near campus
+
+## Patterns across all three
+
+### 1. Being near people counts as connecting
+- **#1** loves friends dropping by while she studies (shared location, open door).
+- **#2** sees a friend is *online* and just hops into a call.
+- **#3** eats breakfast and goes to the gym with her roommate, and her favorite social time is having friends over to sit and talk.
+- Nobody described long scheduled hangouts as their favorite. Easy, unplanned ways of being around each other came up most.
+
+### 2. Reaching out feels like work
+- **#1** won't reply until she can match the other person's energy, so replies can take up to 5 days, and she overthinks afterward.
+- **#2** never initiates. Friends always ask first, and he forgets to reach out.
+- **#3** is too busy and has social notifications turned off.
+- The barrier is the **effort to start or respond**, not a lack of interest.
+
+### 3. Schedules are full and unpredictable
+- All three are busy (grad school + job, full-time sales, exams every week + job).
+- **#1** and **#3** cut socializing during exam weeks. **#2** feels like time off "speeds up" and he has none.
+- Socializing has to **fit into what they're already doing** (meals, studying, work, games).
+
+### 4. Small groups at the same level work best
+- **#1** studies alone first, then reviews with others once she's ready.
+- **#3** quit big study groups because people were at different levels and help wasn't **reciprocal**. She does best with one partner on the same page.
+- **#2** prefers playing with strangers over friends because there's **less pressure**.
+- Big or mismatched groups bring stress, pressure and wasted time.
+
+### 5. Quick, low-effort ways to interact get used
+- **#1**: reels and TikToks are a "love language," and she asks friends to *emphasize* a message instead of waiting for a reply.
+- **#2**: thinks commenting is pointless but still spams W's in stream chat.
+- **#3**: watches Snapchat stories but doesn't message there.
+- People will tap, react and share long before they write a full message.
+
+### 6. Current tools are scattered and manual
+- They use texting, iMessage, Instagram DMs, Snapchat, email, GroupMe, Discord, Google Chat, Teams, Docs and PowerPoint.
+- Group work is mostly in person and "just put it in the document." **#3** has basically no collaborative projects at all.
+- **#2** has Discord servers but just uses a group chat. Simple wins over structured.
+- Notification fatigue is real. **#3** turned off social notifications entirely.
+
+### 7. Shared interests and routines start connections
+- **#2** connects through golf and snowboarding.
+- **#1** and **#3** connect through school, work and hosting.
+- Work came up for both #2 and #3 as a big source of daily interaction (regulars, one coworker, customers), but those connections stay at work.
+
+## Design opportunities
+
+| Opportunity | What it could look like | From |
+|---|---|---|
+| **Ambient presence** | See who's around or what they're doing live (studying, golfing, free) without needing to message. "Drop in" like walking into a friend's room. | #1, #2, #3 |
+| **One-tap join** | Friend is online → tap → you're in together. No scheduling. | #2 |
+| **Low-energy responses** | Reactions, "saw this, will reply later," quick shares, so caring doesn't require a full reply. | #1, #2, #3 |
+| **Nudges for non-initiators** | Light prompts like "X is free / doing Y, join?" or "you haven't talked to Z in a while," so no one always has to be the planner. | #1, #2 |
+| **Co-working / body doubling** | A shared space to work or study separately but together, which fits into busy days. | #1, #3 |
+| **Solo → shared modes** | Prep privately, then bring work into the group when ready. | #1, #3 |
+| **Same-level matching** | Find people in the same class or at the same progress so help goes both ways. | #3 |
+| **Low-stakes play** | Casual, co-op, chaotic activities (like "friend slop" games or Gartic Phone) instead of competitive pressure. | #2 |
+| **Conversation prompts** | Built-in icebreakers or deep questions (like the card games #3 plays when hosting). | #3 |
+| **Quiet by default** | Easy to check, not noisy. Respect people who turn notifications off. | #3 |
+| **Privacy & control** | Choose who sees your status and posts (why Snapchat stories feel personal). | #3 |
+| **Keep it simple** | Group chat + call beats complex servers for small friend groups. | #2 |
+
+## Big question going forward
+**How might we help busy people feel close to friends through easy, low-pressure ways of being together, without adding another thing to schedule or reply to?**
+
+---
+
 # 11/3 | Interview #1 Takeaways
 
 📄 **Full transcript:** [leandra-interview-1-transcript.pdf](transcripts/leandra-interview-1-transcript.pdf)
