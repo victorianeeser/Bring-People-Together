@@ -18,15 +18,15 @@ Three interviews: Niko, [Person 2] and [Person 3].
 
 | Activity | How often | What he likes | What's hard |
 |---|---|---|---|
-| Friend group (about 10 guys) | Plans regularly through the week | Everyone knows each other and gets to see each other | Finding a time; someone can always miss it; trading hours clash on weekdays |
-| Pickleball with friends | A couple of times a week | One of his main hobbies; all his buddies play | — |
-| Fishing with friends | Mostly summer weekends | One of his favorite hobbies; relaxed time outdoors together | Harder now that the weather has turned and he's been busy |
-| Gym with friends | Not specified | Training together | Sessions suffer when he hasn't slept well |
-| Family's cafe | Some weekdays when he's home | Hanging out with three of his best friends while they work | Only when he isn't traveling for work |
-| Trading with friends | Day to day | Works with them, then hangs out outside work | Late sessions cost him sleep and time with others |
-| Discord and video games | Occasional | Talking while playing different games; chatting late at night | — |
-| College friends' group chat | Almost every day | Staying in touch across distance | Hasn't seen them in about a year and a half |
-| Texts and calls with friends | Every once in a while | Catching up | — |
+| Friend group (about 10) | Regularly | Seeing everyone | Finding a time |
+| Pickleball | Couple times a week | Main hobby with buddies | — |
+| Fishing | Summer weekends | Favorite hobby, outdoors | Weather, busy |
+| Gym | Not specified | Training together | Poor sleep |
+| Family's cafe | Some weekdays | Time with best friends | Work travel |
+| Trading | Daily | Working with friends | Late hours |
+| Discord and games | Occasional | Late-night chats | — |
+| College group chat | Almost daily | Staying in touch | Distance |
+| Texts and calls | Now and then | Catching up | — |
 
 ## Important quotes
 
