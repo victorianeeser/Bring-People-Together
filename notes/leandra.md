@@ -24,5 +24,3 @@
 - When it is paused, it is paused for everyone. When a song is skipped, it skips for everyone. 
 
 ![alt text](images/image.png)
-
-# 11/3 Interview Transcripts
