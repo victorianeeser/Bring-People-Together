@@ -1,6 +1,8 @@
 # Bring-People-Together
 
-## Who we're designing for and why
+## Who we might be designing for, and why
+
+Week 1 homework: one paragraph each. Rewrite this section whenever the project changes.
 
 ### Maya
 
