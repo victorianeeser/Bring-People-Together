@@ -25,15 +25,15 @@ The storyboard used Crazy Eights. A full card game takes too long when people ar
 6. The winner gets a "You pick dinner" screen with one-tap suggestions taken from the chat, or can type their own.
 7. The winner's **SETTLED: Sushi** message lands in the chat "Sent with Confetti", and everyone sees the confetti.
 
-## Screens
+## Prototype 1 screens
 
 | | | |
 |---|---|---|
-| ![Join screen](screens/01-join-screen.png)<br>**Join.** Each tester types their name on their own phone. | ![Group chat going in circles](screens/02-group-chat-going-in-circles.png)<br>**The problem.** The chat goes in circles. Nobody decides. | ![Plus drawer with Settle It](screens/03-plus-drawer-with-settle-it-app.png)<br>**Find it.** Settle It lives in the iMessage + drawer, like GamePigeon. |
-| ![Settle It setup sheet](screens/04-settle-it-setup-sheet.png)<br>**Set it up.** Category, the options people mentioned, game, and join time. | ![Lobby waiting for the group](screens/05-lobby-waiting-for-the-group.png)<br>**Lobby.** Countdown, what's on the table, and who's in. | ![Game bubble in the chat](screens/06-game-bubble-in-the-chat.png)<br>**In the chat.** The game posts as an app bubble that updates live. |
-| ![Quick Draw wait for green](screens/07-quick-draw-wait-for-green.png)<br>**Quick Draw.** Wait for it… | ![Quick Draw tap now](screens/08-quick-draw-tap-now.png)<br>**Tap!** Fastest tap wins the round. | ![Quick Draw round results](screens/09-quick-draw-round-results.png)<br>**Round results.** Everyone's reaction time. |
-| ![Lucky Draw tap your card](screens/10-lucky-draw-tap-your-card.png)<br>**Lucky Draw.** Tap to flip your card. | ![Lucky Draw high card reveal](screens/11-lucky-draw-high-card-reveal.png)<br>**Reveal.** The high card wins. | ![Others wait while winner picks](screens/12-others-wait-while-winner-picks.png)<br>**Winner picks.** Everyone else watches the typing dots. |
-| ![Settled result sent to chat](screens/13-settled-result-sent-to-chat.png)<br>**Settled.** The pick lands in the chat with confetti, and the group reacts. | | |
+| ![Join screen](prototype-1-screens/01-join-screen.png)<br>**Join.** Each tester types their name on their own phone. | ![Group chat going in circles](prototype-1-screens/02-group-chat-going-in-circles.png)<br>**The problem.** The chat goes in circles. Nobody decides. | ![Plus drawer with Settle It](prototype-1-screens/03-plus-drawer-with-settle-it-app.png)<br>**Find it.** Settle It lives in the iMessage + drawer, like GamePigeon. |
+| ![Settle It setup sheet](prototype-1-screens/04-settle-it-setup-sheet.png)<br>**Set it up.** Category, the options people mentioned, game, and join time. | ![Lobby waiting for the group](prototype-1-screens/05-lobby-waiting-for-the-group.png)<br>**Lobby.** Countdown, what's on the table, and who's in. | ![Game bubble in the chat](prototype-1-screens/06-game-bubble-in-the-chat.png)<br>**In the chat.** The game posts as an app bubble that updates live. |
+| ![Quick Draw wait for green](prototype-1-screens/07-quick-draw-wait-for-green.png)<br>**Quick Draw.** Wait for it… | ![Quick Draw tap now](prototype-1-screens/08-quick-draw-tap-now.png)<br>**Tap!** Fastest tap wins the round. | ![Quick Draw round results](prototype-1-screens/09-quick-draw-round-results.png)<br>**Round results.** Everyone's reaction time. |
+| ![Lucky Draw tap your card](prototype-1-screens/10-lucky-draw-tap-your-card.png)<br>**Lucky Draw.** Tap to flip your card. | ![Lucky Draw high card reveal](prototype-1-screens/11-lucky-draw-high-card-reveal.png)<br>**Reveal.** The high card wins. | ![Others wait while winner picks](prototype-1-screens/12-others-wait-while-winner-picks.png)<br>**Winner picks.** Everyone else watches the typing dots. |
+| ![Settled result sent to chat](prototype-1-screens/13-settled-result-sent-to-chat.png)<br>**Settled.** The pick lands in the chat with confetti, and the group reacts. | | |
 
 ## How the prototype changed while building it
 1. **First version:** a plain chat with a big green "game table" screen and an orange Settle it button. It worked, but it didn't feel like a group chat people already use.
