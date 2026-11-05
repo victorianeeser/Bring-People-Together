@@ -1,12 +1,12 @@
 # 11/4 | Victoria's Interview Notes
 
-Three interviews: Niko, Stacy and Lex.
+Three interviews: Dimitri, Stacy and Lex.
 
 📄 **Full transcripts:** [victoria-interview-transcripts.pdf](transcripts/victoria-interview-transcripts.pdf)
 
 ## Notes per interview
 
-### 1. Niko
+### 1. Dimitri
 
 #### Main points
 - **Balance matters most.** He cares about family, friends, his girlfriend, hobbies and work. Overworking as both an engineer and a trader left him exhausted and took attention away from people.
@@ -80,7 +80,7 @@ Three interviews: Niko, Stacy and Lex.
 
 ## Important quotes
 
-### Niko
+### Dimitri
 - "a click of a button can show somebody that you still care about them"
 - "there's always going to be someone who can't make it"
 - "the biggest thing that will help anyone connect with people is just thinking about yourself less"
@@ -96,16 +96,16 @@ Three interviews: Niko, Stacy and Lex.
 - "Just because someone is busy doesn't mean they don't want to spend time with you."
 
 ## Patterns across all 3
-- **Time is the biggest barrier (3/3).** Trading hours for Niko, work and family for Stacy, and homework and sports for Lex.
-- **Finding a time is hard for groups (3/3).** Niko aims for what works for most people, Stacy wants to avoid long text threads, and Lex's group struggles to decide.
-- **Money gets in the way too (3/3).** Niko's friends are focused on loans and houses, Stacy finds going out expensive, and Lex wants things to do that don't cost much.
-- **Regular contact makes friendship easier (3/3).** Niko has weekly routines, Stacy wishes for a monthly plan, and Lex sees friends at school every day.
-- **Small check-ins keep people close (3/3).** Niko and Lex both use group chats daily, and Stacy texts a daughter at college nearly every day.
+- **Time is the biggest barrier (3/3).** Trading hours for Dimitri, work and family for Stacy, and homework and sports for Lex.
+- **Finding a time is hard for groups (3/3).** Dimitri aims for what works for most people, Stacy wants to avoid long text threads, and Lex's group struggles to decide.
+- **Money gets in the way too (3/3).** Dimitri's friends are focused on loans and houses, Stacy finds going out expensive, and Lex wants things to do that don't cost much.
+- **Regular contact makes friendship easier (3/3).** Dimitri has weekly routines, Stacy wishes for a monthly plan, and Lex sees friends at school every day.
+- **Small check-ins keep people close (3/3).** Dimitri and Lex both use group chats daily, and Stacy texts a daughter at college nearly every day.
 - **Being together still matters most (2/3).** Stacy says chats don't replace seeing someone, and Lex prefers in person.
 
 ## Design opportunities
 
-### Niko
+### Dimitri
 - **Plan around the majority:** pick the time that works for most people.
 - **Build on routines:** attach connection to things that already repeat.
 - **Quick ways to show you care:** send a small sign, especially when saying no to a plan.
@@ -121,18 +121,18 @@ Three interviews: Niko, Stacy and Lex.
 - **Help people feel included:** make it easier to invite people and harder to feel left out.
 
 ### Combined
-- **Make finding a time easy (Niko, Stacy, Lex):** show who's free and pick what works for most people.
+- **Make finding a time easy (Dimitri, Stacy, Lex):** show who's free and pick what works for most people.
 - **Help groups decide and follow through (Stacy, Lex):** suggest ideas, choose quickly and remind people.
-- **Build on what repeats (Niko, Stacy):** use routines and standing plans, so nobody has to start from scratch.
-- **Make small gestures count (Niko, Stacy, Lex):** let people check in quickly between hangouts.
+- **Build on what repeats (Dimitri, Stacy):** use routines and standing plans, so nobody has to start from scratch.
+- **Make small gestures count (Dimitri, Stacy, Lex):** let people check in quickly between hangouts.
 - **Keep hangouts simple and affordable (Stacy, Lex):** make coffee, a walk or a free activity feel like enough.
-- **Stay close across distance (Niko, Stacy, Lex):** keep friends connected when they live far apart.
-- **Work with what people already use (Niko, Lex):** fit into group chats instead of adding another app.
+- **Stay close across distance (Dimitri, Stacy, Lex):** keep friends connected when they live far apart.
+- **Work with what people already use (Dimitri, Lex):** fit into group chats instead of adding another app.
 - **Help people feel included (Lex):** make it easier to invite people and harder to feel left out.
 
 ## Big question
 
-### Niko
+### Dimitri
 When someone's time is taken up by work, how can a small, quick action feel like real presence for the people they care about, and not just a substitute for showing up?
 
 ### Stacy
@@ -143,6 +143,6 @@ School brings friends together without any planning, so how might we keep that e
 
 ## Possible directions
 - **From "we should" to a real plan:** a group chat tool that shows who's free, helps the group decide and locks in the plan. (Stacy, Lex)
-- **Plans that repeat on their own:** a standing lunch, game or meetup that keeps happening even when not everyone can come. (Niko, Stacy)
-- **Small actions that feel like showing up:** quick shared moments that help friends feel together when they can't meet, including across distance. (Niko, Stacy, Lex)
-- **Easy, unplanned time together:** a way to see who's around right now and join them, like running into friends at school. (Niko, Lex)
+- **Plans that repeat on their own:** a standing lunch, game or meetup that keeps happening even when not everyone can come. (Dimitri, Stacy)
+- **Small actions that feel like showing up:** quick shared moments that help friends feel together when they can't meet, including across distance. (Dimitri, Stacy, Lex)
+- **Easy, unplanned time together:** a way to see who's around right now and join them, like running into friends at school. (Dimitri, Lex)
