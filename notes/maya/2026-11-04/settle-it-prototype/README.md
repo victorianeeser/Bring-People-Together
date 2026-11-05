@@ -2,6 +2,9 @@
 
 Maya's prototype of storyboard concept **9. Settle It** (from [11/4 storyboard ideas](../maya-storyboard-ideas.md)).
 
+**Open the prototype:** [http://localhost:3000](http://localhost:3000)
+Start it first with `node server.js` in this folder (see [Run it](#run-it)). The link only works on the computer running the server. Phones on the same Wi-Fi use the address the terminal prints, like `http://192.168.x.x:3000`.
+
 **The idea:** Addie loves iMessage games because "you can't cheat on it." Group chats get stuck deciding things, and the loudest person usually wins. In Settle It, anyone in the chat can start a quick mini game. Whoever wins picks the plan, and nobody gets to argue.
 
 The storyboard used Crazy Eights. A full card game takes too long when people are hungry, so this prototype swaps it for two mini games that take under a minute:
@@ -61,19 +64,6 @@ Each tester opens the phone link and types their name. That's it. Each browser t
 - **Add a test friend** adds a fake person who chats and plays, so you can test with fewer people.
 - **Start an argument** drops a "where should we eat" loop into the chat, split across everyone.
 - **Clear the chat** resets everything for the next group. People who left are removed too.
-
-## Put it online (Render, free)
-So anyone can join from anywhere with a link, no shared Wi-Fi needed:
-1. Sign up at [render.com](https://render.com) (free).
-2. **New > Web Service > Public Git Repository**, and paste `https://github.com/victorianeeser/Bring-People-Together`
-3. Settings:
-   - **Root Directory:** `notes/maya/2026-11-04/settle-it-prototype`
-   - **Build Command:** `npm install`
-   - **Start Command:** `npm start`
-   - **Instance Type:** Free
-4. Click **Deploy**. Render gives you a link like `https://settle-it-xxxx.onrender.com`. Everyone opens that link on their phone.
-
-On the free plan the server sleeps after about 15 minutes with nobody on it. The first visit after that takes about 30 seconds to wake it up, and waking it clears the chat.
 
 ## Prototype limits (say these to testers if they ask)
 - It's one fake group chat, not real iMessage. A real version would be an iMessage app or a chat bot.
