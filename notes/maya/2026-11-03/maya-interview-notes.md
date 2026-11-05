@@ -2,7 +2,7 @@
 
 Three interviews: Addie, Lanie and Anthony.
 
-📄 **Full transcripts:** [Addie](transcripts/maya-interview-1-addie-transcript.txt) · [Lanie](transcripts/maya-interview-2-lanie-transcript.txt)
+📄 **Full transcripts:** [Addie](transcripts/maya-interview-1-addie-transcript.txt) · [Lanie](transcripts/maya-interview-2-lanie-transcript.txt) · [Anthony](transcripts/maya-interview-3-anthony-transcript.md)
 
 ## Participant notes
 
