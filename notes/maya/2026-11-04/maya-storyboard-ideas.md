@@ -82,6 +82,8 @@ Each one is a 2–4 panel comic to draw in Sharpie and pin on the wall. Every id
 3. Close-up of the final card: someone plays an 8. "WINNER picks dinner."
 4. Everyone eating together. The winner looks smug and the losers laugh.
 
+**Prototyped:** see the [Settle It prototype](settle-it-prototype/README.md) and [testing notes](settle-it-prototype/testing-notes.md).
+
 ## 10. Both Home
 **From:** Anthony: with friends from home, "every time I see him it's like we've been talking for the past year." They don't need regular contact, just a chance to see each other.
 **Software:** a lock screen widget that notices when you and an old friend are both back in your hometown at the same time (from shared calendars or location you choose to share), and suggests meeting up.
