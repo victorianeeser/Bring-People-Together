@@ -2,6 +2,12 @@
 
 Each one is a 2–4 panel comic to draw in Sharpie and pin on the wall. Every idea has a software piece, but most of them aren't a standalone app. They live in the group chat, a widget, the lock screen, a game or a bot. All of them come from my interviews with Addie, Lanie and Anthony.
 
+## My sketches
+
+![Hand-drawn storyboards for concepts 1 to 5](storyboards-sheet-1-concepts-1-5.jpg)
+
+![Hand-drawn storyboards for concepts 6 to 10](storyboards-sheet-2-concepts-6-10.jpg)
+
 ---
 
 ## 1. Answer Drop
