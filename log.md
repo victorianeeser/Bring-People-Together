@@ -16,3 +16,4 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 ## Nov 4
 
 - **Victoria:** organized the README by name and the notes by person, tried 3 multiplayer products, added notes and transcripts from 3 interviews, wrote README paragraph, updated numbers and log
+- **Maya:** came up with 10 storyboard ideas from her interviews, sketched all 10 by hand, added cropped sketches and descriptions
