@@ -8,15 +8,14 @@ Running tally. Update every week.
 
 | | Count | Goal | Progress |
 |---|---|---|---|
-| People interviewed | 9 | | |
+| People interviewed | 9 | 100 | 9% |
 | People tested | 5 | | |
-| **Unique people reached** | **11** | **100** | **11%** |
 
 ## Weekly breakdown
 
-| Week of | Interviewed this week | Tested this week | New people reached | Reached total |
+| Week of | Interviewed this week | Interviewed total | Tested this week | Tested total |
 |---|---|---|---|---|
-| 2026-11-02 | 9 | 5 | 11 | 11 |
+| 2026-11-02 | 9 | 9 | 5 | 5 |
 | 2026-11-09 | | | | |
 | 2026-11-16 | | | | |
 | 2026-11-23 | | | | |
@@ -27,4 +26,3 @@ Running tally. Update every week.
 
 - **Interviewed:** a real-time conversation with one person (in person or by call). Notes go in `notes/`.
 - **Tested:** someone reacted to or tried one of our prototypes. Notes go in `notes/`.
-- **Unique people reached:** each person counts once, even if they were both interviewed and tested (for example, Maya's testers Addie, Lanie and Anthony were also interviewed, so only Charles and Megan are new).
