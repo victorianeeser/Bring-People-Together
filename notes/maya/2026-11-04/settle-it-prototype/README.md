@@ -62,6 +62,19 @@ Each tester opens the phone link and types their name. That's it. Each browser t
 - **Start an argument** drops a "where should we eat" loop into the chat, split across everyone.
 - **Clear the chat** resets everything for the next group. People who left are removed too.
 
+## Put it online (Render, free)
+So anyone can join from anywhere with a link, no shared Wi-Fi needed:
+1. Sign up at [render.com](https://render.com) (free).
+2. **New > Web Service > Public Git Repository**, and paste `https://github.com/victorianeeser/Bring-People-Together`
+3. Settings:
+   - **Root Directory:** `notes/maya/2026-11-04/settle-it-prototype`
+   - **Build Command:** `npm install`
+   - **Start Command:** `npm start`
+   - **Instance Type:** Free
+4. Click **Deploy**. Render gives you a link like `https://settle-it-xxxx.onrender.com`. Everyone opens that link on their phone.
+
+On the free plan the server sleeps after about 15 minutes with nobody on it. The first visit after that takes about 30 seconds to wake it up, and waking it clears the chat.
+
 ## Prototype limits (say these to testers if they ask)
 - It's one fake group chat, not real iMessage. A real version would be an iMessage app or a chat bot.
 - In Quick Draw the server times every tap. On a shaky Wi-Fi connection a few milliseconds of lag can matter.

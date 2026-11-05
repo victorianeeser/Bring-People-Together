@@ -1,0 +1,13 @@
+{
+  "name": "settle-it-prototype",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Settle It: an iMessage-style group chat where a quick mini game decides the plan.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
