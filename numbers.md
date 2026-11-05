@@ -14,7 +14,12 @@ Running tally. Update every week.
 
 | Week of | Interviewed this week | Interviewed total |
 |---|---|---|
-| 2026-11-03 | 9 | 9 |
+| 2026-11-02 | 9 | 9 |
+| 2026-11-09 | | |
+| 2026-11-16 | | |
+| 2026-11-23 | | |
+| 2026-11-30 | | |
+| 2026-12-07 | | |
 
 ## What counts
 
