@@ -8,14 +8,15 @@ Running tally. Update every week.
 
 | | Count | Goal | Progress |
 |---|---|---|---|
-| People interviewed | 9 | 100 | 9% |
+| People interviewed | 9 | | |
 | People tested | 5 | | |
+| **Total** | **14** | **100** | **14%** |
 
 ## Weekly breakdown
 
-| Week of | Interviewed this week | Interviewed total | Tested this week | Tested total |
+| Week of | Interviewed this week | Tested this week | Total this week | Running total |
 |---|---|---|---|---|
-| 2026-11-02 | 9 | 9 | 5 | 5 |
+| 2026-11-02 | 9 | 5 | 14 | 14 |
 | 2026-11-09 | | | | |
 | 2026-11-16 | | | | |
 | 2026-11-23 | | | | |
