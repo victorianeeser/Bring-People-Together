@@ -22,3 +22,7 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 ## Nov 7
 
 - **Leandra** finished a rough prototype of the study group web app. Ready for testing and tested the prototype with two people.
+
+## Nov 8
+
+- **Victoria:** made a prototype of the Bucket List idea (a shared checklist that turns finished plans into scrapbook pages) with Claude Code
