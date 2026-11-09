@@ -125,21 +125,22 @@ const STICKERS = {
   us: wordSticker('US! label', 'US!', SIZZLE, 96),
 };
 
-// Flat illustrations stand in for real photos on the demo pages.
-const SCENES = {
-  orchard: `<rect width="400" height="300" fill="#CFE8F5"/><rect y="200" width="400" height="100" fill="#A7D08C"/><rect x="70" y="130" width="18" height="90" fill="#7A5A3C"/><circle cx="79" cy="110" r="62" fill="#5FA463"/><rect x="280" y="140" width="18" height="80" fill="#7A5A3C"/><circle cx="289" cy="115" r="58" fill="#6DB26F"/><g fill="#E5533D"><circle cx="50" cy="95" r="8"/><circle cx="95" cy="80" r="8"/><circle cx="110" cy="130" r="8"/><circle cx="65" cy="145" r="8"/><circle cx="265" cy="100" r="8"/><circle cx="310" cy="90" r="8"/><circle cx="300" cy="140" r="8"/></g>`,
-  basket: `<rect width="400" height="300" fill="#F3E3C3"/><rect y="220" width="400" height="80" fill="#C9A26B"/><g fill="#E5533D"><circle cx="150" cy="140" r="34"/><circle cx="215" cy="125" r="36"/><circle cx="270" cy="150" r="32"/></g><path d="M105 160h190l-24 100H129Z" fill="#9A6B3F"/><path d="M125 200h150M135 235h130" stroke="#7A5230" stroke-width="8"/>`,
-  beach: `<rect width="400" height="300" fill="#BDE3F2"/><circle cx="320" cy="60" r="34" fill="#FFC53D"/><rect y="140" width="400" height="70" fill="#4FA3C7"/><rect y="205" width="400" height="95" fill="#F2DDAE"/><rect x="118" y="120" width="8" height="120" fill="#7A5A3C"/><path d="M50 130a72 62 0 0 1 144 0Z" fill="#E5533D"/>`,
-  waves: `<rect width="400" height="300" fill="#FBD9B4"/><circle cx="200" cy="130" r="58" fill="#F58A5B"/><rect y="150" width="400" height="150" fill="#3F8FB2"/><g fill="none" stroke="#BDE3F2" stroke-width="7" stroke-linecap="round"><path d="M40 190q30-22 60 0t60 0"/><path d="M220 225q30-22 60 0t60 0"/><path d="M90 260q30-22 60 0t60 0"/></g>`,
-  rack: `<rect width="400" height="300" fill="#E8DFF5"/><rect y="255" width="400" height="45" fill="#B7A4CF"/><rect x="50" y="50" width="300" height="9" fill="#55505C"/><path d="M85 70h60v140H85Z" fill="#E5533D"/><path d="M160 70h60v165h-60Z" fill="#2D5BFF"/><path d="M235 70h60v120h-60Z" fill="#FFC53D"/><g stroke="#55505C" stroke-width="5"><path d="M115 55v15M190 55v15M265 55v15"/></g>`,
-  cookies: `<rect width="400" height="300" fill="#F7E7CE"/><rect x="60" y="70" width="280" height="170" rx="14" fill="#8D8A84"/><g fill="#D9A566"><circle cx="120" cy="120" r="30"/><circle cx="200" cy="120" r="30"/><circle cx="280" cy="120" r="30"/><circle cx="120" cy="190" r="30"/><circle cx="200" cy="190" r="30"/><circle cx="280" cy="190" r="30"/></g><g fill="#6B4226"><circle cx="110" cy="112" r="5"/><circle cx="130" cy="128" r="5"/><circle cx="192" cy="130" r="5"/><circle cx="210" cy="110" r="5"/><circle cx="272" cy="115" r="5"/><circle cx="290" cy="130" r="5"/><circle cx="112" cy="196" r="5"/><circle cx="205" cy="182" r="5"/><circle cx="282" cy="198" r="5"/></g>`,
-  tent: `<rect width="400" height="300" fill="#26365E"/><g fill="#FBE29A"><circle cx="60" cy="50" r="3"/><circle cx="140" cy="90" r="3"/><circle cx="240" cy="40" r="3"/><circle cx="340" cy="80" r="3"/></g><circle cx="320" cy="60" r="24" fill="#FBE29A"/><rect y="225" width="400" height="75" fill="#3F6B4B"/><path d="M200 90 320 235H80Z" fill="#E5533D"/><path d="M200 130 245 235h-90Z" fill="#7A2E22"/>`,
-  mirror: `<rect width="400" height="300" fill="#F7D6DF"/><rect x="125" y="25" width="150" height="250" rx="75" fill="#C9A26B"/><rect x="140" y="40" width="120" height="220" rx="60" fill="#D9EEF5"/><circle cx="200" cy="115" r="26" fill="#7A5A3C"/><path d="M160 260c0-70 16-110 40-110s40 40 40 110Z" fill="#3A9D6E"/>`,
+// Unsplash photos for the demo pages: [photo id, width, height].
+const DEMO_PHOTOS = {
+  p1: ['1628486930972-c1db82d528da', 800, 600],
+  p2: ['1727120279660-5c28b8461609', 800, 600],
+  p3: ['1504321946642-8f661bf96ff0', 800, 1000],
+  p4: ['1597467151996-ec9a3a097e6c', 800, 1000],
+  p5: ['1604882767135-b41fac508fff', 800, 700],
+  p6: ['1791064543809-5bde33c40e34', 800, 700],
+  p7: ['1513519683267-4ee6761728ac', 800, 600],
+  p8: ['1554290999-9052c2d5e559', 800, 900],
+  p9: ['1543510518-9d8afe002596', 800, 700],
 };
 
-function scene(kind, width, height) {
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" width="${width}" height="${height}">${SCENES[kind]}</svg>`;
-  return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+function demoPhoto(id) {
+  const [photo, width, height] = DEMO_PHOTOS[id];
+  return `https://images.unsplash.com/photo-${photo}?auto=format&fit=crop&w=${width}&h=${height}&q=70`;
 }
 
 function daysAgo(days) {
@@ -147,7 +148,7 @@ function daysAgo(days) {
 }
 
 function createSeed() {
-  const photo = (id, kind, w, h, x, y, rot, z) => ({ id, src: scene(kind, w, h), x, y, rot, z });
+  const photo = (id, x, y, rot, z) => ({ id, src: demoPhoto(id), x, y, rot, z });
   const sticker = (id, type, x, y, rot, z) => ({ id, type, x, y, rot, z });
 
   const roomies = {
@@ -206,8 +207,8 @@ function createSeed() {
         inIds: ['priya', ME, 'ellie', 'chloe'], done: true, doneAt: daysAgo(34),
         page: {
           photos: [
-            photo('p1', 'orchard', 800, 600, 50, 45, -5, 1),
-            photo('p2', 'basket', 800, 600, 300, 90, 4, 2),
+            photo('p1', 50, 45, -5, 1),
+            photo('p2', 300, 90, 4, 2),
           ],
           stickers: [sticker('s1', 'star', 610, 60, 10, 3), sticker('s2', 'heart', 560, 330, -8, 4)],
           caption: 'Too many apples. Zero regrets.',
@@ -221,8 +222,8 @@ function createSeed() {
         inIds: ['chloe', ME, 'priya', 'ellie', 'zoe'], done: true, doneAt: daysAgo(112),
         page: {
           photos: [
-            photo('p3', 'beach', 800, 1000, 70, 60, 3, 1),
-            photo('p4', 'waves', 800, 1000, 500, 200, -6, 2),
+            photo('p3', 70, 60, 3, 1),
+            photo('p4', 500, 200, -6, 2),
           ],
           stickers: [sticker('s3', 'sun', 610, 45, 0, 3), sticker('s4', 'yay', 330, 300, -7, 4)],
           caption: 'Priya went in. Priya regretted it.',
@@ -236,8 +237,8 @@ function createSeed() {
         inIds: ['ellie', ME, 'chloe'], done: true, doneAt: daysAgo(15),
         page: {
           photos: [
-            photo('p5', 'rack', 800, 700, 90, 70, -3, 1),
-            photo('p6', 'mirror', 800, 700, 430, 160, 5, 2),
+            photo('p5', 90, 70, -3, 1),
+            photo('p6', 430, 160, 5, 2),
           ],
           stickers: [sticker('s5', 'sparkle', 330, 40, 8, 3), sticker('s6', 'star', 80, 330, -12, 4)],
           caption: 'Best dressed: nobody. Most fun: everybody.',
@@ -289,7 +290,7 @@ function createSeed() {
         notes: 'Six batches and one fire alarm.',
         inIds: ['lily', 'mom', ME, 'grandma'], done: true, doneAt: daysAgo(320),
         page: {
-          photos: [photo('p7', 'cookies', 800, 600, 80, 70, -4, 1)],
+          photos: [photo('p7', 80, 70, -4, 1)],
           stickers: [sticker('s7', 'heart', 340, 90, 8, 2), sticker('s8', 'omg', 420, 270, -6, 3)],
           caption: 'Six batches. One fire alarm.',
           captionPos: { x: 340, y: 400 },
@@ -301,7 +302,7 @@ function createSeed() {
         notes: 'The tent held up. Dad did not.',
         inIds: ['dad', 'lily', ME], done: true, doneAt: daysAgo(100),
         page: {
-          photos: [photo('p8', 'tent', 800, 900, 500, 60, 5, 1), photo('p9', 'waves', 800, 700, 120, 150, -3, 2)],
+          photos: [photo('p8', 500, 60, 5, 1), photo('p9', 120, 150, -3, 2)],
           stickers: [sticker('s9', 'moon', 390, 40, 0, 3), sticker('s10', 'crown', 60, 60, -10, 4)],
           caption: 'The tent held up. Dad did not.',
           captionPos: { x: 180, y: 490 },
@@ -332,11 +333,16 @@ function seasonOfMonth(key) {
   return month <= 8 ? 'Summer' : 'Fall';
 }
 
-// Fills in anything added since older saves: seasons, and text boxes in place of the single caption.
+// Fills in anything added since older saves: seasons, text boxes in place of the single caption, and real demo photos.
 function upgradeData(data) {
   data.groups.forEach((group) => group.activities.forEach((a) => {
     if (!a.season) a.season = SEED_SEASONS[a.id] || seasonOfMonth(a.month);
     delete a.month;
+    if (a.page) {
+      a.page.photos.forEach((p) => {
+        if (DEMO_PHOTOS[p.id] && !p.src.startsWith('data:image/jpeg')) p.src = demoPhoto(p.id);
+      });
+    }
     if (a.page && !a.page.texts) {
       const { caption, captionPos, captionZ } = a.page;
       a.page.texts = caption ? [{ id: 'text1', text: caption, x: captionPos.x, y: captionPos.y, rot: 0, z: captionZ || 15 }] : [];

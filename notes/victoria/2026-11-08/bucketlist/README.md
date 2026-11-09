@@ -4,7 +4,7 @@ Round-1 prototype for IxD415, "Bring People Together."
 
 **The concept:** A shared bucket list for a group of friends. Anyone in the group can add an activity, and friends say "I'm in." When the group finishes something, it becomes a scrapbook page with photos, a caption and stickers.
 
-This is a one-person demo. It saves to your browser's localStorage, so friends on other computers won't see your changes. The photos on the demo pages are drawings that stand in for real ones.
+This is a one-person demo. It saves to your browser's localStorage, so friends on other computers won't see your changes. The photos on the demo pages and the member portraits are stock images, so they need an internet connection to show up.
 
 ## Run it
 Open a terminal in this folder and run:
