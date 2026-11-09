@@ -7,13 +7,13 @@ A quiet online study table for friends: set your goals, focus together, and chec
 
 ## User 1, Nick
 
-**Copy is confusing, especially at check-in.** The wording didn't make sense to them, and the check-in screen didn't feel helpful.
+**Copy is confusing, especially at check-in.** The wording didn't make sense to him, and the check-in screen didn't feel helpful.
 
-**Chat or call during check-in?** They asked whether check-in should be a typed chat or a quick call.
+**Chat or call during check-in?** He asked whether check-in should be a typed chat or a quick call.
 
-**Proof of work.** They suggested sending a photo or screenshot of your work at check-in. This raises a bigger question: how do people give each other real feedback, not just reactions?
+**Proof of work.** He suggested sending a photo or screenshot of your work at check-in. This raises a bigger question: how do people give each other real feedback, not just reactions?
 
-**Not everyone has study friends.** Not everyone has friends ready to study with. They suggested public rooms or servers you could join.
+**Not everyone has study friends.** Not everyone has friends ready to study with. He suggested public rooms or servers you could join.
 
 **What I'll change:**
 - Rewrite the check-in copy so it's clearer
@@ -26,7 +26,7 @@ A quiet online study table for friends: set your goals, focus together, and chec
 
 **Didn't notice the other participants.** He didn't initially realize there were friends sitting around the table.
 
-**Pause vs. Leave was confusing.** He accidentally pressed Pause while trying to find a way to leave the study session.
+**Pause vs. Leave was confusing.** He accidentally pressed pause while trying to find a way to leave the study session.
 
 **What I'll change:**
 - Label the circles with names, not just initials
@@ -37,9 +37,9 @@ A quiet online study table for friends: set your goals, focus together, and chec
 
 **Liked the distraction-free environment.** He liked that there was no video or chat because he wanted to feel accountable without having additional distractions.
 
-**Wanted clearer timer notifications.** She understood the focus timer but wasn't sure what would happen when it reached zero or when her next check-in would happen.
+**Wanted clearer timer notifications.** He understood the focus timer but wasn't sure what would happen when it reached zero or when her next check-in would happen.
 
-**Could goals be edited?** She wondered whether she could change or add goals after the study session had already started.
+**Could goals be edited?** He wondered whether he could change or add goals after the study session had already started.
 
 **What I'll change:**
 - Make the next check-in time more noticeable
@@ -48,11 +48,9 @@ A quiet online study table for friends: set your goals, focus together, and chec
 
 ## User 4, Kamna
 
-**Liked the shared study environment.** She liked that everyone could work on different assignments while sharing the same virtual study space.
+**How do I invite friends?** She looked for an obvious way to invite friends or share a session code.
 
-**How do I invite friends?** They looked for an obvious way to invite friends or share a session code.
-
-**Wanted more visibility into everyone's progress.** They liked the idea of studying alongside friends but wanted to see who was actively working, taking a break, or checking in.
+**Wanted more visibility into everyone's progress.** She liked the idea of studying alongside friends but wanted to see who was actively working, taking a break, or checking in.
 
 **What I'll change:**
 - Make the invite/join process more obvious
@@ -62,8 +60,6 @@ A quiet online study table for friends: set your goals, focus together, and chec
 ## User 5, Peggy
 
 **Early check-in was confusing.** She wasn't entirely sure how checking in early differed from the regular scheduled check-in.
-
-**Liked the hourly reset.** She appreciated being able to reflect on what they accomplished and create new goals for the next hour.
 
 **What I'll change:**
 - Clarify the difference between early and scheduled check-ins
