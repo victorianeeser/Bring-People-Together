@@ -1,6 +1,6 @@
 # 11/8 | Bucket List user testing
 
-Testing the [Bucket List prototype](bucketlist/README.md) with 5 people. Under each tester, **Prototype response** shows what changed because of what they said.
+I tested the [Bucket List prototype](bucketlist/README.md) with 5 people. Names are aliases. Under each tester, **Prototype response** shows what changed because of what they said.
 
 ## What I want to find out
 - Do people understand it's a shared list for a friend group?
@@ -35,46 +35,34 @@ Testing the [Bucket List prototype](bucketlist/README.md) with 5 people. Under e
 
 ---
 
-## Tester 1: Name, age
-Summary of how it went.
-- **What worked:**
-- **What surprised me:**
-- **What flopped:**
-- **Prototype response:**
+## Tester 1: Jade
+Jade found the old timeline view confusing.
+- **What flopped:** The old timeline view.
+- **Prototype response:** Replaced the timeline with a simple checklist you can filter by season.
 
-## Tester 2: Name, age
-Summary of how it went.
-- **What worked:**
-- **What surprised me:**
-- **What flopped:**
-- **Prototype response:**
+## Tester 2: Owen
+Owen wanted to be able to change the color of the stickers.
+- **What flopped:** Sticker colors couldn't be changed.
+- **Prototype response:** Select a sticker on the page and pick from 6 colors.
 
-## Tester 3: Name, age
-Summary of how it went.
-- **What worked:**
-- **What surprised me:**
-- **What flopped:**
-- **Prototype response:**
+## Tester 3: Maren
+Maren wanted to add text boxes and write as much as they wanted.
+- **What flopped:** Text on a page was too limited.
+- **Prototype response:** **+ Add text box** now adds as many text boxes as you want, each up to 120 characters.
 
-## Tester 4: Name, age
-Summary of how it went.
-- **What worked:**
-- **What surprised me:**
-- **What flopped:**
-- **Prototype response:**
+## Tester 4: Theo
+Theo wanted to be able to have separate groups.
+- **What flopped:** Couldn't keep separate groups.
+- **Prototype response:** **+ New group** creates a group with its own list and scrapbook, and the menu at the top switches between groups.
 
-## Tester 5: Name, age
-Summary of how it went.
-- **What worked:**
-- **What surprised me:**
-- **What flopped:**
-- **Prototype response:**
+## Tester 5: Nora
+Nora wanted an invite feature.
+- **What flopped:** There was no way to invite people.
+- **Prototype response:** Added an **Invite** button to the members list, which adds someone to the group by name for now.
 
 ---
 
 ## Patterns across testers
-- **What worked:**
-- **What surprised me:**
-- **What flopped:**
-- **What I changed:**
-- **Still open:**
+- **What flopped:** The timeline was confusing, and the other 4 testers each asked for something that was missing.
+- **What I changed:** A simpler season checklist, sticker colors, multiple text boxes, separate groups, and an invite button.
+- **Patterns:** 2 of 5 wanted more ways to customize scrapbook pages, and 2 of 5 wanted more control over who's in a group.
