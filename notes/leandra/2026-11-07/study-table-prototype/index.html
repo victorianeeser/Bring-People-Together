@@ -1,0 +1,708 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Study Table</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@300;500&display=swap">
+<style>
+/* Layout: one calm column. A round table is the hero: the shared clock in the middle, friends seated around the rim. Everything else is quiet and below. */
+:root {
+  --bg: #f1efe9; --surface: #fbfaf7; --ink: #1f2a2e; --muted: #7b8687; --line: #e1ddd3;
+  --lamp: #c9822b; --lamp-glow: #f6e2c2; --focus: #3f8a74; --rest: #b9bfbd;
+  --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #12171a; --surface: #192024; --ink: #e9ece8; --muted: #86918f; --line: #273034;
+  --lamp: #eba75a; --lamp-glow: #3a2c1a; --focus: #6cc3a6; --rest: #4a5558; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #12171a; --surface: #192024; --ink: #e9ece8; --muted: #86918f; --line: #273034;
+  --lamp: #eba75a; --lamp-glow: #3a2c1a; --focus: #6cc3a6; --rest: #4a5558; color-scheme: dark }
+
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--ink); font: 16px/1.5 var(--f-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 56px }
+.wrap { max-width: 620px; margin: 0 auto }
+h1, h2, h3 { font-family: var(--f-display); font-weight: 600; text-wrap: balance; margin: 0; line-height: 1.15 }
+button, input, textarea, select { font: inherit; color: inherit }
+button { cursor: pointer }
+:focus-visible { outline: 2px solid var(--lamp); outline-offset: 3px }
+.muted { color: var(--muted) }
+.small { font-size: 14px }
+
+/* header */
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 20px }
+.brand { font-family: var(--f-display); font-weight: 600; font-size: 18px; display: flex; align-items: center; gap: 8px }
+.brand i { width: 10px; height: 10px; border-radius: 50%; background: var(--lamp); box-shadow: 0 0 12px var(--lamp) }
+.where { display: flex; align-items: center; gap: 8px; font-family: var(--f-mono); font-size: 13px; color: var(--muted) }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--rest) }
+.dot.live { background: var(--focus) }
+
+/* buttons */
+.btn { border: 0; background: var(--ink); color: var(--bg); padding: 12px 22px; border-radius: 999px; font-weight: 700 }
+.btn.lamp { background: var(--lamp); color: #21160a }
+.btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line) }
+.btn:disabled { opacity: .5 }
+.link { background: none; border: 0; padding: 4px 2px; color: var(--muted); font-size: 14px; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--line) }
+.link:hover { color: var(--ink) }
+
+/* join */
+.join { padding-top: 6vh; display: grid; gap: 28px }
+.join h1 { font-size: clamp(40px, 9vw, 64px); letter-spacing: -.03em; font-weight: 400 }
+.join h1 em { font-style: normal; color: var(--lamp) }
+.join .sub { font-size: 18px; color: var(--muted); margin-top: 10px }
+.fields { display: grid; gap: 10px }
+.in { width: 100%; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; font-size: 17px }
+.in::placeholder { color: var(--muted) }
+textarea.in { resize: vertical; min-height: 96px }
+details { color: var(--muted); font-size: 14px }
+details summary { cursor: pointer; width: fit-content }
+.timing { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px }
+.timing label { display: grid; gap: 4px }
+.timing select { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px }
+
+/* the table */
+.stage { display: grid; justify-items: center; padding-block: 8px 4px; position: relative }
+.stage::before { content: ""; position: absolute; width: 520px; max-width: 120%; aspect-ratio: 1; top: 50%; left: 50%; transform: translate(-50%, -54%); background: radial-gradient(closest-side, var(--lamp-glow), transparent 75%); pointer-events: none; transition: opacity 1s }
+.stage.focus::before { opacity: .55 }
+.tablewrap { padding: 30px; position: relative }
+.table { position: relative; width: min(66vw, 300px); aspect-ratio: 1 }
+.ring { position: absolute; inset: 0; transform: rotate(-90deg) }
+.ring circle { fill: none; stroke-width: 3 }
+.ring .bg { stroke: var(--line) }
+.ring .fg { stroke: var(--focus); stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset .3s linear, stroke .6s }
+.stage.checkin .ring .fg { stroke: var(--lamp) }
+.stage.paused .ring .fg { stroke: var(--rest) }
+.stage.paused::before { opacity: .25 }
+.center { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; gap: 2px }
+.phase { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 700 }
+.clock { font-family: var(--f-mono); font-weight: 300; font-size: clamp(48px, 15vw, 72px); line-height: 1.05; font-variant-numeric: tabular-nums; letter-spacing: -.04em }
+.meta { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums }
+
+.seat { position: absolute; width: 46px; height: 46px; margin: -23px 0 0 -23px; border-radius: 50%; display: grid; place-items: center;
+  font-family: var(--f-display); font-weight: 600; color: #fff; font-size: 17px; border: 3px solid var(--bg); box-shadow: 0 0 0 2.5px var(--rest); transition: box-shadow .4s, opacity .4s }
+.seat.focus { box-shadow: 0 0 0 2.5px var(--focus) }
+.seat.done { box-shadow: 0 0 0 2.5px var(--lamp) }
+.seat.rest { opacity: .45 }
+.seat.writing { box-shadow: 0 0 0 2.5px var(--lamp); animation: breathe 2s ease-in-out infinite }
+.seat.me::after { content: "you"; position: absolute; top: 100%; margin-top: 5px; font: 700 10px/1 var(--f-body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted) }
+.seat.empty { background: transparent; border: 1.5px dashed var(--line); box-shadow: none; color: var(--muted); font-weight: 400 }
+@keyframes breathe { 50% { box-shadow: 0 0 0 6px var(--lamp-glow), 0 0 0 2.5px var(--lamp) } }
+
+.actions { display: grid; gap: 10px; justify-items: center; margin-top: 6px }
+.actions .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap }
+.actions .btn { min-width: 11em; text-align: center }
+
+/* goals */
+.goals { margin-top: 34px; display: grid; gap: 2px }
+.goal-row { display: grid; grid-template-columns: 12px minmax(0, 1fr) auto; gap: 12px; align-items: baseline; padding: 12px 4px; border-bottom: 1px solid var(--line) }
+.goal-row:last-child { border-bottom: 0 }
+.goal-row .c { width: 10px; height: 10px; border-radius: 50%; align-self: center }
+.goal-row .txt { min-width: 0; overflow-wrap: anywhere }
+.goal-row .nm { font-weight: 700; margin-right: 6px }
+.goal-row .st { font-size: 13px; color: var(--muted); white-space: nowrap; display: flex; gap: 3px; align-items: center }
+.pip { width: 8px; height: 8px; border-radius: 2px; background: var(--line) }
+.pip.done { background: var(--focus) } .pip.partial { background: var(--lamp) } .pip.missed { background: transparent; outline: 1.5px solid var(--rest); outline-offset: -1.5px }
+.goal-edit { display: flex; gap: 8px; margin-top: 8px; align-items: center }
+.goal-row .prog { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums }
+.checklist { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 6px }
+.checklist li { display: flex; gap: 10px; align-items: flex-start; min-width: 0 }
+.tick { flex: none; width: 20px; height: 20px; margin-top: 2px; border-radius: 6px; border: 1.5px solid var(--rest); background: transparent; display: grid; place-items: center; padding: 0; color: var(--bg); font-size: 13px; line-height: 1; font-weight: 700 }
+.tick.on { background: var(--focus); border-color: var(--focus) }
+button.tick:hover { border-color: var(--focus) }
+.checklist .t { overflow-wrap: anywhere; min-width: 0 }
+.checklist .tick.on + .t { text-decoration: line-through; text-decoration-color: var(--rest); color: var(--muted) }
+.rm { margin-left: auto; background: none; border: 0; color: var(--muted); padding: 0 6px; font-size: 20px; line-height: 1 }
+.rm:hover { color: var(--ink) }
+.builder { display: grid; gap: 10px }
+.builder .checklist { margin: 0 6px }
+.builder .checklist:empty { display: none }
+.adder { display: flex; gap: 8px }
+.adder .in { flex: 1; min-width: 0 }
+.btn.small { padding: 8px 18px }
+.goal-edit .in { padding: 10px 14px; font-size: 16px }
+
+/* check-in */
+.checkin { margin-top: 40px; display: grid; gap: 28px }
+.sheet { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 22px; display: grid; gap: 14px }
+.sheet h2 { font-size: 24px }
+.choices { display: flex; gap: 8px; flex-wrap: wrap }
+.choices label { flex: 1; min-width: 92px; text-align: center; padding: 10px; border-radius: 999px; border: 1px solid var(--line); cursor: pointer }
+.choices input { position: absolute; opacity: 0; pointer-events: none }
+.choices label:has(input:checked) { background: var(--ink); color: var(--bg); border-color: var(--ink) }
+.choices label:has(input:focus-visible) { outline: 2px solid var(--lamp); outline-offset: 2px }
+.round-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap }
+.feed { display: grid; gap: 14px }
+.post { display: grid; gap: 10px; padding: 18px; border-radius: 18px; background: var(--surface); border: 1px solid var(--line); min-width: 0 }
+.post-head { display: flex; align-items: center; gap: 10px }
+.post-head .av { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 600; font-family: var(--f-display); font-size: 14px; flex: none }
+.post-head b { flex: 1; min-width: 0 }
+.tag { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: var(--bg) }
+.tag.done { color: var(--focus) } .tag.partial { color: var(--lamp) } .tag.missed { color: var(--muted) }
+.work { white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; font-size: 17px }
+.post a { color: var(--lamp); overflow-wrap: anywhere; font-size: 14px }
+.next { font-size: 14px; color: var(--muted) }
+.reacts { display: flex; gap: 6px; flex-wrap: wrap }
+.react { border: 1px solid var(--line); background: transparent; border-radius: 999px; padding: 4px 12px; font-size: 14px }
+.react.on { background: var(--lamp-glow); border-color: var(--lamp) }
+.comments { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; font-size: 14px }
+.reply { display: flex; gap: 8px; flex-wrap: wrap; align-items: center }
+.reply .in { flex: 1; min-width: 180px; padding: 10px 14px; font-size: 15px }
+
+.foot { margin-top: 48px; display: flex; gap: 18px; justify-content: center; flex-wrap: wrap }
+.banner { margin-bottom: 12px; font-size: 14px; color: var(--muted); text-align: center }
+#toast { position: fixed; left: 50%; bottom: calc(22px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 10px 18px; border-radius: 999px; font-size: 14px; opacity: 0; pointer-events: none; transition: opacity .2s; max-width: calc(100% - 32px); text-align: center }
+#toast.show { opacity: 1 }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="bar">
+    <div class="brand"><i aria-hidden="true"></i>Study Table</div>
+    <div class="where" id="where" hidden><span id="dot" class="dot"></span><span id="codeTxt"></span></div>
+  </header>
+  <p id="banner" class="banner" hidden></p>
+
+  <!-- JOIN -->
+  <form id="joinView" class="join" autocomplete="off">
+    <div>
+      <h1>Focus together.<br><em>Check in</em> every hour.</h1>
+      <p class="sub">A quiet table for you and your friends. No video, no chat.</p>
+    </div>
+    <div class="fields">
+      <input class="in" id="jName" maxlength="30" required placeholder="Your name" aria-label="Your name">
+      <div class="builder">
+        <ul class="checklist" id="jGoalList" aria-label="Your goals for this hour"></ul>
+        <div class="adder">
+          <input class="in" id="jGoal" maxlength="80" placeholder="What will you finish this hour?" aria-label="Add a goal for this hour">
+          <button class="btn ghost small" type="button" id="jAdd">Add</button>
+        </div>
+      </div>
+      <input class="in" id="jCode" maxlength="40" required pattern="[a-z0-9][a-z0-9-]*" placeholder="Table code" aria-label="Table code" style="font-family:var(--f-mono)">
+      <details>
+        <summary>Timing</summary>
+        <div class="timing">
+          <label>Focus <select id="jFocus"><option value="25">25 min</option><option value="50" selected>50 min</option><option value="60">60 min</option><option value="1">1 min (test)</option></select></label>
+          <label>Check-in <select id="jCheck"><option value="5">5 min</option><option value="10" selected>10 min</option><option value="2">2 min (test)</option></select></label>
+        </div>
+      </details>
+    </div>
+    <div><button class="btn lamp" type="submit" id="joinBtn">Sit down</button></div>
+  </form>
+
+  <!-- ROOM -->
+  <section id="roomView" hidden>
+    <div id="stage" class="stage">
+      <div class="tablewrap">
+        <div class="table">
+          <svg class="ring" viewBox="0 0 100 100" aria-hidden="true"><circle class="bg" cx="50" cy="50" r="44"/><circle id="ringFill" class="fg" cx="50" cy="50" r="44" pathLength="100"/></svg>
+          <div class="center">
+            <div id="phaseLabel" class="phase">Ready</div>
+            <div id="clock" class="clock">50:00</div>
+            <div id="meta" class="meta"></div>
+          </div>
+          <div id="seats"></div>
+        </div>
+      </div>
+      <div class="actions">
+        <div class="row">
+          <button class="btn" id="startBtn" type="button">Start together</button>
+          <button class="btn ghost" id="breakBtn" type="button" hidden>Take a break</button>
+          <button class="btn ghost" id="checkNowBtn" type="button" hidden>Check in early</button>
+          <button class="btn ghost" id="focusNowBtn" type="button" hidden>Back to focus</button>
+        </div>
+        <div class="row" id="sessionRow">
+          <button class="btn ghost" id="pauseBtn" type="button" aria-pressed="false">Pause</button>
+          <button class="btn ghost" id="endBtn" type="button">End session</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="goals" id="goals"></div>
+    <form id="goalForm" class="goal-edit" hidden autocomplete="off">
+      <input class="in" id="goalInput" maxlength="80" placeholder="Add a goal" aria-label="Add a goal">
+      <button class="btn small" type="submit">Add</button>
+      <button class="link" type="button" id="goalDone">Done</button>
+    </form>
+
+    <section id="checkinView" class="checkin" hidden>
+      <form id="ckForm" class="sheet" autocomplete="off">
+        <h2>How did it go?</h2>
+        <div class="choices">
+          <label><input type="radio" name="res" value="done"><span>Hit it</span></label>
+          <label><input type="radio" name="res" value="partial"><span>Partly</span></label>
+          <label><input type="radio" name="res" value="missed"><span>Not yet</span></label>
+        </div>
+        <textarea class="in" id="ckWork" maxlength="500" placeholder="Show your work: paste it or describe it" aria-label="Show your work"></textarea>
+        <input class="in" id="ckLink" type="url" maxlength="300" placeholder="Link (optional)" aria-label="Link">
+        <div class="builder">
+          <span class="muted small">Next hour's goals</span>
+          <ul class="checklist" id="ckNextList" aria-label="Next hour's goals"></ul>
+          <div class="adder">
+            <input class="in" id="ckNext" maxlength="80" placeholder="Add a goal for next hour" aria-label="Add a goal for next hour">
+            <button class="btn ghost small" type="button" id="ckAdd">Add</button>
+          </div>
+        </div>
+        <div><button class="btn lamp" type="submit" id="ckSubmit">Share</button></div>
+      </form>
+      <div style="display:grid;gap:14px;min-width:0">
+        <div class="round-head"><h3 style="font-size:20px">The table</h3><span id="waiting" class="muted small"></span></div>
+        <div id="feed" class="feed"></div>
+        <form id="replyBox" class="reply" hidden autocomplete="off">
+          <input class="in" id="replyInput" maxlength="100" aria-label="Comment">
+          <button class="btn" type="submit">Send</button>
+          <button class="link" type="button" id="replyCancel">Cancel</button>
+        </form>
+      </div>
+    </section>
+
+    <div class="foot">
+      <button class="link" id="editGoalBtn" type="button">Edit my goals</button>
+      <button class="link" id="notesBtn" type="button">Copy session notes</button>
+      <button class="link" id="leaveBtn" type="button">Leave</button>
+    </div>
+  </section>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const h = (tag, attrs, ...kids) => {
+    const e = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs || {})) {
+      if (k === 'class') e.className = v;
+      else if (k.startsWith('on')) e.addEventListener(k.slice(2), v);
+      else if (v !== false && v != null) e.setAttribute(k, v === true ? '' : v);
+    }
+    for (const k of kids.flat()) { if (k == null || k === false) continue; e.append(k.nodeType ? k : document.createTextNode(String(k))); }
+    return e;
+  };
+  const clampStr = (v, n) => (typeof v === 'string' ? v : '').slice(0, n);
+  const RESULTS = { done: 'Hit it', partial: 'Partly', missed: 'Not yet' };
+  const REACTIONS = [['nice', '👏', 'Nice work'], ['fire', '🔥', 'On a roll'], ['q', '❓', 'Question']];
+
+  const MAXG = 5;
+  const cleanGoals = (v) => (Array.isArray(v) ? v : []).slice(0, MAXG).map((g) => ({ t: clampStr(g && g.t, 80), d: !!(g && g.d) })).filter((g) => g.t);
+  const copyGoals = (arr, keepDone) => arr.map((g) => ({ t: g.t, d: keepDone ? g.d : false }));
+  const joinGoals = [], nextGoals = [];
+  function checklist(goals, opts = {}) {
+    return h('ul', { class: 'checklist' }, goals.map((g, i) => h('li', null,
+      opts.onToggle ? h('button', { type: 'button', class: 'tick' + (g.d ? ' on' : ''), 'aria-pressed': g.d ? 'true' : 'false', 'aria-label': (g.d ? 'Mark not done: ' : 'Mark done: ') + g.t, onclick: () => opts.onToggle(i) }, g.d ? '✓' : '')
+        : h('span', { class: 'tick' + (g.d ? ' on' : ''), 'aria-hidden': 'true' }, g.d ? '✓' : ''),
+      h('span', { class: 't' }, g.t),
+      opts.onRemove ? h('button', { type: 'button', class: 'rm', 'aria-label': 'Remove ' + g.t, onclick: () => opts.onRemove(i) }, '×') : null)));
+  }
+  function builder(listId, inputId, addId, arr) {
+    const list = $(listId), inp = $(inputId);
+    const draw = () => list.replaceChildren(...checklist(arr, { onRemove: (i) => { arr.splice(i, 1); draw(); } }).childNodes);
+    const add = () => {
+      const t = inp.value.trim().slice(0, 80); if (!t) return;
+      if (arr.length >= MAXG) { toast('Keep it to 5 goals per hour'); return; }
+      arr.push({ t, d: false }); inp.value = ''; draw();
+    };
+    inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); add(); } });
+    $(addId).addEventListener('click', () => { add(); inp.focus(); });
+    return { draw, add, set(items) { arr.length = 0; arr.push(...items.slice(0, MAXG)); inp.value = ''; draw(); } };
+  }
+
+  const S = {
+    me: { name: '', goals: [], status: 'focus', away: false, checkin: null, reacts: {}, timer: null },
+    editing: false,
+    prefs: { focusMin: 50, checkinMin: 10 },
+    myPeer: null, table: null, peers: [], code: '', lastKey: '', log: new Map(), replyTo: null, unsub: [],
+  };
+  let roomNs = null, actx = null;
+
+  let toastT;
+  function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2600); }
+  function colorFor(s) { let x = 0; for (const c of String(s)) x = (x * 31 + c.charCodeAt(0)) >>> 0; return `hsl(${x % 360} 38% 48%)`; }
+  const pkey = (peer) => 'p_' + String(peer).replace(/[^A-Za-z0-9_-]/g, '');
+  const fmt = (ms) => { const s = Math.max(0, Math.ceil(ms / 1000)); return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); };
+  const clock = (t) => new Date(t).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+  function safeUrl(u) { try { const x = new URL(u); return (x.protocol === 'https:' || x.protocol === 'http:') ? x : null; } catch { return null; } }
+  function randCode() { const a = 'abcdefghjkmnpqrstuvwxyz23456789'; let s = 'table-'; for (let i = 0; i < 4; i++) s += a[Math.floor(Math.random() * a.length)]; return s; }
+
+  function chime(up) {
+    if (!actx) return;
+    try {
+      const t = actx.currentTime, notes = up ? [523, 784] : [784, 523];
+      notes.forEach((f, i) => {
+        const o = actx.createOscillator(), g = actx.createGain();
+        o.type = 'sine'; o.frequency.value = f;
+        g.gain.setValueAtTime(0.0001, t + i * .2);
+        g.gain.exponentialRampToValueAtTime(0.12, t + i * .2 + .02);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + i * .2 + .8);
+        o.connect(g).connect(actx.destination); o.start(t + i * .2); o.stop(t + i * .2 + .9);
+      });
+    } catch {}
+  }
+
+  // ---------- shared timer: lives in everyone's presence, newest setAt wins ----------
+  function cleanTimer(t) {
+    if (!t || typeof t !== 'object' || typeof t.setAt !== 'number') return null;
+    const n = (v, lo, hi, d) => { v = Number(v); return Number.isFinite(v) ? Math.min(hi, Math.max(lo, v)) : d; };
+    return { startedAt: typeof t.startedAt === 'number' ? t.startedAt : null, pausedAt: typeof t.pausedAt === 'number' ? t.pausedAt : null, by: clampStr(t.by, 30), focusMin: n(t.focusMin, 1, 120, 50), checkinMin: n(t.checkinMin, 1, 30, 10), setAt: t.setAt };
+  }
+  function phase(now = Date.now()) {
+    const t = S.me.timer;
+    if (!t || !t.startedAt) return { phase: 'idle', round: 0 };
+    if (t.pausedAt) now = t.pausedAt;
+    const f = t.focusMin * 60000, c = t.checkinMin * 60000, cyc = f + c;
+    const el = Math.max(0, now - t.startedAt), round = Math.floor(el / cyc) + 1, inC = el % cyc;
+    if (inC < f) return { phase: 'focus', round, left: f - inC, total: f, endsAt: now + (f - inC) };
+    return { phase: 'checkin', round, left: cyc - inC, total: c, endsAt: now + (cyc - inC) };
+  }
+  function setTimer(startedAt, pausedAt = null) {
+    const base = S.me.timer || S.prefs;
+    push({ timer: { startedAt, pausedAt, by: S.me.name, focusMin: base.focusMin, checkinMin: base.checkinMin, setAt: Date.now() } });
+    tick();
+  }
+  function togglePause() {
+    const t = S.me.timer; if (!t || !t.startedAt) return;
+    const now = Date.now();
+    if (t.pausedAt) { setTimer(t.startedAt + (now - t.pausedAt), null); toast('Timer resumed for everyone'); }
+    else { setTimer(t.startedAt, now); toast('Timer paused for everyone'); }
+  }
+  function adoptTimer() {
+    let best = S.me.timer;
+    for (const p of S.peers) {
+      const t = cleanTimer(p.presence && p.presence.timer);
+      if (t && (!best || t.setAt > best.setAt)) best = t;
+    }
+    if (best && best !== S.me.timer && (!S.me.timer || best.setAt > S.me.timer.setAt)) {
+      const prev = S.me.timer, who = best.by || 'Someone';
+      push({ timer: best });
+      if (prev) {
+        let msg = '';
+        if (best.startedAt && best.pausedAt && !prev.pausedAt) msg = `${who} paused the timer`;
+        else if (best.startedAt && !best.pausedAt && prev.pausedAt && prev.startedAt) msg = `${who} resumed the timer`;
+        else if (best.startedAt && !prev.startedAt) msg = `${who} started the clock`;
+        else if (!best.startedAt && prev.startedAt) msg = `${who} ended the session`;
+        if (msg) { toast(msg); chime(!best.pausedAt); }
+      }
+    }
+  }
+
+  // ---------- presence ----------
+  function push(patch) {
+    Object.assign(S.me, patch);
+    if (S.table) S.table.presence(patch).catch((e) => toast(e && e.code === 'invalid_argument' ? 'That was too long to share. Try shortening it.' : 'Could not reach the table. Trying again soon.'));
+    render();
+  }
+  function soloTable() {
+    const self = { peer: 'solo', by: null, isMe: true, sameTab: true, kind: 'viewer', guest: false, presence: {}, updatedAt: Date.now() };
+    const fns = [];
+    return {
+      presence(p) { const np = { ...self.presence }; for (const [k, v] of Object.entries(p)) { if (v === null) delete np[k]; else np[k] = v; } self.presence = np; const list = [{ ...self }]; queueMicrotask(() => fns.forEach((f) => f({ peers: list, joined: [], left: [], updated: list }))); return Promise.resolve(); },
+      onPeers(f) { fns.push(f); queueMicrotask(() => f({ peers: [{ ...self }], joined: [], left: [], updated: [] })); return () => {}; },
+      onConnection(f) { queueMicrotask(() => f(false)); return () => {}; },
+      leave() { return Promise.resolve(); },
+    };
+  }
+  function onPeers(change) {
+    S.peers = change.peers.filter((p) => p.kind === 'viewer');
+    const me = S.peers.find((p) => p.isMe && p.sameTab); if (me) S.myPeer = me.peer;
+    adoptTimer(); recordLog(); render();
+  }
+  const isMine = (p) => p.isMe && p.sameTab;
+  const pres = (p) => isMine(p) ? S.me : (p.presence || {});
+  const nameOf = (p) => clampStr(pres(p).name, 30) || 'Someone';
+  const seated = () => [...S.peers].filter((p) => isMine(p) || pres(p).name).sort((a, b) => isMine(b) - isMine(a));
+
+  // ---------- session log for repo notes ----------
+  function recordLog() {
+    for (const p of S.peers) {
+      const ci = pres(p).checkin;
+      if (ci && typeof ci.round === 'number') {
+        const k = pkey(p.peer) + '_' + ci.round, prev = S.log.get(k);
+        S.log.set(k, { peer: p.peer, name: nameOf(p), round: ci.round, result: RESULTS[ci.result] ? ci.result : 'missed', goals: cleanGoals(ci.goals), work: clampStr(ci.work, 500), link: clampStr(ci.link, 300), next: cleanGoals(ci.next), reacts: prev ? prev.reacts : {} });
+      }
+    }
+    for (const p of S.peers) {
+      const r = pres(p).reacts; if (!r || typeof r !== 'object') continue;
+      for (const [k, v] of Object.entries(r)) { const e = S.log.get(k); if (e && v && typeof v === 'object') e.reacts[nameOf(p)] = { r: clampStr(v.r, 8), c: clampStr(v.c, 100) }; }
+    }
+  }
+  function notesMarkdown() {
+    const date = new Date().toISOString().slice(0, 10);
+    const rows = [...S.log.values()].sort((a, b) => a.round - b.round || a.name.localeCompare(b.name));
+    let md = `# Study Table session, ${S.code}, ${date}\n\nAt the table: ${seated().map(nameOf).join(', ')}\n`;
+    let r = 0;
+    for (const e of rows) {
+      if (e.round !== r) { r = e.round; md += `\n## Round ${r}\n`; }
+      md += `- **${e.name}**: ${RESULTS[e.result]}\n`;
+      for (const g of e.goals) md += `  - [${g.d ? 'x' : ' '}] ${g.t}\n`;
+      if (e.work) md += `  - Work: ${e.work.replace(/\n+/g, ' / ')}\n`;
+      if (e.link) md += `  - Link: ${e.link}\n`;
+      if (e.next.length) md += `  - Next: ${e.next.map((g) => g.t).join('; ')}\n`;
+      const rx = Object.entries(e.reacts).map(([n, v]) => `${n} ${(REACTIONS.find((x) => x[0] === v.r) || [, ''])[1]}${v.c ? ` "${v.c}"` : ''}`);
+      if (rx.length) md += `  - Reactions: ${rx.join('; ')}\n`;
+    }
+    if (!rows.length) md += '\nNo check-ins yet.\n';
+    return md;
+  }
+
+  // ---------- phase changes ----------
+  function onPhaseChange(prevKey, ph) {
+    const prev = prevKey.split(':')[0];
+    if (prevKey) chime(ph.phase === 'checkin');
+    if (ph.phase === 'checkin') {
+      $('ckForm').reset();
+      const g = S.me.goals, done = g.filter((x) => x.d).length;
+      const pre = !g.length ? null : done === g.length ? 'done' : done ? 'partial' : 'missed';
+      if (pre) document.querySelector(`input[name="res"][value="${pre}"]`).checked = true;
+      nextB.set(copyGoals(g.filter((x) => !x.d)));
+    }
+    if (ph.phase === 'focus' && prev === 'checkin') {
+      const ci = S.me.checkin, keep = {};
+      for (const [k, v] of Object.entries(S.me.reacts || {})) if (k.endsWith('_' + ph.round)) keep[k] = v;
+      const patch = { reacts: keep };
+      if (ci && ci.round === ph.round - 1 && ci.next && ci.next.length) patch.goals = copyGoals(ci.next);
+      else patch.goals = copyGoals(S.me.goals.filter((x) => !x.d));
+      push(patch);
+      $('replyBox').hidden = true; S.replyTo = null;
+    }
+  }
+  function tick() {
+    if (!S.table) return;
+    const ph = phase(), key = ph.phase + ':' + ph.round;
+    if (key !== S.lastKey) { const prev = S.lastKey; S.lastKey = key; onPhaseChange(prev, ph); render(); }
+    else renderClock(ph);
+  }
+  setInterval(tick, 250);
+
+  // ---------- render ----------
+  function renderClock(ph) {
+    const t = S.me.timer;
+    $('stage').className = 'stage ' + ph.phase;
+    if (ph.phase === 'idle') {
+      $('phaseLabel').textContent = 'Ready';
+      $('clock').textContent = fmt((t ? t.focusMin : S.prefs.focusMin) * 60000);
+      $('meta').textContent = t && t.by ? `Session ended by ${t.by === S.me.name ? 'you' : t.by}` : 'Start when everyone is here';
+      $('ringFill').style.strokeDashoffset = 100;
+    } else if (t.pausedAt) {
+      $('stage').className = 'stage paused';
+      $('phaseLabel').textContent = ph.phase === 'focus' ? 'Focus · paused' : 'Check-in · paused';
+      $('clock').textContent = fmt(ph.left);
+      $('meta').textContent = `Paused by ${t.by && t.by !== S.me.name ? t.by : 'you'}`;
+      $('ringFill').style.strokeDashoffset = (100 * ph.left / ph.total).toFixed(2);
+    } else {
+      $('phaseLabel').textContent = ph.phase === 'focus' ? 'Focus' : 'Check-in';
+      $('clock').textContent = fmt(ph.left);
+      $('meta').textContent = ph.phase === 'focus' ? `Round ${ph.round} · check in at ${clock(ph.endsAt)}` : `Round ${ph.round} · back to focus at ${clock(ph.endsAt)}`;
+      $('ringFill').style.strokeDashoffset = (100 * ph.left / ph.total).toFixed(2);
+    }
+  }
+
+  function statusOf(p, ph) {
+    const pr = pres(p);
+    if (ph.phase === 'checkin') return (pr.checkin && pr.checkin.round === ph.round) ? ['done', 'checked in'] : ['writing', 'writing check-in'];
+    if (pr.status === 'break') return ['rest', 'on a break'];
+    if (pr.away && ph.phase === 'focus') return ['rest', 'away'];
+    if (ph.phase === 'idle') return ['', 'here'];
+    return ['focus', 'focusing'];
+  }
+
+  function render() {
+    if (!S.table) return;
+    const ph = phase();
+    renderClock(ph);
+    $('startBtn').hidden = ph.phase !== 'idle';
+    $('breakBtn').hidden = ph.phase !== 'focus';
+    $('checkNowBtn').hidden = ph.phase !== 'focus';
+    $('focusNowBtn').hidden = ph.phase !== 'checkin';
+    const paused = !!(S.me.timer && S.me.timer.pausedAt);
+    $('sessionRow').style.visibility = ph.phase === 'idle' ? 'hidden' : 'visible';
+    $('pauseBtn').textContent = paused ? 'Resume' : 'Pause';
+    $('pauseBtn').setAttribute('aria-pressed', paused ? 'true' : 'false');
+    $('breakBtn').textContent = S.me.status === 'break' ? 'Back to work' : 'Take a break';
+
+    // seats around the table
+    const people = seated();
+    const n = Math.max(people.length, 4);
+    const seats = $('seats'); seats.replaceChildren();
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * 2 * Math.PI - Math.PI / 2, x = 50 + 50 * Math.cos(a), y = 50 + 50 * Math.sin(a);
+      const p = people[i];
+      if (!p) { seats.append(h('div', { class: 'seat empty', style: `left:${x}%;top:${y}%`, title: `Open seat. Friends join with code ${S.code}` }, '+')); continue; }
+      const nm = nameOf(p), [cls, label] = statusOf(p, ph);
+      const gl = isMine(p) ? S.me.goals : cleanGoals(pres(p).goals);
+      const tip = `${nm}: ${label}` + (gl.length ? `, ${gl.filter((g) => g.d).length} of ${gl.length} goals done` : '');
+      seats.append(h('div', { class: `seat ${cls}${isMine(p) ? ' me' : ''}`, style: `left:${x}%;top:${y}%;background:${colorFor(p.peer + nm)}`, title: tip, role: 'img', 'aria-label': tip }, nm.slice(0, 1).toUpperCase()));
+    }
+
+    // goals
+    const goals = $('goals'); goals.replaceChildren();
+    for (const p of people) {
+      const nm = nameOf(p), [, label] = statusOf(p, ph), mine = isMine(p);
+      const gl = mine ? S.me.goals : cleanGoals(pres(p).goals), done = gl.filter((g) => g.d).length;
+      const hist = [...S.log.values()].filter((e) => e.peer === p.peer).sort((a, b) => a.round - b.round);
+      goals.append(h('div', { class: 'goal-row' },
+        h('span', { class: 'c', style: `background:${colorFor(p.peer + nm)};align-self:start;margin-top:7px` }),
+        h('div', { class: 'txt' },
+          h('span', { class: 'nm' }, mine ? 'You' : nm),
+          gl.length ? h('span', { class: 'prog' }, `${done} of ${gl.length} done`) : h('span', { class: 'muted' }, 'no goals yet'),
+          gl.length ? checklist(gl, mine ? { onToggle: toggleGoal, onRemove: S.editing ? removeGoal : null } : {}) : null),
+        h('div', { class: 'st' }, hist.length ? hist.map((e) => h('i', { class: 'pip ' + e.result, title: `Round ${e.round}: ${RESULTS[e.result]}` })) : label)));
+    }
+
+    $('checkinView').hidden = ph.phase !== 'checkin';
+    if (ph.phase === 'checkin') renderFeed(ph);
+  }
+
+  function renderFeed(ph) {
+    const posted = S.me.checkin && S.me.checkin.round === ph.round;
+    $('ckSubmit').textContent = posted ? 'Update' : 'Share';
+    const feed = $('feed'); feed.replaceChildren();
+    const waiting = [];
+    for (const p of seated()) {
+      const pr = pres(p), mine = isMine(p), nm = nameOf(p), ci = pr.checkin;
+      if (!ci || ci.round !== ph.round) { waiting.push(mine ? 'you' : nm); continue; }
+      const res = RESULTS[ci.result] ? ci.result : 'missed';
+      const key = pkey(p.peer) + '_' + ph.round;
+      const rx = [];
+      for (const q of S.peers) { const v = pres(q).reacts && pres(q).reacts[key]; if (v && typeof v === 'object') rx.push({ name: nameOf(q), r: clampStr(v.r, 8), c: clampStr(v.c, 100), mine: isMine(q) }); }
+      const myR = rx.find((x) => x.mine);
+      const url = safeUrl(clampStr(ci.link, 300));
+      feed.append(h('article', { class: 'post' },
+        h('div', { class: 'post-head' },
+          h('span', { class: 'av', style: `background:${colorFor(p.peer + nm)}` }, nm.slice(0, 1).toUpperCase()),
+          h('b', null, mine ? 'You' : nm), h('span', { class: 'tag ' + res }, RESULTS[res])),
+        cleanGoals(ci.goals).length ? checklist(cleanGoals(ci.goals)) : null,
+        ci.work ? h('p', { class: 'work' }, clampStr(ci.work, 500)) : null,
+        url ? h('a', { href: url.href, target: '_blank', rel: 'noopener noreferrer' }, url.hostname + url.pathname.slice(0, 30)) : null,
+        cleanGoals(ci.next).length ? h('div', { class: 'next' }, 'Next hour → ', cleanGoals(ci.next).map((g) => g.t).join(' · ')) : null,
+        rx.some((x) => x.c) ? h('ul', { class: 'comments' }, rx.filter((x) => x.c).map((x) => h('li', null, h('b', null, x.name + ' '), x.c))) : null,
+        h('div', { class: 'reacts' },
+          REACTIONS.map(([id, em, lbl]) => {
+            const who = rx.filter((x) => x.r === id).map((x) => x.name);
+            if (mine && !who.length) return null;
+            return h('button', { type: 'button', class: 'react' + (myR && myR.r === id ? ' on' : ''), title: who.length ? `${lbl}: ${who.join(', ')}` : lbl, disabled: mine, 'aria-label': lbl + (who.length ? `, ${who.length}` : ''), onclick: () => react(key, id) }, em + (who.length ? ' ' + who.length : ''));
+          }),
+          mine ? null : h('button', { type: 'button', class: 'react', onclick: () => openReply(key, nm) }, 'Comment'))));
+    }
+    if (!feed.children.length) feed.append(h('p', { class: 'muted small' }, 'Nobody has shared yet.'));
+    $('waiting').textContent = waiting.length ? `waiting on ${waiting.join(', ')}` : 'everyone is in';
+  }
+
+  function react(key, r) {
+    const cur = (S.me.reacts || {})[key];
+    push({ reacts: { ...(S.me.reacts || {}), [key]: { r: cur && cur.r === r ? '' : r, c: cur ? cur.c : '' } } }); recordLog();
+  }
+  function openReply(key, nm) {
+    S.replyTo = key; $('replyInput').placeholder = `A note for ${nm}`;
+    const cur = (S.me.reacts || {})[key]; $('replyInput').value = cur ? cur.c : '';
+    $('replyBox').hidden = false; $('replyInput').focus();
+  }
+
+  // ---------- events ----------
+  $('replyBox').addEventListener('submit', (e) => {
+    e.preventDefault(); if (!S.replyTo) return;
+    const cur = (S.me.reacts || {})[S.replyTo];
+    push({ reacts: { ...(S.me.reacts || {}), [S.replyTo]: { r: cur ? cur.r : '', c: $('replyInput').value.trim().slice(0, 100) } } });
+    recordLog(); $('replyBox').hidden = true; S.replyTo = null; toast('Sent');
+  });
+  $('replyCancel').addEventListener('click', () => { $('replyBox').hidden = true; S.replyTo = null; });
+
+  $('ckForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const ph = phase(); if (ph.phase !== 'checkin') return;
+    const res = (document.querySelector('input[name="res"]:checked') || {}).value;
+    if (!res) { toast('Pick how it went first'); return; }
+    const link = $('ckLink').value.trim();
+    if (link && !safeUrl(link)) { toast('Links need to start with https://'); return; }
+    nextB.add();
+    push({ checkin: { round: ph.round, result: res, goals: copyGoals(S.me.goals, true), work: $('ckWork').value.trim().slice(0, 500), link: link.slice(0, 300), next: copyGoals(nextGoals), at: Date.now() } });
+    recordLog(); toast('Shared with the table');
+  });
+
+  $('startBtn').addEventListener('click', () => setTimer(Date.now()));
+  $('pauseBtn').addEventListener('click', togglePause);
+  $('checkNowBtn').addEventListener('click', () => { const t = S.me.timer, ph = phase(); setTimer(Date.now() - ((ph.round - 1) * (t.focusMin + t.checkinMin) + t.focusMin) * 60000); });
+  $('focusNowBtn').addEventListener('click', () => { const t = S.me.timer, ph = phase(); setTimer(Date.now() - ph.round * (t.focusMin + t.checkinMin) * 60000); });
+  let endConfirmT = null;
+  function resetEndBtn() { clearTimeout(endConfirmT); endConfirmT = null; $('endBtn').textContent = 'End session'; }
+  $('endBtn').addEventListener('click', () => {
+    if (!endConfirmT) {
+      $('endBtn').textContent = 'Tap to confirm'; toast('Tap again to end the session for everyone');
+      endConfirmT = setTimeout(resetEndBtn, 4000); return;
+    }
+    resetEndBtn(); setTimer(null); toast('Session ended for everyone');
+  });
+  $('breakBtn').addEventListener('click', () => push({ status: S.me.status === 'break' ? 'focus' : 'break' }));
+  const joinB = builder('jGoalList', 'jGoal', 'jAdd', joinGoals);
+  const nextB = builder('ckNextList', 'ckNext', 'ckAdd', nextGoals);
+  function toggleGoal(i) { const g = copyGoals(S.me.goals, true); if (!g[i]) return; g[i].d = !g[i].d; push({ goals: g }); }
+  function removeGoal(i) { const g = copyGoals(S.me.goals, true); g.splice(i, 1); push({ goals: g }); }
+  function setEditing(on) { S.editing = on; $('goalForm').hidden = !on; $('editGoalBtn').textContent = on ? 'Done editing' : 'Edit my goals'; render(); if (on) $('goalInput').focus(); }
+  $('editGoalBtn').addEventListener('click', () => setEditing(!S.editing));
+  $('goalDone').addEventListener('click', () => setEditing(false));
+  $('goalForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const t = $('goalInput').value.trim().slice(0, 80); if (!t) return;
+    if (S.me.goals.length >= MAXG) { toast('Keep it to 5 goals per hour'); return; }
+    push({ goals: [...copyGoals(S.me.goals, true), { t, d: false }] }); $('goalInput').value = '';
+  });
+  document.addEventListener('visibilitychange', () => { if (S.table) push({ away: document.hidden }); });
+
+  $('notesBtn').addEventListener('click', () => {
+    const md = notesMarkdown();
+    navigator.clipboard.writeText(md).then(() => toast('Notes copied for your repo'), () => {
+      const ta = h('textarea', { class: 'in', style: 'margin-top:16px', 'aria-label': 'Session notes' }); ta.value = md;
+      $('roomView').append(ta); ta.select(); toast('Copy the notes below');
+    });
+  });
+
+  $('leaveBtn').addEventListener('click', async () => {
+    try { await S.table.leave(); } catch {}
+    S.unsub.forEach((f) => { try { f(); } catch {} }); S.unsub = [];
+    S.table = null; S.peers = []; S.lastKey = ''; S.me.timer = null; S.me.checkin = null; S.log.clear();
+    $('roomView').hidden = true; $('joinView').hidden = false; $('where').hidden = true;
+  });
+
+  $('joinView').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const code = $('jCode').value.trim().toLowerCase();
+    if (!/^[a-z0-9][a-z0-9-]{0,39}$/.test(code)) { toast('Codes use lowercase letters, numbers and dashes'); return; }
+    try { actx = actx || new (window.AudioContext || window.webkitAudioContext)(); } catch {}
+    joinB.add();
+    if (!joinGoals.length) { toast('Add at least one goal for this hour'); $('jGoal').focus(); return; }
+    S.code = code; S.prefs = { focusMin: Number($('jFocus').value), checkinMin: Number($('jCheck').value) };
+    Object.assign(S.me, { name: $('jName').value.trim().slice(0, 30), goals: copyGoals(joinGoals), status: 'focus', away: document.hidden, checkin: null, reacts: {}, timer: null });
+    $('joinBtn').disabled = true; $('joinBtn').textContent = 'Finding your table…';
+    let table = null;
+    if (roomNs) { try { table = await roomNs.join(code); } catch { showBanner("Couldn't reach the live table, so you're solo for now."); } }
+    else showBanner("You're studying solo. Open this page on claude.ai while signed in to sit with friends.");
+    S.table = table || soloTable();
+    $('joinBtn').disabled = false; $('joinBtn').textContent = 'Sit down';
+    try { if (location.hash.slice(1) !== code) history.replaceState(null, '', '#' + code); } catch {}
+    $('codeTxt').textContent = code; $('where').hidden = false;
+    $('joinView').hidden = true; $('roomView').hidden = false;
+    S.unsub.push(S.table.onPeers(onPeers, () => showBanner('Lost the connection to the table.')));
+    S.unsub.push(S.table.onConnection((ok) => { $('dot').className = 'dot' + (table && ok ? ' live' : ''); $('dot').title = table ? (ok ? 'Live' : 'Reconnecting') : 'Solo'; }));
+    S.table.presence({ name: S.me.name, goals: S.me.goals, status: 'focus', away: S.me.away, checkin: null, reacts: {}, timer: null }).catch(() => {});
+    render();
+  });
+
+  function showBanner(msg) { const b = $('banner'); b.textContent = msg; b.hidden = false; }
+
+  // ---------- boot ----------
+  const hc = (location.hash || '').slice(1).toLowerCase();
+  $('jCode').value = /^[a-z0-9][a-z0-9-]{0,39}$/.test(hc) ? hc : randCode();
+  (async () => {
+    const cl = window.claude;
+    if (!cl || typeof cl.use !== 'function') return;
+    try { roomNs = await cl.use('room'); } catch { roomNs = null; }
+    try { const userNs = await cl.use('user'); if (userNs && !$('jName').value) { const me = await userNs.me(); if (me && me.name && !$('jName').value) $('jName').value = me.name.split(' ')[0].slice(0, 30); } } catch {}
+  })();
+})();
+</script>
+
+</body>
+</html>
