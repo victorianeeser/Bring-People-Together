@@ -22,12 +22,50 @@ A quiet online study table for friends: set your goals, focus together, and chec
 
 ## User 2, My dad
 
-**What he did:**
-- Added 3 goals right away and liked pressing Enter to add each one.
-- Didn't notice the friends around the table at first. 
-- Pressed Pause by accident while looking for a way to leave.
+**Liked the goal-setting process.** He added three goals right away and liked being able to press Enter to add each one.
+
+**Didn't notice the other participants.** He didn't initially realize there were friends sitting around the table.
+
+**Pause vs. Leave was confusing.** He accidentally pressed Pause while trying to find a way to leave the study session.
 
 **What I'll change:**
 - Label the circles with names, not just initials
-- Add a short prompt in "show your work", like "What did you finish?"
+- Add a short prompt in "Show Your Work," like "What did you finish?"
 - Move "Leave" somewhere easier to find
+
+## User 3, Devin
+
+**Liked the distraction-free environment.** He liked that there was no video or chat because he wanted to feel accountable without having additional distractions.
+
+**Wanted clearer timer notifications.** She understood the focus timer but wasn't sure what would happen when it reached zero or when her next check-in would happen.
+
+**Could goals be edited?** She wondered whether she could change or add goals after the study session had already started.
+
+**What I'll change:**
+- Make the next check-in time more noticeable
+- Add a subtle notification when the focus session ends
+- Clarify whether goals can be edited during a session
+
+## User 4, Kamna
+
+**Liked the shared study environment.** She liked that everyone could work on different assignments while sharing the same virtual study space.
+
+**How do I invite friends?** They looked for an obvious way to invite friends or share a session code.
+
+**Wanted more visibility into everyone's progress.** They liked the idea of studying alongside friends but wanted to see who was actively working, taking a break, or checking in.
+
+**What I'll change:**
+- Make the invite/join process more obvious
+- Add clearer indicators for who's focusing, on break, or checking in
+- Make everyone's progress easier to see
+
+## User 5, Peggy
+
+**Early check-in was confusing.** She wasn't entirely sure how checking in early differed from the regular scheduled check-in.
+
+**Liked the hourly reset.** She appreciated being able to reflect on what they accomplished and create new goals for the next hour.
+
+**What I'll change:**
+- Clarify the difference between early and scheduled check-ins
+- Add a progress summary between study sessions
+- Make it easier to carry unfinished goals into the next hour
