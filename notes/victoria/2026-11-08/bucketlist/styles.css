@@ -31,6 +31,25 @@
   color: var(--ink);
 }
 
+/* Light mode, chosen in Settings */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --paper: #FFFFFF;
+  --surface: #FFFFFF;
+  --field: #FFFFFF;
+  --ink: #1B1A17;
+  --muted: #5E5B55;
+  --line: #E4E4E0;
+  --border: #8C8C86;
+  --action: #3270E0;
+  --action-soft: #E6EEFE;
+  --hover: #F1F1EE;
+  --error: #B3261E;
+}
+:root[data-theme="light"] :is(.nav-link[aria-current], .season[aria-pressed="true"], .view-switch a[aria-current]) { box-shadow: inset 0 0 0 1.5px var(--ink); }
+:root[data-theme="light"] :is(.btn, .btn.primary:hover, .filter-menu, .selected-tools, .pill input:checked + span, a.check) { border-color: var(--ink); }
+:root[data-theme="light"] dialog::backdrop, :root[data-theme="light"] .scrim { background: rgba(27, 26, 23, .45); }
+
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--paper); color: var(--ink); font: 400 15px/1.5 var(--body); }
 h1, h2, h3, p, ul, dl, dd { margin: 0; padding: 0; }

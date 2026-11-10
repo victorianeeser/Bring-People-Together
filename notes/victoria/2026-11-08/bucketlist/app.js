@@ -545,6 +545,24 @@ function submitInvite(form) {
 
 // Settings
 
+function currentTheme() {
+  return document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
+}
+
+function setTheme(theme) {
+  if (theme === 'light') document.documentElement.dataset.theme = 'light';
+  else delete document.documentElement.dataset.theme;
+  try {
+    localStorage.setItem('bucketlist.theme', theme);
+  } catch (e) {
+    // The theme still applies until the page is closed.
+  }
+}
+
+function themeOption(value, label) {
+  return `<label class="pill"><input type="radio" name="theme" value="${value}" ${currentTheme() === value ? 'checked' : ''}><span>${label}</span></label>`;
+}
+
 function openSettingsModal() {
   addModal.innerHTML = smallFormHtml({
     id: 'settings-form',
@@ -556,6 +574,10 @@ function openSettingsModal() {
         <input id="f-settings-name" name="name" maxlength="30" value="${esc(currentGroup().name)}" aria-describedby="settings-error" autocomplete="off">
         <p class="error" id="settings-error" hidden></p>
       </div>
+      <fieldset>
+        <legend>Appearance</legend>
+        <div class="pills">${themeOption('light', 'Light')}${themeOption('dark', 'Dark')}</div>
+      </fieldset>
       <div class="settings-demo">
         <div>
           <h3>Demo data</h3>
@@ -674,6 +696,7 @@ document.addEventListener('input', (event) => {
 
 document.addEventListener('change', (event) => {
   if (event.target.id === 'group-select') showGroup(event.target.value);
+  if (event.target.name === 'theme') setTheme(event.target.value);
   if (event.target.id === 'panel-season') {
     find(ui.panelId).season = event.target.value;
     saveOrWarn();
