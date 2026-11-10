@@ -9,12 +9,12 @@ Three interviews: Dimitri, Stacy and Lex.
 ### 1. Dimitri
 
 #### Main points
-- **Balance matters most.** He cares about family, friends, his girlfriend, hobbies and work. Overworking as both an engineer and a trader left him exhausted and took attention away from people.
-- **Routines keep his friends close.** He sees a group of about 10 friends through the gym, pickleball, his family's cafe and Discord.
-- **Time and money are the main barriers.** Reaching out first isn't the problem. Friends invite him, but his trading hours often clash on weekdays. Weekends are easier.
-- **Life stages and distance pull friends apart.** His friends range from college students to homeowners, and he hasn't seen his college friends in about a year and a half.
-- **Small gestures keep friendships going.** He texts his college friends in a group chat almost every day.
-- **He sees staying connected as his responsibility.** He believes you have to think about others and be the one who reaches out.
+- **Balance matters most.** He cares about family, friends, his girlfriend, hobbies and work. Overworking as an engineer and trader left him exhausted and less present.
+- **Routines keep his friends close.** He sees about 10 friends through the gym, pickleball, his family's cafe and Discord.
+- **Time and money are the main barriers.** Friends invite him, but his trading hours clash on weekdays. Weekends are easier.
+- **Life stages and distance pull friends apart.** He hasn't seen his college friends in about a year and a half.
+- **Small gestures keep friendships going.** He texts his college group chat almost every day.
+- **Staying connected is on him.** He believes you have to think about others and reach out.
 
 #### Group activities he mentioned
 
@@ -26,20 +26,18 @@ Three interviews: Dimitri, Stacy and Lex.
 | Gym | Not specified | Training together | Poor sleep |
 | Family's cafe | Some weekdays | Time with best friends | Work travel |
 | Trading | Daily | Working with friends | Late hours |
-| Discord and games | Occasional | Late-night chats | — |
 | College group chat | Almost daily | Staying in touch | Distance |
-| Texts and calls | Now and then | Catching up | — |
 
 ### 2. Stacy
 
 #### Main points
 - **Family comes first.** Stacy has two daughters, one in high school and one in college, and also cares about marriage, friendships, career and time alone.
-- **Friendships now take planning.** Seeing friends every day is over, so Stacy aims for at least once every couple of weeks and keeps up through a group text.
-- **Time and energy are the main barriers.** Even with free time, there isn't always energy left to make plans. Distance and money play a smaller part.
-- **Coordinating is the hardest part.** Everyone wants to get together, but finding a date takes too much back-and-forth, and plans can get forgotten.
-- **A regular plan would help.** Stacy wants a monthly lunch or girls' night that everyone knows about, kept simple, like coffee or a walk.
-- **Small check-ins matter.** Stacy texts the daughter at college nearly every day and sees quick messages as a way to show care.
-- **Longtime friends matter more with age.** Friendships built through kids' activities fade as kids grow up, so friends who know Stacy outside of being a mom mean more.
+- **Friendships now take planning.** Stacy aims to see friends every couple of weeks and keeps up through a group text.
+- **Time and energy are the main barriers.** Even with free time, there isn't always energy left to make plans.
+- **Coordinating is the hardest part.** Finding a date takes too much back-and-forth, and plans get forgotten.
+- **A regular plan would help.** Stacy wants a simple monthly lunch or girls' night that everyone knows about.
+- **Small check-ins matter.** Stacy texts the daughter at college nearly every day.
+- **Longtime friends matter more with age.** Friends made through kids' activities fade, so friends who know Stacy beyond being a mom mean more.
 
 #### Group activities Stacy mentioned
 
@@ -48,22 +46,20 @@ Three interviews: Dimitri, Stacy and Lex.
 | Longtime friends | Every couple of weeks | Being known beyond "mom" | Finding a date |
 | Friends' group text | Regularly | Easy way to keep up | Too much back-and-forth |
 | Daughter at college | Texts nearly daily | Staying part of her life | Not overwhelming her |
-| Youngest's school and activities | Not specified | Staying involved | Busy schedules |
 | Workout classes | Not specified | Time alone | Making the time |
 | Other moms | Occasionally | Shared stage of life | Fades as kids grow |
-| Walks | When weather is nice | Being outside | Weather |
 | Faraway friends | Months between visits | Talking regularly | Distance |
 
 ### 3. Lex
 
 #### Main points
 - **Friends and fun matter alongside school.** Lex is a high school student who cares about family, friends and grades, and doesn't want to miss out on being a teenager.
-- **School makes friendship easy.** Most of Lex's social life comes from seeing people every day, with no planning needed.
-- **Time and transportation are the main barriers.** Homework, sports and different schedules get in the way, and most of the group can't drive yet. Money is also an issue.
-- **Deciding is the hard part.** The group spends more time working out what to do than doing it, and it's easier when someone just suggests something.
-- **In person beats online.** Social media helps people keep up, but it isn't the same as being together.
-- **Social media can leave people out.** Seeing friends post from something you weren't invited to can hurt, and posts and messages can cause drama.
-- **Graduation is coming.** Lex expects staying close to take more effort once friends leave for different colleges.
+- **School makes friendship easy.** Lex sees friends every day with no planning needed.
+- **Time and transportation are the main barriers.** Homework, sports and schedules get in the way, most of the group can't drive yet, and money is tight.
+- **Deciding is the hard part.** The group spends more time choosing what to do than doing it.
+- **In person beats online.** Social media helps people keep up, but it isn't the same.
+- **Social media can leave people out.** Seeing posts from something you weren't invited to hurts and can cause drama.
+- **Graduation is coming.** Staying close will take more effort once friends leave for college.
 
 #### Group activities Lex mentioned
 
@@ -71,12 +67,10 @@ Three interviews: Dimitri, Stacy and Lex.
 |---|---|---|---|
 | Close friends at school | Daily | Similar schedules and classes | Seeing them outside school |
 | Friends' group chat | Almost daily | Keeping the conversation going | Never deciding on plans |
-| School activities and sports | Regularly | Something in common with people | Takes up weeknights |
+| School activities and sports | Regularly | Something in common | Takes up weeknights |
 | Food, shopping and movies | Not specified | Making memories | Cost |
-| Football games | Not specified | Hanging out with friends | Getting a ride |
 | Hanging out at someone's house | Sometimes | Easy and free | Getting a ride |
 | Snapchat and TikTok | A lot | Seeing what friends are doing | Feeling left out, drama |
-| Friends at other schools | Less often than before | Still talking | Seeing each other |
 
 ## Important quotes
 
@@ -96,19 +90,19 @@ Three interviews: Dimitri, Stacy and Lex.
 - "Just because someone is busy doesn't mean they don't want to spend time with you."
 
 ## Patterns across all 3
-- **Time is the biggest barrier (3/3).** Trading hours for Dimitri, work and family for Stacy, and homework and sports for Lex.
-- **Finding a time is hard for groups (3/3).** Dimitri aims for what works for most people, Stacy wants to avoid long text threads, and Lex's group struggles to decide.
-- **Money gets in the way too (3/3).** Dimitri's friends are focused on loans and houses, Stacy finds going out expensive, and Lex wants things to do that don't cost much.
-- **Regular contact makes friendship easier (3/3).** Dimitri has weekly routines, Stacy wishes for a monthly plan, and Lex sees friends at school every day.
-- **Small check-ins keep people close (3/3).** Dimitri and Lex both use group chats daily, and Stacy texts a daughter at college nearly every day.
-- **Being together still matters most (2/3).** Stacy says chats don't replace seeing someone, and Lex prefers in person.
+- **Time is the biggest barrier (3/3).** Trading hours, work and family, and homework and sports.
+- **Finding a time is hard for groups (3/3).** Dimitri goes with what works for most, Stacy wants fewer texts, and Lex's group can't decide.
+- **Money gets in the way (3/3).** Loans and houses, the cost of going out, and needing cheap things to do.
+- **Regular contact makes friendship easier (3/3).** Weekly routines, a wished-for monthly plan, and seeing friends at school.
+- **Small check-ins keep people close (3/3).** Daily group chats and texts.
+- **Being together still matters most (2/3).** Stacy and Lex both prefer in person.
 
 ## Design opportunities
 
 ### Dimitri
 - **Plan around the majority:** pick the time that works for most people.
 - **Build on routines:** attach connection to things that already repeat.
-- **Quick ways to show you care:** send a small sign, especially when saying no to a plan.
+- **Quick ways to show you care:** send a small sign, especially when saying no.
 
 ### Stacy
 - **See when people are free:** skip the long text thread.
@@ -121,28 +115,26 @@ Three interviews: Dimitri, Stacy and Lex.
 - **Help people feel included:** make it easier to invite people and harder to feel left out.
 
 ### Combined
-- **Make finding a time easy (Dimitri, Stacy, Lex):** show who's free and pick what works for most people.
+- **Make finding a time easy (all 3):** show who's free and pick what works for most.
 - **Help groups decide and follow through (Stacy, Lex):** suggest ideas, choose quickly and remind people.
-- **Build on what repeats (Dimitri, Stacy):** use routines and standing plans, so nobody has to start from scratch.
-- **Make small gestures count (Dimitri, Stacy, Lex):** let people check in quickly between hangouts.
-- **Keep hangouts simple and affordable (Stacy, Lex):** make coffee, a walk or a free activity feel like enough.
-- **Stay close across distance (Dimitri, Stacy, Lex):** keep friends connected when they live far apart.
-- **Work with what people already use (Dimitri, Lex):** fit into group chats instead of adding another app.
-- **Help people feel included (Lex):** make it easier to invite people and harder to feel left out.
+- **Build on what repeats (Dimitri, Stacy):** routines and standing plans, so nobody starts from scratch.
+- **Make small gestures count (all 3):** quick check-ins between hangouts, including across distance.
+- **Keep it simple and affordable (Stacy, Lex):** coffee, a walk or a free activity is enough.
+- **Fit into what people already use (Dimitri, Lex):** work with group chats instead of adding another app.
 
 ## Big question
 
 ### Dimitri
-When someone's time is taken up by work, how can a small, quick action feel like real presence for the people they care about, and not just a substitute for showing up?
+When work takes up someone's time, how can a small, quick action feel like real presence, and not just a substitute for showing up?
 
 ### Stacy
-How might we turn "we should get together" into plans that actually happen, without adding more back-and-forth to already full lives?
+How might we turn "we should get together" into plans that actually happen, without more back-and-forth?
 
 ### Lex
-School brings friends together without any planning, so how might we keep that easy closeness when schedules, rides and eventually graduation pull them apart?
+School brings friends together without planning, so how might we keep that easy closeness when schedules, rides and graduation pull them apart?
 
 ## Possible directions
 - **From "we should" to a real plan:** a group chat tool that shows who's free, helps the group decide and locks in the plan. (Stacy, Lex)
-- **Plans that repeat on their own:** a standing lunch, game or meetup that keeps happening even when not everyone can come. (Dimitri, Stacy)
-- **Small actions that feel like showing up:** quick shared moments that help friends feel together when they can't meet, including across distance. (Dimitri, Stacy, Lex)
-- **Easy, unplanned time together:** a way to see who's around right now and join them, like running into friends at school. (Dimitri, Lex)
+- **Plans that repeat on their own:** a standing meetup that keeps happening even when not everyone can come. (Dimitri, Stacy)
+- **Small actions that feel like showing up:** quick shared moments that help friends feel together, even far apart. (Dimitri, Stacy, Lex)
+- **Easy, unplanned time together:** see who's around right now and join them, like running into friends at school. (Dimitri, Lex)
