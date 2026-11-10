@@ -29,7 +29,7 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 
 ## Nov 9
 
-- **Everyone:** got feedback in class crit ([notes](notes/2026-11-09-crit/crit-notes.md))
+- **Everyone:** got feedback in class crit ([notes](notes/crit/2026-11-09/crit-notes.md))
 
 ## Nov 10
 
