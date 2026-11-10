@@ -14,3 +14,4 @@
 8. **Bucket list:** shared lists like "before graduation" or "before end of summer." Anyone can add or remove items, similar to Spotify Jam, with AI suggestions.
 9. **Shared calendar:** see when people are free so you can plan things.
 10. **Photo walk:** a 30-second timer to take a photo of something, like a tree, on friend walks.
+
