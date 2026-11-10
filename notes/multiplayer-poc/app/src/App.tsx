@@ -22,7 +22,17 @@ function PresenceBar() {
   const [copied, setCopied] = useState(false)
 
   const copy = async () => {
-    await navigator.clipboard.writeText(location.href)
+    try {
+      await navigator.clipboard.writeText(location.href)
+    } catch {
+      // Fallback for browsers that block the clipboard API
+      const t = document.createElement('textarea')
+      t.value = location.href
+      document.body.appendChild(t)
+      t.select()
+      document.execCommand('copy')
+      t.remove()
+    }
     setCopied(true)
     setTimeout(() => setCopied(false), 1500)
   }
@@ -31,7 +41,8 @@ function PresenceBar() {
   }
 
   return (
-    <div className="bar">
+    // stopPropagation keeps the canvas from treating button clicks as drawing
+    <div className="bar" onPointerDown={(e) => e.stopPropagation()}>
       <span><span className="dot" />{others + 1} here</span>
       <span className="room">room: <b>{room}</b></span>
       <button onClick={copy}>{copied ? 'Copied!' : 'Copy link'}</button>
@@ -47,6 +58,10 @@ export default function App() {
   // Prefix keeps us out of other people's rooms on tldraw's shared demo server.
   const store = useSyncDemo({ roomId: `mw-multiplayer-poc-${room}` })
   return (
-    <Tldraw store={store} components={components} />
+    <Tldraw
+      store={store}
+      components={components}
+      licenseKey={import.meta.env.VITE_TLDRAW_LICENSE_KEY}
+    />
   )
 }
