@@ -1,4 +1,4 @@
-# Bucket List | Rough draft
+# 11/10 | Bucket List rough draft
 
 The group's starting point for the project, copied from Victoria's 11/8 prototype ([original](../../notes/victoria/2026-11-08/bucketlist/)). Edit the files in this folder.
 
@@ -23,4 +23,4 @@ Then go to [http://localhost:8080](http://localhost:8080). Press `Ctrl+C` in the
 3. Under **Build and deployment**, set **Source** to **Deploy from a branch**.
 4. Choose the **main** branch and the **/ (root)** folder, then click **Save**.
 5. After a minute or two, the prototype will be at:
-   `https://victorianeeser.github.io/Bring-People-Together/project/rough-draft/`
+   `https://victorianeeser.github.io/Bring-People-Together/project/2026-11-10-rough-draft/`
