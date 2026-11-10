@@ -26,3 +26,7 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 ## Nov 8
 
 - **Victoria:** made a prototype of the Bucket List idea (a shared checklist that turns finished plans into scrapbook pages) with Claude Code
+
+## Nov 10
+
+- **Leandra:** researched existing scrapbook and bucket list platforms (Canva, Mixbook, Memora, The Bucket App) and made a moodboard for the group's digital bucket list and scrapbook platform
