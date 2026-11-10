@@ -10,6 +10,7 @@ A shared whiteboard. Everyone who opens the same `?room=` link draws on the same
 - **Stack:** Vite + React + `tldraw` + `@tldraw/sync` (`useSyncDemo`, which uses tldraw's hosted demo sync server)
 
 ## Run locally
+    cd app
     npm install
     npm run dev
 
