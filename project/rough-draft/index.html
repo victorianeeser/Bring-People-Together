@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Bucket List</title>
+  <script>try { if (localStorage.getItem('bucketlist.theme') === 'light') document.documentElement.dataset.theme = 'light'; } catch (e) {}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar" aria-label="Group"></aside>
+    <main class="main" id="main" tabindex="-1"></main>
+  </div>
+
+  <dialog class="panel" id="panel" aria-labelledby="panel-title"></dialog>
+  <dialog class="modal" id="add-modal" aria-labelledby="add-title"></dialog>
+  <dialog class="confirm" id="confirm-modal" aria-labelledby="confirm-title"></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="./data.js"></script>
+  <script src="./app.js"></script>
+  <script src="./scrapbook.js"></script>
+</body>
+</html>
