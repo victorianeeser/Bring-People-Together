@@ -30,21 +30,11 @@ Friend groups first, like college roommates and friends from a team or club. Fam
 - **Multiplayer demo:** [notes/multiplayer-poc](notes/multiplayer-poc/), a shared whiteboard anyone can join from a link
 - **Research, inspo, persona and wireframes:** in our Figma file
 
-## Who we might be designing for, and why
+## Who we're designing for, and why
 
-Week 1 homework: one paragraph each. Rewrite this section whenever the project changes.
+We're designing for **friend groups who care about each other but keep losing the chance to spend time together**, starting with college students like roommates and friends from a team or club. Between the three of us, we interviewed college students, grad students, young workers, a mom of two and a high school student. Nobody said they didn't want to hang out. The problem was always getting it to happen: schedules that never line up, homework or work shifts that cancel plans last minute, and group chats where people read the message and never answer. They already have a running list of "we should do this" ideas, and a camera roll full of photos from the times they did. But nothing ties the two together, so plans get forgotten and memories get buried.
 
-### Maya
-
-We're designing for college and grad students who want to spend time with their friends but keep losing the chance to. In our interviews, nobody said they lacked interest in hanging out. The problems came from coordination: messages that get read and never answered, group chats that go silent or move too fast to keep up with, plans that fall apart at the last minute because of homework, work shifts or schedules that never line up, and a few loud voices taking over while quieter people get left out. These students already live in iMessage, Snapchat and GroupMe, already play casual games with friends, and mostly meet new people through someone they already know. So rather than asking them to download another app, we want to design something that fits into the chats and habits they already have, and makes it easier to reply, show up and stay connected between hangouts, while keeping anything involving strangers safe by default.
-
-### Leandra
-
-We're designing for busy students and young workers who care about their friends but don't have the time or energy to keep up with them. Across my three interviews (a physical therapy grad student, a sporting goods salesperson and a pre-optometry senior), nobody struggled to enjoy time with friends. The problem was the effort around it. One won't reply to a text until she has the energy to match it, one never reaches out first and waits for friends to make plans, and one is so locked into exams that her friends describe her as "school and grades." What they valued most was easy, low-pressure time together: friends dropping by while they study, seeing that someone is online and hopping into a call, or playing a casual game where nothing is at stake. Big or mismatched groups felt stressful, and quick interactions like sending a reel got used far more than long messages. So we want to design a shared space that lets people feel close through simple presence and light interactions, fits into what they're already doing, and nudges them to connect without adding another thing to schedule or reply to.
-
-### Victoria
-
-We might design for busy friend groups who care about each other but struggle to turn "we should get together" into real plans. A working 24-year-old, a mom of two and a high school student all told us the same thing: time is short, and finding a time that works is too hard. So we want to design something inside the group chats they already use that makes it easy to see who's free, decide what to do and keep getting together.
+That's why we're making a **shared scrapbook book for each year**. The bucket list on page 1 keeps the group's plans in one place where everyone can say "I'm in." Every finished plan becomes a page the whole group makes together, so the book fills up as the year goes on. People told us it's the friends that make something worth showing up for, so every page shows who was there. Victoria tested an early version with 5 people, and their feedback shaped it: a simple checklist by season instead of a timeline, separate groups, more text and sticker options, and a way to invite friends. Families and couples could use the same book later, but friend groups come first.
 
 ## Group Members
 
