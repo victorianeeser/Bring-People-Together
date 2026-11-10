@@ -1,6 +1,6 @@
 # Multiplayer Board: tldraw sync proof of concept
 
-**Live multiplayer link: https://mayawalsh19-art.github.io/multiplayer-poc/**
+**Live multiplayer link: https://mayawalsh19-art.github.io/multiplayer-poc/?room=class**
 
 Open it, click **Copy link**, and send it to others. Everyone on the same link draws on the same board at once.
 
