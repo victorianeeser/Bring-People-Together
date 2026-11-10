@@ -31,3 +31,4 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 
 - **Leandra:** researched existing scrapbook and bucket list platforms (Canva, Mixbook, Memora, The Bucket App) and made a moodboard for the group's digital bucket list and scrapbook platform
 - **Everyone:** worked in Figma on inspo, concept, user persona, research, branding, and wireframes (screenshot of [Victoria's workboard](notes/victoria/2026-11-10/figma-board-progress.webp))
+- **Everyone:** decided to move forward with Victoria's bucket list and scrapbook idea, and started a [rough draft](project/2026-11-10-rough-draft/) from her prototype
