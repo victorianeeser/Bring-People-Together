@@ -28,6 +28,7 @@ Friend groups first, like college roommates and friends from a team or club. Fam
 - **Prototype:** [project/2026-11-10-rough-draft](project/2026-11-10-rough-draft/), started from Victoria's 11/8 prototype
 - **User testing:** [Victoria's 5 tests](notes/victoria/2026-11-08/victoria-bucketlist-user-testing.md)
 - **Multiplayer demo:** [notes/multiplayer-poc](notes/multiplayer-poc/), a shared whiteboard anyone can join from a link
+- **Threats:** [threats.md](threats.md), what could stop the idea from working and what we can do about it
 - **Research, inspo, persona and wireframes:** [our Figma file](https://www.figma.com/design/eXyBNM0n3Ky0jqW9cRPPvq/Bring-People-Together)
 
 ## Who we're designing for, and why
