@@ -28,7 +28,7 @@ export function openBookForm({ book = null, onSaved } = {}) {
       <h2 id="confirm-title">${isNew ? 'New book' : 'Book settings'}</h2>
       <p>${isNew ? 'Make a book for a friend group, a trip, a semester, or anything else.' : `Change the title, cover, or bucket list for ${esc(book.title)}.`}</p>
       <label class="field"><span>Title</span>
-        <input name="title" maxlength="40" autocomplete="off" value="${esc(state.title)}" aria-describedby="title-error" placeholder="The Roomies, Summer trip, Movie nights">
+        <input name="title" maxlength="40" autocomplete="off" value="${esc(state.title)}" aria-describedby="title-error" placeholder="Friends, Summer trip, Movie nights">
       </label>
       <p class="field-error" id="title-error" hidden></p>
 

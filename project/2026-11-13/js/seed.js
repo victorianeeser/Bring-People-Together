@@ -61,7 +61,7 @@ function roomies() {
   ];
   return {
     id: 'book-roomies',
-    title: 'The Roomies',
+    title: 'Friends',
     cover: { type: 'preset', presetId: 'terracotta-dots' },
     members: [MEMBERS.me, MEMBERS.maya, MEMBERS.jordan, MEMBERS.priya, MEMBERS.sam],
     hasBucketList: true,

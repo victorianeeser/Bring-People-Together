@@ -12,8 +12,9 @@ if (!isValid(data)) {
   data = createSeed();
   saveData(data);
 }
-// Older saved ideas don't have a season yet: guess one from "when".
+// Update older saved data: the demo book was renamed, and old ideas have no season (guess one from "when").
 for (const book of data.books) {
+  if (book.id === 'book-roomies' && book.title === 'The Roomies') book.title = 'Friends';
   for (const item of book.bucketList) if (!item.season) item.season = guessSeason(item.when);
 }
 

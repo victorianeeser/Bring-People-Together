@@ -50,7 +50,7 @@ Plain HTML, CSS, and JavaScript modules. No framework and no build step.
 | `js/model.js` | Data model: books, spreads, bucket list items, page items, covers |
 | `js/state.js` | The book data and every action that changes it; saves on each change |
 | `js/storage.js` | localStorage for book data, IndexedDB for photos (resized to 1600px) |
-| `js/seed.js` | Demo books: The Roomies, Summer '26, Movie Nights |
+| `js/seed.js` | Demo books: Friends, Summer '26, Movie Nights |
 | `js/library.js` | The library carousel and grid |
 | `js/bookform.js` | New book and Book settings |
 | `js/book.js` | The open book: spreads, page edges, page turns, overview |
