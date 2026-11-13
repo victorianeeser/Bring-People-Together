@@ -40,4 +40,4 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 
 ## Nov 12
 
-- **Maya:** created branding/logo options
+- **Maya:** created branding/logo options, created [threats.md](threats.md) and filled it out
