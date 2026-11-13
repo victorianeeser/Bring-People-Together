@@ -1,4 +1,4 @@
-# 11/18 | Shared scrapbook (round 1)
+# 11/13 | Shared scrapbook (round 1)
 
 Round-1 prototype for IxD415, "Bring People Together."
 
@@ -39,7 +39,7 @@ It has to run from a local server (not by double-clicking `index.html`), because
 3. Under **Build and deployment**, set **Source** to **Deploy from a branch**.
 4. Choose the **main** branch and the **/ (root)** folder, then click **Save**.
 5. After a minute or two, the prototype will be at:
-   `https://victorianeeser.github.io/Bring-People-Together/project/2026-11-18/`
+   `https://victorianeeser.github.io/Bring-People-Together/project/2026-11-13/`
 
 ## How it's built
 

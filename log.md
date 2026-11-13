@@ -41,3 +41,7 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 ## Nov 12
 
 - **Maya:** created [branding/logo options](notes/maya/2026-11-12/maya.md), created [threats.md](threats.md) and filled it out
+
+## Nov 13
+
+- **Victoria:** redid the [prototype](project/2026-11-13/) so it flows better, getting it ready for this weekend's user testing
