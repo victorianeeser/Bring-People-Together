@@ -87,16 +87,3 @@ The app brings back photos with an ex, a friend you lost, or someone who passed 
 After a breakup, one of them posts couple photos, adds plans about the relationship, or uses the book to keep tabs on the other.
 - Everything above applies: hide photos of yourself, report, block, and remove members.
 - Intimate photos are removed for everyone on the first report and sent to us. The reporter gets links to [Take It Down](https://takeitdown.ncmec.org/) (under 18) and [StopNCII](https://stopncii.org/) (18 and over).
-
-## The least we'd build to keep people safe
-
-1. Books are private and invite-only, with no public pages and no search.
-2. Invite links expire after 7 days, and removing someone resets the link.
-3. "This is me. Hide it." on any photo.
-4. You can only edit or delete your own things. The owner can undo.
-5. Report, which hides content for you right away and for everyone after 2 reports (1 for intimate photos).
-6. Block, which hides their content and presence from you and stops them adding you to books.
-7. No counts or rankings, and no "who said no" or "seen" lists.
-8. Leave a book anytime and take your photos with you.
-9. Remove location data from photos.
-10. Rate limits on uploads, comments, invites and reminders.
