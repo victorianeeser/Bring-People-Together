@@ -1,74 +1,74 @@
 # Threats
 
-Things that could stop our shared scrapbook from working, and what we can do about each one. Based on our idea in the [README](README.md), our interviews, Victoria's 5 user tests, and the [11/9 crit](notes/crit/2026-11-09/crit-notes.md).
+Our scrapbook is a shared space: a friend group's book for the year, with the bucket list on page 1 and a spread for every plan they actually do. Anything people make together can also be used against someone in the group. This page covers three questions:
 
-## 1. People don't come back
+1. What does a good community use of this look like, and how do we plan for and support it?
+2. How would an angry ex use this?
+3. What is the least we can build that keeps people reasonably safe?
 
-**The threat:** The same thing that kills plans in group chats could kill the book. Someone makes a book, a few people add plans, and then it goes quiet. In our interviews, the problem was never wanting to hang out. It was follow-through. An app doesn't fix that on its own.
+---
 
-**What we can do:**
-- Give people a reason to open it between plans: "Can't decide?" random pick, "One year ago today," and a nudge when a plan gets enough "I'm in"s.
-- Make checking off a plan and adding one photo take seconds, so the book still fills up when people are busy.
-- Let groups backfill the year with photos they already have, so the book never starts empty.
+## 1. What good use looks like
 
-## 2. Only one person does the work
+**A good book:**
+- Belongs to a real friend group (roommates, a team, a club) who all said yes to being in it.
+- Has plans from many people on the bucket list, not just the one planner.
+- Fills up because everyone who said "I'm in" adds a photo or a line to the spread.
+- Includes the friend who couldn't make it, so they still see it and can add a comment.
+- Gets looked back on happily, like "one year ago today we did this."
+- Stays inside the group unless everyone is fine with a page being shared.
 
-**The threat:** In most friend groups there's one planner. If one person makes every spread, it stops being a book the group makes together and becomes a chore for that person.
+**How we plan for it and support it:**
+- **Set the norm when a book is made.** One short line on the create screen: "This book is for the people in it. Only post photos your friends would be okay with."
+- **Make everyone a contributor, not an audience.** Each friend has their own color, and the spread asks everyone who said "I'm in" to add one thing.
+- **Nudge, don't guilt.** One reminder per plan, never a streak or a "you haven't posted" message.
+- **Give the group an owner.** The person who makes the book can manage members and the invite link. That person can also hand the book to someone else.
+- **End on purpose.** Each year's book closes and goes on the shelf, so the group starts fresh instead of carrying old drama forward.
 
-**What we can do:**
-- Each friend has their own color, so it's easy to see who hasn't added anything yet.
-- Ask everyone who said "I'm in" to add one thing to the spread, instead of asking one person to finish it.
+---
 
-## 3. It's another app to download
+## 2. How would an angry ex use this?
 
-**The threat:** People already have a group chat, a camera roll and shared albums. Asking a whole friend group to download something new is a big ask, and if even one friend won't join, the book isn't complete.
+The likely situation: two people dated, broke up, and are still in the same friend group's book. Or one of them made the book and still controls it.
 
-**What we can do:**
-- Joining has to be one tap from a link or QR code, ideally in the browser with no download.
-- Make the link easy to drop into the group chat they already use, so we fit into what they do instead of replacing it.
+| What the ex could do | Why it hurts | What stops it |
+|---|---|---|
+| Post private or embarrassing photos of you on a spread | Everyone in your friend group sees them | Anyone can hide a photo of themselves with one tap. Photos reported by 2 people are hidden right away. |
+| Write mean captions or add stickers on your photos | It's in "your" shared memories | Members can only edit their own content. Everything shows whose color added it. |
+| Delete or mess up what you added | Erases you from the group's year | No one can delete someone else's content except the owner, and edits can be undone. |
+| Add plans to the bucket list that are about you ("our trip to Chicago") | Puts the relationship back in front of the group | Report a plan. The owner can remove it. |
+| Use "One year ago today" to bring back old couple photos | The app reminds you of the breakup | "Hide memories with this person" and an off switch for the feature. |
+| Watch when you're online through live cursors and colors | Feels like being tracked | Blocking hides your presence and your cursor from them. |
+| Keep the invite link and rejoin after being removed | Removing them doesn't stick | Removing a member resets the link. Removed people can't rejoin with old links. |
+| Start a new book with your photos and invite the same friends | Gets around the old book | Photos can't be copied between books. Blocked people can't add you to a book. |
+| Export a page or set it as a wallpaper and send it around | Moves private photos outside the group | Exports are off unless the group turns them on. We can't stop screenshots, so the norm and reporting matter. |
+| Read the location from a photo | Shows where you live or hang out | Location data is removed from every photo on upload. |
+| Spam "I'm in" or reminders to flood your notifications | Harassment that looks like using the app normally | Rate limits on reminders and notifications. |
 
-## 4. Competitors
+**The worst case is intimate photos.** Those get removed immediately when reported, without waiting for the owner, and they go to us for review. The reporter gets a link to [Take It Down](https://takeitdown.ncmec.org/) (for minors) and [StopNCII](https://stopncii.org/) (for adults).
 
-**The threat:** At crit, the big question was "how does it differ from Canva?" Other apps already cover parts of our idea:
-- **Canva, Mixbook, Chatbooks:** make nice-looking books and pages, but one person designs them.
-- **The Bucket App:** bucket lists, but no scrapbook.
-- **Polarsteps, Day One:** turn a trip or a year into a book, but mostly for one person.
-- **Locket, Retro, Dispo:** share photos with close friends, but nothing ties them to plans.
-- **Group chats and shared albums:** free, and everyone already has them.
+---
 
-**What we can do:** Lead with the part nobody else has: the bucket list is page 1 and the table of contents, and the whole group fills in each page live. We should be able to say that in one sentence.
+## 3. The least we can build that keeps people reasonably safe
 
-## 5. Privacy and trust
+If we only build ten things, these are the ones:
 
-**The threat:** The book holds photos of real people, sometimes people who didn't post them. Someone might not want a photo of themselves in the book, or a friend might leave the group after a falling out.
+1. **Private by default.** Books are invite-only. No public pages, no search.
+2. **Invite links that expire.** Links last 7 days, and the owner can reset one at any time. The class-demo QR code expires after the demo.
+3. **Remove a member.** The owner can remove someone, which also resets the invite link.
+4. **Leave anytime.** You can leave a book, and when you do you choose whether your photos stay or leave with you.
+5. **"This is me. Hide it."** Anyone can hide a photo or caption of themselves for the whole group with one tap. The owner sees that it was hidden but can't bring it back.
+6. **Report.** Reasons: photo of me without permission, mean or harassing, spam, intimate photo. Reported content is hidden for the reporter right away and for everyone after 2 reports. Intimate photos are hidden for everyone on the first report.
+7. **Block.** Blocking someone hides their content and presence from you, hides yours from them, and stops them from adding you to new books.
+8. **Only edit your own stuff.** Every change is tagged with the person's color, and the owner can undo changes.
+9. **Strip photo location data** on upload.
+10. **Rate limits:**
+    - Uploads: 30 photos per person per hour
+    - Invites: 10 per book per day
+    - Reminders: 1 per plan per day
+    - Join attempts: 5 per link per minute
+    - New books: 3 per person per day
 
-**What we can do:**
-- Books are private to the group by default, with invite-only links.
-- Let anyone remove a photo of themselves, and decide what happens to someone's photos if they leave.
-- Be clear about who can see an exported page or wallpaper.
+**Not in the first version:** automatic photo scanning, age verification, a moderation team, or blocking screenshots (phones don't allow it). We'd say this honestly in the privacy note instead of pretending the app can stop everything.
 
-## 6. Friend groups change
-
-**The threat:** Roommates move out, teams graduate, friends drift apart. A book that only works for a fixed group could feel awkward or sad when the group changes.
-
-**What we can do:**
-- One book per year means each book is a snapshot of who was there, not a forever commitment.
-- Let a person be in many books, so a new group can start its own without leaving the old one.
-
-## 7. Building it
-
-**The threat:** Many people editing one page at the same time is the hardest part to build, and it's the part that makes us different. Photo uploads also take space and can be slow on a phone.
-
-**What we can do:**
-- Our [multiplayer demo](notes/multiplayer-poc/) already shows several people drawing on one board live, so we know it can work.
-- For the class demo, keep it to a small set of stickers and page styles and test with real classmates before the final presentation.
-- The free tldraw license key for the demo runs out on Feb 18, 2027, so we'd need a new one if we keep using it after that.
-
-## 8. Too much to do in the scrapbook
-
-**The threat:** Crit asked for more (polaroid frames, filters, tape, textures, custom stickers) and also asked us to simplify the bucket list. If we add everything, it gets confusing and slow, and people who aren't "creative" won't try.
-
-**What we can do:**
-- Start every spread from a theme so it looks good without any effort.
-- Keep the bucket list a simple checklist by season, like Victoria's testers asked for.
-- Add the extra tools only after the basics feel easy.
+**How we'd check it works:** in our next round of testing, we'd ask testers to try hiding a photo of themselves, reporting a spread and removing a member, and we'd time how long each takes. If any of them takes more than about 10 seconds or needs help, it's too hard to find.
