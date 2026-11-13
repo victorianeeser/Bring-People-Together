@@ -40,4 +40,4 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 
 ## Nov 12
 
-- **Maya:** brainstormed 20 app names in Figma, made logo and branding options for the top picks, narrowed them to Stuck Together and Pagemates, and built out each one with a logo system, colors, type, app icons and app screens ([Branding page](https://www.figma.com/design/eXyBNM0n3Ky0jqW9cRPPvq/Bring-People-Together?node-id=26-2))
+- **Maya:** created branding/logo options
