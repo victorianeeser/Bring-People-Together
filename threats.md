@@ -100,5 +100,3 @@ After a breakup, one of them posts couple photos, adds plans about the relations
 8. Leave a book anytime and take your photos with you.
 9. Remove location data from photos.
 10. Rate limits on uploads, comments, invites and reminders.
-
-**How we'd test it:** in our next round of user testing, ask people to hide a photo of themselves, report a caption and leave a book, and time each one. If it takes more than about 10 seconds or they need help, it's too hard to find.
