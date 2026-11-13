@@ -37,3 +37,7 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 - **Everyone:** worked in Figma on inspo, concept, user persona, research, branding, and wireframes (screenshot of [Victoria's workboard](notes/victoria/2026-11-10/figma-board-progress.webp))
 - **Everyone:** decided to move forward with Victoria's bucket list and scrapbook idea, and started a [rough draft](project/2026-11-10-rough-draft/) from her prototype
 - **Maya:** built a shared whiteboard where several people can draw on the same board at the same time from one link, put it online, and added it to [notes/multiplayer-poc](notes/multiplayer-poc/) ([try it](https://mayawalsh19-art.github.io/multiplayer-poc/?room=class)); in Figma, compared 6 apps that turn photos and plans into books, made 2 inspo boards with notes, and wrote persona notes from her interviews; wrote our final idea and who we're designing for in the README; typed up Monday's [crit notes](notes/crit/2026-11-09/crit-notes.md)
+
+## Nov 12
+
+- **Maya:** brainstormed 20 app names in Figma, made logo and branding options for the top picks, narrowed them to Stuck Together and Pagemates, and built out each one with a logo system, colors, type, app icons and app screens ([Branding page](https://www.figma.com/design/eXyBNM0n3Ky0jqW9cRPPvq/Bring-People-Together?node-id=26-2))
