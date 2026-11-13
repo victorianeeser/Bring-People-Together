@@ -17,7 +17,7 @@
   --display: Inter, system-ui, sans-serif;
   --hand: Inter, system-ui, sans-serif;
   --page-font: Inter, system-ui, sans-serif;
-  --book-h: clamp(280px, 52vh, 470px);
+  --book-h: clamp(180px, min(52vh, calc(100vh - 370px)), 470px);
   --book-w: calc(var(--book-h) * 0.75);
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   /* One shadow for books on the shelf, open pages, and the cover while it opens */
