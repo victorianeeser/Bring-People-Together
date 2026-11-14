@@ -45,3 +45,4 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 ## Nov 13
 
 - **Victoria:** redid the [prototype](project/2026-11-13/) so it flows better, getting it ready for this weekend's user testing
+- **Leandra:** made a [live version](project/2026-11-13-live/) of the prototype with Claude Code so several people can use it at the same time for our 5-person test: shared books, photos, and a "who's here" bar, synced through Firebase. Set up the Firebase project, tested it with two browsers, and put it online with Netlify ([try it](https://scrapbook-proto.netlify.app/?room=class))
