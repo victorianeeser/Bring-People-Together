@@ -6,13 +6,12 @@ Tested the [live scrapbook](../../../project/2026-11-13-live/) ([try it](https:/
 
 ## Photos
 
-![A tester looking at the book shelf with the Friends book on the cover](tester-viewing-book-shelf-friends-cover.jpg)
-
-![A tester adding star and heart stickers to a page](tester-adding-stickers-to-page.jpg)
-
-![A tester browsing the My Scrapbook book on the shelf](tester-browsing-my-scrapbook-shelf.jpg)
-
-![A tester editing a spread in the book](tester-editing-a-spread.jpg)
+<p>
+  <img src="tester-viewing-book-shelf-friends-cover.jpg" alt="A tester looking at the book shelf with the Friends book on the cover" width="200">
+  <img src="tester-adding-stickers-to-page.jpg" alt="A tester adding star and heart stickers to a page" width="200">
+  <img src="tester-browsing-my-scrapbook-shelf.jpg" alt="A tester browsing the My Scrapbook book on the shelf" width="200">
+  <img src="tester-editing-a-spread.jpg" alt="A tester editing a spread in the book" width="200">
+</p>
 
 ## Video
 
