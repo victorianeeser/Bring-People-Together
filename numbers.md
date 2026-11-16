@@ -7,14 +7,14 @@ Running tally of people each of us interviewed or tested. Update every week.
 | Week of | Victoria | Maya | Leandra | Total |
 |---|---|---|---|---|
 | 2026-11-02 | 3 | 3 | 3 | 9 |
-| 2026-11-09 | 10 | 5 | 10 | 25 |
+| 2026-11-09 | 10 | 10 | 10 | 30 |
 | 2026-11-16 | | | | |
 | 2026-11-23 | | | | |
 | 2026-11-30 | | | | |
 | 2026-12-07 | | | | |
-| **Subtotal** | | | | **34** |
+| **Subtotal** | | | | **39** |
 
-**Progress:** 34 of 100 (34%)
+**Progress:** 39 of 100 (39%)
 
 ## What counts
 
