@@ -32,3 +32,5 @@ Tested the [live scrapbook](../../../project/2026-11-13-live/) ([try it](https:/
 
 - Add a way to delete text, stickers and photos.
 - Keep each sticker on the spread it was added to.
+- Finalize the design and the look and feel.
+- Work out the multiplayer issues so everything works on multiple screens at once.
