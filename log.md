@@ -46,6 +46,11 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 
 - **Victoria:** redid the [prototype](project/2026-11-13/) so it flows better, getting it ready for this weekend's user testing
 - **Leandra:** made a [live version](project/2026-11-13-live/) of the prototype with Claude Code so several people can use it at the same time for our 5-person test: shared books, photos, and a "who's here" bar, synced through Firebase. Set up the Firebase project, tested it with two browsers, and put it online with Netlify ([try it](https://scrapbook-proto.netlify.app/?room=class))
+- **Victoria:** tested the [prototype](project/2026-11-13/) with 5 people in person on one shared laptop, one at a time and then as a group. Testers liked testing together. Found that everyone gets added to all three books automatically, "live here" isn't clickable, and the page flip jumps when the edit button pushes the book down. [Notes and photo](notes/victoria/2026-11-13/victoria-user-testing.md)
+
+## Nov 14
+
+- **Leandra:** tested the [live version](project/2026-11-13-live/) with 5 people at the library, each on their own laptop. Joining, adding bucket list ideas and adding stickers all synced to everyone. Found that everyone's circle in the "who's here" bar is the same peach color, and other people see moved items jump instead of slide. [Notes](notes/leandra/2026-11-14/group-testing-notes.md)
 
 ## Nov 15
 
