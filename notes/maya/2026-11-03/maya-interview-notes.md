@@ -4,6 +4,8 @@ Three interviews: Addie, Lanie and Anthony.
 
 📄 **Full transcripts:** [Addie](transcripts/maya-interview-1-addie-transcript.txt) · [Lanie](transcripts/maya-interview-2-lanie-transcript.txt) · [Anthony](transcripts/maya-interview-3-anthony-transcript.md)
 
+🎧 **Audio recordings:** [Addie](recordings/maya-interview-1-addie-recording.m4a) · [Lanie](recordings/maya-interview-2-lanie-recording.m4a) · [Anthony](recordings/maya-interview-3-anthony-recording.m4a)
+
 ## Participant notes
 
 ### 1. Addie
