@@ -1,6 +1,6 @@
 # 11/15 | Scrapbook user testing
 
-Sunday, November 15, 2026 · 5 participants · in person, each on a laptop
+Sunday, November 15, 2026 · 5 participants · in person
 
 Tested the [live scrapbook](../../../project/2026-11-13-live/) ([try it](https://scrapbook-proto.netlify.app/?room=class)).
 
