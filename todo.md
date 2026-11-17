@@ -2,7 +2,7 @@
 
 Due by Wednesday, November 18
 
-<!-- tasks to be added -->
+- **Maya:** edit the logo to make it more handwritten and make two different brand boards, with a more crafty, handmade feel (look at Tori's ideas in Figma)
 
 Due by Monday, November 16
 
