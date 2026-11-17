@@ -6,7 +6,7 @@ import { loadData, saveData, deletePhotos, clearPhotos } from './storage.js';
 import { createSeed, classBook, CLASS_BOOK_ID } from './seed.js';
 import { photoKeysInBook, MEMBER_COLORS, uid, createSpread, createBucketItem, guessSeason, codeFromId, normalizeCode } from './model.js';
 import { ME, ME_NAME } from './identity.js';
-import { startSync, push, reconcile, clearRemotePhotos, liveEnabled, getMyColor } from './sync.js';
+import { startSync, push, reconcile, removeRemotePhotos, liveEnabled, getMyColor } from './sync.js';
 
 const isValid = (data) => data && data.version === 1 && Array.isArray(data.books);
 
@@ -128,6 +128,7 @@ export function startLive() {
 }
 
 export function addBook(book) {
+  if (!book.createdBy) book.createdBy = ME; // the creator can change or remove anything in the book
   data.books.push(book);
   const ok = commit();
   ensureMe();
@@ -198,6 +199,30 @@ export function addBucketItem(bookId, fields) {
   return item;
 }
 
+// Reports (threats.md): hidden for you right away, for everyone after 2 reports.
+// An intimate photo is removed for everyone on the first report.
+function addReport(thing, { intimate = false } = {}) {
+  thing.reports = [...new Set([...(Array.isArray(thing.reports) ? thing.reports : []), ME])];
+  if (intimate) thing.removedForAll = true;
+}
+
+export function reportPageItem(bookId, itemId, options) {
+  const book = getBook(bookId);
+  for (const spread of book?.spreads || []) {
+    const item = [...spread.leftPage.items, ...spread.rightPage.items].find((i) => i.id === itemId);
+    if (item) { addReport(item, options); commit(); return true; }
+  }
+  return false;
+}
+
+export function reportIdea(bookId, itemId) {
+  const item = findItem(getBook(bookId), itemId);
+  if (!item) return false;
+  addReport(item);
+  commit();
+  return true;
+}
+
 export function deleteBook(id) {
   const book = getBook(id);
   if (!book) return false;
@@ -208,8 +233,10 @@ export function deleteBook(id) {
 
 // Resets the whole room for everyone: starting books back, everyone's photos removed.
 export async function resetDemo() {
+  // The database rules don't allow deleting all photos in one go, so remove each book's photos one by one.
+  const keys = data.books.flatMap((book) => photoKeysInBook(book));
   await clearPhotos();
-  await clearRemotePhotos().catch(() => {});
+  await removeRemotePhotos(keys).catch(() => {});
   data = createSeed();
   const ok = commit();
   ensureMe();

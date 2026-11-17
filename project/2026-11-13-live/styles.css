@@ -705,3 +705,27 @@ fieldset.field legend { margin-bottom: 6px; padding: 0; }
 /* TEMP for user testing: the class book's code in the join copy. Remove after testing. */
 .test-code { margin-top: 8px; color: var(--ink); }
 .test-code strong { letter-spacing: 0.08em; }
+
+/* Safety (threats.md): who added each thing, own-only edits, reports */
+.spread .page-inner .pi[data-by]::after {
+  content: attr(data-by); position: absolute; left: 0; top: 100%; margin-top: 4px; padding: 1px 7px;
+  border-radius: 999px; background: var(--by); color: var(--by-ink, #FFFFFF);
+  font: 600 11px/1.5 var(--ui); white-space: nowrap; pointer-events: none;
+  opacity: 0; transition: opacity 0.15s;
+}
+.spread .page-inner .pi[data-by]:hover::after,
+.spread .page-inner .pi[data-by].selected::after,
+.spread .page-inner .pi[data-by]:focus-visible::after { opacity: 1; }
+.spread .page-inner .pi-text.editing::after { display: none; }
+.sel-credit { margin: 2px 0 10px; color: #4A4E5A; font-size: 13px; }
+.credit-name { padding: 0 6px; border-radius: 999px; background: var(--by); color: #FFFFFF; font-weight: 600; }
+.link-btn { padding: 4px 0; border: 0; background: none; color: #4A4E5A; font: inherit; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.link-btn:hover { color: var(--danger); }
+.report-btn { margin-top: 8px; }
+.pop-report { display: block; margin: 10px auto 0; }
+.report-reasons { display: grid; gap: 8px; margin: 14px 0 0; padding: 0; border: 0; }
+.report-reasons legend { margin-bottom: 6px; font-weight: 600; }
+.report-reasons label { display: flex; gap: 8px; align-items: center; }
+.report-intimate-note { margin-top: 10px; font-size: 13px; }
+.help-links { margin: 10px 0 0 18px; display: grid; gap: 6px; }
+.help-links a { color: var(--ink); font-weight: 600; }

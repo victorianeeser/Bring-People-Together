@@ -2,7 +2,10 @@
 // add photos (file picker or drag-and-drop), text, and stickers; undo and redo.
 // Every change saves right away. Item positions are percentages of the page.
 
-import { commit } from './state.js';
+import { commit, reportPageItem } from './state.js';
+import { ME } from './identity.js';
+import { canChange, canReport, adderOf, allowAdds } from './moderation.js';
+import { openReportDialog, showTakeDownHelp } from './report.js';
 import { createPageItem, uid } from './model.js';
 import { putPhoto, resizeImage } from './storage.js';
 import { STICKERS, STICKER_COLORS, TRAY, stickerSvg } from './stickers.js';
@@ -28,6 +31,8 @@ export function panelHtml() {
 
       <section class="panel-section selected-tools" id="selected-tools" hidden aria-labelledby="selected-title">
         <h3 id="selected-title">Selected</h3>
+        <p class="sel-credit" id="sel-credit" hidden></p>
+        <div id="sel-edit-tools">
         <label class="slider-row"><span>Rotate</span><input type="range" id="sel-rotate" min="-180" max="180" step="1"><output id="sel-rotate-out"></output></label>
         <label class="slider-row"><span>Size</span><input type="range" id="sel-size" min="5" max="100" step="1"><output id="sel-size-out"></output></label>
         <div class="swatch-row" id="sel-colors" role="group" aria-label="Sticker color">
@@ -39,6 +44,8 @@ export function panelHtml() {
           <button type="button" class="pill-btn small" data-edit="duplicate">Duplicate</button>
           <button type="button" class="pill-btn small danger-text" data-edit="delete">Remove</button>
         </div>
+        </div>
+        <button type="button" class="link-btn report-btn" data-edit="report" hidden>Report</button>
       </section>
 
       <section class="panel-section" aria-labelledby="photos-title">
@@ -111,6 +118,18 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
     return spread.leftPage.items.length <= spread.rightPage.items.length ? 'left' : 'right';
   }
   const save = () => commit();
+  // Only your own things (or anything, if you made the book) can be moved, changed or removed.
+  const mine = (found) => Boolean(found) && canChange(book, found.item);
+  function explainLocked(found) {
+    const adder = adderOf(book, found.item);
+    toast(`Only ${adder?.name || 'the person who added it'} can change this. You can report it if it's not OK.`);
+  }
+  // A cap on how fast one person can add things to a spread (threats.md: "Piling on").
+  function underLimit(spread, count = 1) {
+    const { ok, wait } = allowAdds(spread.id, count);
+    if (!ok) toast(`That's a lot at once. You can add more to this spread in ${wait} seconds.`);
+    return ok;
+  }
 
   // ---- Selection ----
   function clearHandles() {
@@ -128,7 +147,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
     if (el) {
       el.classList.add('selected');
       el.setAttribute('aria-pressed', 'true');
-      if (editingId !== selectedId) {
+      if (editingId !== selectedId && mine(find(selectedId))) {
         // No whitespace between handles: notes read their text from the element.
         el.insertAdjacentHTML('beforeend', `<span class="handle h-rotate" aria-hidden="true">${ROTATE_ICON}</span><span class="handle h-resize" aria-hidden="true"></span>`);
       }
@@ -144,6 +163,15 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
     if (found) {
       const { item } = found;
       panel.querySelector('#selected-title').textContent = `Selected: ${TYPE_NAME[item.type]}`;
+      const adder = adderOf(book, item);
+      const credit = panel.querySelector('#sel-credit');
+      credit.hidden = !adder;
+      if (adder) {
+        credit.innerHTML = `Added by <span class="credit-name" style="--by:${esc(adder.color)}">${adder.id === ME ? 'you' : esc(adder.name)}</span>`
+          + (mine(found) ? '' : `. Only ${esc(adder.name)} can change it.`);
+      }
+      panel.querySelector('#sel-edit-tools').hidden = !mine(found);
+      panel.querySelector('[data-edit="report"]').hidden = !canReport(item);
       rotateInput.value = Math.round(item.rotation || 0);
       panel.querySelector('#sel-rotate-out').textContent = `${Math.round(item.rotation || 0)}°`;
       sizeInput.value = Math.round(item.width);
@@ -197,6 +225,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
     const images = [...files].filter((f) => f.type.startsWith('image/'));
     if (!spread) return;
     if (!images.length) { toast('Only image files can be added as photos'); return; }
+    if (!underLimit(spread, images.length)) return;
     toast(images.length > 1 ? `Adding ${images.length} photos…` : 'Adding photo…');
     const snap = snapshot();
     let lastId = null;
@@ -204,7 +233,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
       try {
         const { blob, width, height } = await resizeImage(file);
         const photoKey = await putPhoto(blob);
-        const item = createPageItem('photo', { width: 42, rotation: Math.round((Math.random() - 0.5) * 8), photoKey, aspect: height / width });
+        const item = createPageItem('photo', { addedBy: ME, width: 42, rotation: Math.round((Math.random() - 0.5) * 8), photoKey, aspect: height / width });
         placeNew(spread, side || targetSide(spread), item, point ? { x: point.x + i * 4, y: point.y + i * 4 } : null);
         lastId = item.id;
       } catch {
@@ -221,9 +250,9 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
 
   function addText() {
     const spread = currentSpread();
-    if (!spread) return;
+    if (!spread || !underLimit(spread)) return;
     record();
-    const item = createPageItem('text', { width: 56, content: '', font: 'caveat', size: 7, color: '#2B2B2B' });
+    const item = createPageItem('text', { addedBy: ME, width: 56, content: '', font: 'caveat', size: 7, color: '#2B2B2B' });
     placeNew(spread, targetSide(spread), item);
     save();
     selectedId = item.id;
@@ -233,9 +262,9 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
 
   function addSticker(kind, { side, point } = {}) {
     const spread = currentSpread();
-    if (!spread) return;
+    if (!spread || !underLimit(spread)) return;
     record();
-    const item = createPageItem('sticker', { kind, width: STICKER_WIDTH[kind] || 18, rotation: Math.round((Math.random() - 0.5) * 16) });
+    const item = createPageItem('sticker', { addedBy: ME, kind, width: STICKER_WIDTH[kind] || 18, rotation: Math.round((Math.random() - 0.5) * 16) });
     placeNew(spread, side || targetSide(spread), item, point);
     save();
     selectedId = item.id;
@@ -246,6 +275,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
   function removeSelected() {
     const found = find(selectedId);
     if (!found) return;
+    if (!mine(found)) { explainLocked(found); return; }
     record();
     found.page.items = found.page.items.filter((i) => i.id !== selectedId);
     save();
@@ -257,7 +287,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
 
   function restack(direction) {
     const found = find(selectedId);
-    if (!found) return;
+    if (!found || !mine(found)) return;
     record();
     const items = allItems(found.spread).sort((a, b) => (a.z || 0) - (b.z || 0));
     const i = items.indexOf(found.item);
@@ -271,9 +301,10 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
 
   function duplicate() {
     const found = find(selectedId);
-    if (!found) return;
+    if (!found || !mine(found) || !underLimit(found.spread)) return;
     record();
-    const copy = { ...JSON.parse(JSON.stringify(found.item)), id: uid('pi'), x: found.item.x + 4, y: found.item.y + 4, z: topZ(found.spread) + 1 };
+    const { reports, removedForAll, ...rest } = JSON.parse(JSON.stringify(found.item));
+    const copy = { ...rest, addedBy: ME, id: uid('pi'), x: found.item.x + 4, y: found.item.y + 4, z: topZ(found.spread) + 1 };
     found.page.items.push(copy);
     save();
     selectedId = copy.id;
@@ -286,10 +317,39 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
     if (!from.length) return;
     if (editingId) finishEditing();
     to.push(snapshot());
-    book.spreads = JSON.parse(from.pop());
+    restoreSpreads(JSON.parse(from.pop()));
     save();
     redraw();
     announce(redo ? 'Redone' : 'Undone');
+  }
+
+  // Undo puts back only things you're allowed to change. Other people's things stay as they are now,
+  // so undo can never erase what someone else added (threats.md: "Erasing someone from the year").
+  function restoreSpreads(saved) {
+    const savedById = new Map(saved.map((sp) => [sp.id, sp]));
+    for (const spread of book.spreads) {
+      const old = savedById.get(spread.id);
+      if (!old) continue;
+      for (const side of ['leftPage', 'rightPage']) {
+        const keepTheirs = spread[side].items.filter((item) => !canChange(book, item));
+        const theirIds = new Set(keepTheirs.map((item) => item.id));
+        const restoreMine = old[side].items.filter((item) => canChange(book, item) && !theirIds.has(item.id));
+        spread[side].items = [...keepTheirs, ...restoreMine];
+      }
+    }
+  }
+
+  // ---- Reporting ----
+  async function reportSelected() {
+    const found = find(selectedId);
+    if (!found || !canReport(found.item)) return;
+    const result = await openReportDialog(found.item.type);
+    if (!result) return;
+    reportPageItem(book.id, found.item.id, { intimate: result.intimate });
+    selectedId = null;
+    redraw();
+    if (result.intimate) showTakeDownHelp();
+    else toast("Reported. It's hidden for you now.");
   }
 
   // ---- Text editing (type right on the page) ----
@@ -298,6 +358,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
     const el = itemEl(id);
     const found = find(id);
     if (!el || !found || found.item.type !== 'text') return;
+    if (!mine(found)) { explainLocked(found); return; }
     editingId = id;
     editSnap = snapshot();
     el.textContent = found.item.content; // start from the clean text (drops the handles too)
@@ -460,6 +521,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
       event.preventDefault();
       if (selectedId !== found.item.id) select(found.item.id);
       el.focus({ preventScroll: true });
+      if (!mine(found)) return; // you can select it (to see who added it, or report it), not move it
       if (handle) startHandle(event, el, found, handle.classList.contains('h-resize') ? 'resize' : 'rotate');
       else startMove(event, el, found);
       return;
@@ -505,7 +567,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
   // ---- Panel ----
   function setColor(color) {
     const found = find(selectedId);
-    if (!found || found.item.type !== 'sticker') return;
+    if (!found || found.item.type !== 'sticker' || !mine(found)) return;
     record();
     found.item.color = color;
     save();
@@ -516,7 +578,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
   let sliderSnap = null;
   function onSlider(event) {
     const found = find(selectedId);
-    if (!found) return;
+    if (!found || !mine(found)) return;
     if (!sliderSnap) sliderSnap = snapshot();
     const { item } = found;
     const el = itemEl(selectedId);
@@ -555,6 +617,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
     forward: () => restack(1),
     backward: () => restack(-1),
     duplicate,
+    report: reportSelected,
     undo: () => undo(),
     redo: () => undo(true),
   };
@@ -631,6 +694,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
   function nudge(change) {
     const found = find(selectedId);
     if (!found) return;
+    if (!mine(found)) { explainLocked(found); return; }
     if (performance.now() - lastNudge > 700) record();
     lastNudge = performance.now();
     change(found.item);

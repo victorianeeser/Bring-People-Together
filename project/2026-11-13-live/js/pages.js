@@ -3,7 +3,8 @@
 import { CATEGORIES, SEASONS } from './model.js';
 import { stickerSvg, STICKERS } from './stickers.js';
 import { photoUrl } from './storage.js';
-import { esc } from './ui.js';
+import { esc, inkFor } from './ui.js';
+import { isHidden, adderOf } from './moderation.js';
 
 // The book as a list of spreads. With a bucket list on, the table of contents is spread 0.
 export function spreadsOf(book) {
@@ -38,9 +39,13 @@ export function itemLabel(item) {
 }
 
 // In the open book, items can be selected (and reached with Tab), so they get a role and label.
-function itemHtml(item, interactive) {
-  const attrs = `data-id="${esc(item.id)}" style="${itemStyle(item)}${item.type === 'text' ? `;font-family:var(--page-font);font-size:${textFontSize(item)};color:${esc(item.color || '#2B2B2B')}` : ''}"`
-    + (interactive ? ` tabindex="0" role="button" aria-pressed="false" aria-label="${esc(itemLabel(item))}"` : '');
+// In the open book each item also shows who added it (on hover and when selected), in their color.
+function itemHtml(item, interactive, book) {
+  const adder = interactive && book ? adderOf(book, item) : null;
+  const credit = adder ? ` data-by="${esc(adder.name)}"` : '';
+  const creditStyle = adder ? `;--by:${esc(adder.color)};--by-ink:${inkFor(adder.color)}` : '';
+  const attrs = `data-id="${esc(item.id)}"${credit} style="${itemStyle(item)}${creditStyle}${item.type === 'text' ? `;font-family:var(--page-font);font-size:${textFontSize(item)};color:${esc(item.color || '#2B2B2B')}` : ''}"`
+    + (interactive ? ` tabindex="0" role="button" aria-pressed="false" aria-label="${esc(itemLabel(item))}${adder ? `, added by ${esc(adder.name)}` : ''}"` : '');
   if (item.type === 'photo') {
     const fill = item.photoKey
       ? `<img class="photo-img" data-photo-key="${esc(item.photoKey)}" alt="" draggable="false">`
@@ -53,8 +58,9 @@ function itemHtml(item, interactive) {
   return `<div class="pi pi-sticker" ${attrs}>${stickerSvg(item.kind, item.color)}</div>`;
 }
 
-export const pageItemsHtml = (page, interactive = false) =>
-  [...page.items].sort((a, b) => (a.z || 0) - (b.z || 0)).map((item) => itemHtml(item, interactive)).join('');
+// Reported items are left out (see moderation.js).
+export const pageItemsHtml = (page, interactive = false, book = null) =>
+  [...page.items].filter((item) => !isHidden(item)).sort((a, b) => (a.z || 0) - (b.z || 0)).map((item) => itemHtml(item, interactive, book)).join('');
 
 // Table of contents: the bucket list. In the open book it's interactive (buttons);
 // in thumbnails and the opening cover it's a plain copy, so nothing nests inside other buttons.
@@ -99,6 +105,7 @@ export function sortedIdeas(book, season = null) {
   const rank = (i) => { const r = SEASONS.indexOf(i.season || 'Someday'); return r < 0 ? SEASONS.length : r; };
   return book.bucketList
     .map((item, order) => ({ item, order }))
+    .filter(({ item }) => !isHidden(item))
     .filter(({ item }) => !season || (item.season || 'Someday') === season)
     .sort((a, b) => rank(a.item) - rank(b.item) || a.order - b.order)
     .map(({ item }) => item);
@@ -142,11 +149,11 @@ export function spreadPagesHtml(book, index, { interactive = false, season = nul
       ? '<button type="button" class="back-contents" data-action="back-to-contents">← back to contents</button>'
       : '<span class="back-contents">← back to contents</span>')
     : '';
-  const isEmpty = !spread.leftPage.items.length && !spread.rightPage.items.length;
+  const isEmpty = ![...spread.leftPage.items, ...spread.rightPage.items].some((item) => !isHidden(item));
   const hint = isEmpty && interactive
     ? `<p class="page-empty"><strong>${esc(spread.title || 'New spread')}</strong>This spread is ready for photos, notes, and stickers.</p>`
     : '';
-  return { left: back + pageItemsHtml(spread.leftPage, interactive), right: hint + pageItemsHtml(spread.rightPage, interactive) };
+  return { left: back + pageItemsHtml(spread.leftPage, interactive, book), right: hint + pageItemsHtml(spread.rightPage, interactive, book) };
 }
 
 // Uploaded photos live in IndexedDB; fill them in after the HTML is on the page.

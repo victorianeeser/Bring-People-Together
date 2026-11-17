@@ -1,0 +1,60 @@
+{
+  "rules": {
+    "rooms": {
+      "$room": {
+        ".read": "$room.matches(/^[a-z0-9-]{1,40}$/)",
+        "seeded": {
+          ".write": true,
+          ".validate": "newData.isBoolean()"
+        },
+        "books": {
+          "$book": {
+            ".validate": "$book.matches(/^[A-Za-z0-9_-]{1,64}$/)",
+            "info": {
+              ".write": true,
+              ".validate": "newData.isString() && newData.val().length <= 20000"
+            },
+            "members": {
+              "$member": {
+                ".write": true,
+                ".validate": "$member.matches(/^[A-Za-z0-9_-]{1,64}$/) && newData.isString() && newData.val().length <= 2000"
+              }
+            },
+            "bucket": {
+              "$idea": {
+                ".write": true,
+                ".validate": "$idea.matches(/^[A-Za-z0-9_-]{1,64}$/) && newData.isString() && newData.val().length <= 10000"
+              }
+            },
+            "spreads": {
+              "$spread": {
+                ".write": true,
+                ".validate": "$spread.matches(/^[A-Za-z0-9_-]{1,64}$/) && newData.isString() && newData.val().length <= 200000"
+              }
+            },
+            "$other": { ".validate": false }
+          }
+        },
+        "photos": {
+          "$photo": {
+            ".write": true,
+            ".validate": "$photo.matches(/^[A-Za-z0-9_-]{1,64}$/) && newData.isString() && newData.val().beginsWith('data:image/') && newData.val().length <= 3000000"
+          }
+        },
+        "presence": {
+          "$person": {
+            ".write": true,
+            ".validate": "$person.matches(/^[A-Za-z0-9_-]{1,64}$/) && newData.hasChild('name') && newData.child('name').isString() && newData.child('name').val().length <= 40"
+          }
+        },
+        "cursors": {
+          "$person": {
+            ".write": true,
+            ".validate": "$person.matches(/^[A-Za-z0-9_-]{1,64}$/) && newData.hasChildren()"
+          }
+        },
+        "$other": { ".validate": false }
+      }
+    }
+  }
+}

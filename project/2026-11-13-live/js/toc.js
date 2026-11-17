@@ -2,7 +2,9 @@
 
 import { CATEGORIES, COSTS, SEASONS } from './model.js';
 import { ME } from './seed.js';
-import { toggleImIn, markDone, addBucketItem } from './state.js';
+import { toggleImIn, markDone, addBucketItem, reportIdea } from './state.js';
+import { canReport } from './moderation.js';
+import { openReportDialog } from './report.js';
 import { spreadIndexOf, spreadPageNumbers } from './pages.js';
 import { ICONS, esc, toast, announce, inkFor } from './ui.js';
 
@@ -57,7 +59,8 @@ export function createIdeaPopover(container, { book, turnTo, rerender, findAncho
         ${done
           ? (page ? `<button type="button" class="pill-btn solid" data-pop="go" data-index="${spreadIndex}">Go to page ${page} →</button>` : '')
           : '<button type="button" class="pill-btn solid" data-pop="did-it">We did it!</button>'}
-      </div>`;
+      </div>
+      ${canReport(it) ? '<button type="button" class="link-btn pop-report" data-pop="report">Report this plan</button>' : ''}`;
   }
 
   function place(anchor) {
@@ -115,6 +118,15 @@ export function createIdeaPopover(container, { book, turnTo, rerender, findAncho
     if (action === 'go') {
       close({ refocus: false });
       turnTo(Number(btn.dataset.index));
+    }
+    if (action === 'report') {
+      close({ refocus: false });
+      openReportDialog('idea').then((result) => {
+        if (!result) return;
+        reportIdea(book.id, it.id);
+        rerender();
+        toast("Reported. It's hidden for you now.");
+      });
     }
   });
 

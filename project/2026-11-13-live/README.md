@@ -25,25 +25,29 @@ Everyone who opens the same link shares the same books. When someone adds an ide
 
 If two people edit the **same spread** at the exact same moment, the last save wins. Different spreads and different ideas never overwrite each other.
 
+## Safety features (from [threats.md](../../threats.md))
+
+- **Every photo, note and sticker shows who added it.** Hover over it, or select it in Edit mode, to see a tag with their name in their color. Nothing is anonymous. *(Mean captions and stickers)*
+- **You can only change your own things.** In Edit mode you can select anyone's item, but only the person who added it can move, resize, rotate, recolor, edit or remove it. The person who **made the book** can change anything. Undo only brings back your own things, so it can never erase what someone else added. Things in the demo books from before this feature have no name on them, so anyone can still change them. *(Erasing someone from the year)*
+- **Report.** Select someone else's photo, note or sticker in Edit mode and click **Report**, or open a plan on the bucket list and click **Report this plan**. It's hidden for you right away and hidden for everyone after **2 reports**. Reporting an **intimate photo** removes it for everyone on the first report and shows links to [Take It Down](https://takeitdown.ncmec.org/) and [StopNCII](https://stopncii.org/). Reported things stay in the database (hidden), so they could be reviewed. *(Mean captions, Piling on, Pressure to do risky things, An ex who's still in the group)*
+- **A limit on piling on.** One person can add at most **10 things to a spread per minute**. After that they're told how many seconds to wait. *(Piling on)*
+- **Photo location is removed.** Every uploaded photo is redrawn and saved as a new JPEG, which drops the hidden location (GPS) info. *(Location in photos)*
+- **Tighter database rules** in [`database.rules.json`](database.rules.json): the database only accepts the kinds of data the app uses (books, photos, who's here, cursors), with size limits on each, and nobody can wipe a whole room or list every room in one request.
+
+**What this doesn't stop:** there are no accounts, so the database can't tell people apart. Own-only edits, reports and the add limit are checked by the app, so someone who knows how to edit the code in their browser could get around them. A real version would need sign-in (for example Firebase Authentication) so the database rules can check who is making each change.
+
 ## Firebase
 
 The shared books live in a free Firebase Realtime Database. **This is already set up** (project `scrapbook-e2dc2`, config in [`js/firebase-config.js`](js/firebase-config.js)). The steps below are how it was done, in case it ever needs redoing. If the config is emptied, this folder works like the original one-person demo.
 
 1. Go to [console.firebase.google.com](https://console.firebase.google.com) and sign in with a Google account. **Create a project** (any name, Google Analytics can be off).
 2. In the left menu, open **Build > Realtime Database** and click **Create Database**. Pick a location, then choose **Start in test mode**.
-3. Open the **Rules** tab, replace everything with this, and click **Publish**:
-   ```json
-   {
-     "rules": {
-       "rooms": { ".read": true, ".write": true }
-     }
-   }
-   ```
+3. Open the **Rules** tab, replace everything with the contents of [`database.rules.json`](database.rules.json), and click **Publish**.
 4. Go to **Project settings** (gear icon) > **Your apps** > the **</>** (Web) button. Register an app (any nickname, no hosting).
 5. Copy the values from the `firebaseConfig` it shows into [`js/firebase-config.js`](js/firebase-config.js): `apiKey`, `authDomain`, `databaseURL`, `projectId`, `appId`. If `databaseURL` is missing, copy it from the top of the Realtime Database page (it ends in `firebaseio.com` or `firebasedatabase.app`).
 6. Commit and push. The Firebase values aren't secret; they just name the project.
 
-**Privacy note:** with these rules, anyone who has the link and room name can read and change the books. That's fine for a class test. Don't put anything private in it.
+**Privacy note:** anyone who has the link and room name can still read and change the books. That's fine for a class test. Don't put anything private in it.
 
 ## Run it
 
@@ -65,6 +69,9 @@ With GitHub Pages on, the link to share is:
 | `js/firebase-config.js` | Your Firebase project's config |
 | `js/sync.js` | Sends changes to the room and applies other people's changes, shares photos, tracks who's here and their cursors |
 | `js/identity.js` | Who you are in this browser: an id, the name you typed, and your live color |
+| `js/moderation.js` | Safety rules: who can change what, when reported things are hidden, the add limit |
+| `js/report.js` | The Report dialog and the take-down help links |
+| `database.rules.json` | The Firebase Realtime Database rules to paste into the console |
 | `js/join.js` | "Join a book" with an invite code |
 | `js/state.js` | Same as before, plus sending every change to the room and adding you to each book |
 | `js/storage.js` | Same as before, plus uploading and downloading shared photos |
