@@ -3,10 +3,10 @@
 // from other people are copied into the same objects so open views stay valid.
 
 import { loadData, saveData, deletePhotos, clearPhotos } from './storage.js';
-import { createSeed } from './seed.js';
-import { photoKeysInBook, MEMBER_COLORS, uid, createSpread, createBucketItem, guessSeason } from './model.js';
+import { createSeed, classBook, CLASS_BOOK_ID } from './seed.js';
+import { photoKeysInBook, MEMBER_COLORS, uid, createSpread, createBucketItem, guessSeason, codeFromId, normalizeCode } from './model.js';
 import { ME, ME_NAME } from './identity.js';
-import { startSync, push, reconcile, clearRemotePhotos, liveEnabled } from './sync.js';
+import { startSync, push, reconcile, clearRemotePhotos, liveEnabled, getMyColor } from './sync.js';
 
 const isValid = (data) => data && data.version === 1 && Array.isArray(data.books);
 
@@ -16,12 +16,19 @@ if (!isValid(data)) {
   saveData(data);
 }
 
-// Update older saved data: the demo book was renamed, and old ideas have no season (guess one from "when").
+// Update older saved data: the demo book was renamed, old ideas have no season (guess one from "when"),
+// older books have no invite code, and older rooms don't have the IXD415 class book yet.
+// Returns true if anything changed, so it can be shared with the room.
+const SEED_CODES = { 'book-roomies': 'FRND26', 'book-summer': 'SUMR26', 'book-movies': 'MOVIE5' };
 function migrate() {
+  let changed = false;
   for (const book of data.books) {
-    if (book.id === 'book-roomies' && book.title === 'The Roomies') book.title = 'Friends';
-    for (const item of book.bucketList) if (!item.season) item.season = guessSeason(item.when);
+    if (book.id === 'book-roomies' && book.title === 'The Roomies') { book.title = 'Friends'; changed = true; }
+    if (!book.code) { book.code = SEED_CODES[book.id] || codeFromId(book.id); changed = true; }
+    for (const item of book.bucketList) if (!item.season) { item.season = guessSeason(item.when); changed = true; }
   }
+  if (!data.books.some((b) => b.id === CLASS_BOOK_ID)) { data.books.unshift(classBook()); changed = true; }
+  return changed;
 }
 migrate();
 
@@ -54,18 +61,38 @@ function nextColor(book) {
   return MEMBER_COLORS.find((c) => !used.has(c)) || MEMBER_COLORS[book.members.length % MEMBER_COLORS.length];
 }
 
-// Books you're in, and books in this room you could join.
-const isMine = (book) => book.members.some((m) => m.id === ME);
+// The library shows only books you're in. Others are joined with their invite code.
+export const isMine = (book) => book.members.some((m) => m.id === ME);
 export const myBooks = () => data.books.filter(isMine);
-export const otherBooks = () => data.books.filter((b) => !isMine(b));
+export const findByCode = (code) => data.books.find((b) => normalizeCode(b.code) === normalizeCode(code)) || null;
+
+// Takes you out of a book. The book stays for everyone else.
+export function leaveBook(bookId) {
+  const book = getBook(bookId);
+  if (!book || !isMine(book)) return false;
+  book.members = book.members.filter((m) => m.id !== ME);
+  for (const item of book.bucketList) item.whosIn = item.whosIn.filter((id) => id !== ME);
+  commit();
+  return true;
+}
 
 // Adds you to a book you picked.
 export function joinBook(bookId) {
   const book = getBook(bookId);
   if (!book || !ME_NAME || isMine(book)) return false;
-  book.members.push({ id: ME, name: ME_NAME, color: nextColor(book) });
+  book.members.push({ id: ME, name: ME_NAME, color: getMyColor() || nextColor(book) });
   commit();
   return true;
+}
+
+// Your circle uses the same color in every book you're in (your live color).
+export function setMyColor(color) {
+  let changed = false;
+  for (const book of data.books) {
+    const me = book.members.find((m) => m.id === ME);
+    if (me && me.color !== color) { me.color = color; changed = true; }
+  }
+  if (changed) commit();
 }
 
 // Keeps your name up to date in the books you're in. In live mode you pick which books to join;
@@ -90,7 +117,7 @@ export function ensureMe() {
 // Someone else changed the shared books.
 function applyRemote(remote) {
   reconcile(data.books, remote.books);
-  migrate();
+  if (migrate()) push(data);
   saveData(data);
   notify({ remote: true });
   ensureMe();
@@ -148,6 +175,16 @@ export function markDone(bookId, itemId) {
   item.status = 'done';
   item.spreadId = spread.id;
   item.doneAt = new Date().toISOString();
+  commit();
+  return spread;
+}
+
+// Adds two blank pages (a spread) at a spot in book.spreads. Returns the new spread.
+export function addSpread(bookId, at) {
+  const book = getBook(bookId);
+  if (!book) return null;
+  const spread = createSpread();
+  book.spreads.splice(Math.max(0, Math.min(at, book.spreads.length)), 0, spread);
   commit();
   return spread;
 }

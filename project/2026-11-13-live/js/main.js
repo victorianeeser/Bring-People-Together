@@ -6,11 +6,10 @@ import { mountLibrary, showInLibrary } from './library.js';
 import { mountBook } from './book.js';
 import { openTransition, closeTransition } from './transitions.js';
 import { isAnimating, setAnimating, initDevPanel } from './animation.js';
-import { startLive, ensureMe, getBook, subscribe, myBooks, otherBooks } from './state.js';
-import { openJoinBooks } from './join.js';
+import { startLive, ensureMe, getBook, subscribe, setMyColor } from './state.js';
 import { ME, ME_NAME, MY_COLOR, LIVE_COLORS, hasName, setMyName } from './identity.js';
 import { ROOM, liveEnabled, onStatus, onPresence, startPresence, setPresenceBook } from './sync.js';
-import { esc, toast, dialogOpen } from './ui.js';
+import { esc, inkFor } from './ui.js';
 
 const app = document.getElementById('app');
 const backdrop = document.getElementById('backdrop');
@@ -172,7 +171,6 @@ function mountPresenceBar() {
   bar.className = 'presence-bar';
   bar.innerHTML = `
     <button type="button" class="presence-toggle" aria-expanded="false" aria-controls="presence-list"></button>
-    ${liveEnabled ? '<button type="button" class="presence-copy">Copy link</button>' : ''}
     <div class="presence-list" id="presence-list" role="region" aria-label="Who's here" hidden></div>`;
   document.body.append(bar);
   const toggle = bar.querySelector('.presence-toggle');
@@ -180,7 +178,7 @@ function mountPresenceBar() {
   let status = 'off';
   let people = {};
 
-  const face = (p) => `<span class="presence-face" style="background:${esc(p.color || '#9AA0AE')}" aria-hidden="true">${esc(String(p.name || '?').trim().slice(0, 1).toUpperCase())}</span>`;
+  const face = (p) => `<span class="presence-face" style="background:${esc(p.color || '#9AA0AE')};color:${inkFor(p.color || '#9AA0AE')}" aria-hidden="true">${esc(String(p.name || '?').trim().slice(0, 1).toUpperCase())}</span>`;
 
   function render() {
     const live = status === 'live';
@@ -215,19 +213,19 @@ function mountPresenceBar() {
   }
 
   bar.addEventListener('click', (event) => {
-    if (event.target.closest('.presence-toggle')) { setOpen(list.hidden); return; }
-    if (!event.target.closest('.presence-copy')) return;
-    const url = new URL(location.href);
-    url.hash = '';
-    url.searchParams.set('room', ROOM);
-    navigator.clipboard.writeText(url.toString()).then(() => toast('Link copied. Send it to your friends.'), () => toast(url.toString()));
+    if (event.target.closest('.presence-toggle')) setOpen(list.hidden);
   });
   document.addEventListener('pointerdown', (event) => { if (!bar.contains(event.target)) setOpen(false); });
   bar.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && !list.hidden) { event.stopPropagation(); setOpen(false); toggle.focus(); }
   });
   onStatus((next) => { status = next; render(); });
-  onPresence((next) => { people = next; render(); });
+  onPresence((next) => {
+    people = next;
+    render();
+    // Your circle in each book uses your live color, so you look the same everywhere.
+    if (next[ME]?.color) setMyColor(next[ME].color);
+  });
   subscribe(() => { if (!list.hidden) render(); }); // book titles can change
 }
 
@@ -243,13 +241,6 @@ async function startLiveMode() {
   // setHash() changes the hash without always firing our router, so check after transitions too.
   window.addEventListener('book:open', () => setTimeout(() => setPresenceBook(bookIdFromHash()), 1500));
   window.addEventListener('book:close', () => setTimeout(() => setPresenceBook(bookIdFromHash()), 1500));
-
-  // The first time the room's books arrive, ask which books you're in (if you're in none yet).
-  const stop = subscribe((info) => {
-    if (!info?.remote) return;
-    stop();
-    if (!myBooks().length && otherBooks().length && !dialogOpen() && !bookIdFromHash()) openJoinBooks({ firstTime: true });
-  });
 }
 
 startLiveMode();

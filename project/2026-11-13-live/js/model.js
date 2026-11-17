@@ -26,6 +26,17 @@ export function guessSeason(when = '') {
 // Avatar colors for members, used in order for new people.
 export const MEMBER_COLORS = ['#F4A988', '#9CC5A1', '#8FB3E8', '#D7A6E0', '#F2CF72', '#A8E2DC', '#FFC7B8', '#BFD4FD', '#E7B7C3', '#C9D99A'];
 
+// Invite codes: 6 letters and numbers, without ones that are easy to mix up (0/O, 1/I/L).
+const CODE_CHARS = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+export const normalizeCode = (code) => String(code || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+export const randomCode = () => Array.from({ length: 6 }, () => CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)]).join('');
+// The same code every time for the same book id (for older books saved before codes existed).
+export function codeFromId(id) {
+  let h = 2166136261;
+  for (const c of String(id)) h = Math.imul(h ^ c.charCodeAt(0), 16777619) >>> 0;
+  return Array.from({ length: 6 }, (_, i) => CODE_CHARS[(h >>> (i * 5)) % CODE_CHARS.length]).join('');
+}
+
 export const isEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
 export const FONTS = {
@@ -57,6 +68,7 @@ export function createBook({ title, cover, members, hasBucketList }) {
     cover: cover || { type: 'preset', presetId: COVER_PRESETS[0].id },
     members,
     hasBucketList: Boolean(hasBucketList),
+    code: randomCode(), // friends join the book with this code
     bucketList: [],
     // Without a bucket list the book starts with one blank spread.
     spreads: hasBucketList ? [] : [createSpread()],

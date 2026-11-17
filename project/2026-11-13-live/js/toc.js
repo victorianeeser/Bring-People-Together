@@ -4,12 +4,12 @@ import { CATEGORIES, COSTS, SEASONS } from './model.js';
 import { ME } from './seed.js';
 import { toggleImIn, markDone, addBucketItem } from './state.js';
 import { spreadIndexOf, spreadPageNumbers } from './pages.js';
-import { ICONS, esc, toast, announce } from './ui.js';
+import { ICONS, esc, toast, announce, inkFor } from './ui.js';
 
 const CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>';
 const POP_WIDTH = 360;
 const formatDate = (iso) => (iso ? new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : '');
-const face = (m) => `<span class="avatar" style="--avatar:${esc(m.color)}" aria-hidden="true">${esc(m.name.charAt(0))}</span>`;
+const face = (m) => `<span class="avatar" style="--avatar:${esc(m.color)};--avatar-ink:${inkFor(m.color)}" aria-hidden="true">${esc(m.name.charAt(0))}</span>`;
 
 // The popover that opens when you click an idea in the table of contents.
 export function createIdeaPopover(container, { book, turnTo, rerender, findAnchor }) {

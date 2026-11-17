@@ -12,9 +12,13 @@ Everyone who opens the same link shares the same books. When someone adds an ide
 
 ## What's different from the original
 
-- **Join with your name, then pick your books.** The first time you open it, it asks what your friends should call you, then which books you're in. The library shows only your books. **Join a book** (next to New book) lists the others in the room.
+- **Join with your name.** The first time you open it, it asks what your friends should call you.
+- **Books are invite only.** Your library shows only the books you're in. To join one, click **Join a book** and type its invite code. **Try the class book with the code `IXD415`.** Each book's code shows next to its people in the library (click it to copy), and **Share** copies an invite with the link and the code. New books get their own code.
+- **Leave book** is in the **More** menu. The book stays for everyone else; you can come back with its code.
+- **Add pages** (under the book) adds two blank pages right after the ones you're on and opens them for editing, so books without a bucket list can grow too.
 - **Who's here.** A bar in the bottom-left corner shows **Live**, how many people are here, and a circle for each person. Click it to see a list of everyone here and where they are (which book, which pages, and whether they're editing). **Copy link** copies the link to send to others.
-- **Live cursors.** On a spread, you see everyone else on the same pages: their cursor with their name, and a colored outline around whatever they've selected. Each person gets their own color.
+- **Live cursors.** On a spread, you see everyone else on the same pages: their cursor with their name, and a colored outline around whatever they've selected. When someone drags, resizes or rotates something, it glides on your screen as they move it. Each person gets their own color.
+- **Here now.** The top right of an open book shows who else is in it. Click someone to jump to the pages they're on.
 - **Rooms.** The link ends in `?room=class`. A different room name (`?room=test1`) is a separate set of books, so each test can start fresh.
 - **Photos are shared.** Uploaded photos are saved to the room, so everyone sees them. They're shrunk to 1200px to keep them quick to load.
 - **Reset demo data** resets the room **for everyone** on that link.
@@ -61,7 +65,7 @@ With GitHub Pages on, the link to share is:
 | `js/firebase-config.js` | Your Firebase project's config |
 | `js/sync.js` | Sends changes to the room and applies other people's changes, shares photos, tracks who's here and their cursors |
 | `js/identity.js` | Who you are in this browser: an id, the name you typed, and your live color |
-| `js/join.js` | The "Join a book" picker |
+| `js/join.js` | "Join a book" with an invite code |
 | `js/state.js` | Same as before, plus sending every change to the room and adding you to each book |
 | `js/storage.js` | Same as before, plus uploading and downloading shared photos |
 | `js/book.js` | Same as before, plus redrawing an open book when someone else changes it (it waits until you finish a drag or a page turn) and drawing other people's cursors |

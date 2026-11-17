@@ -70,7 +70,7 @@ export function panelHtml() {
     </aside>`;
 }
 
-export function createEditor({ root, book, spreadEl, currentSpread, rerender, isEnabled = () => true, onDone, onSelect }) {
+export function createEditor({ root, book, spreadEl, currentSpread, rerender, isEnabled = () => true, onDone, onSelect, onLive }) {
   // Editing only works on a regular spread while edit mode is on.
   const editable = () => Boolean(currentSpread()) && isEnabled();
   const panel = root.querySelector('#edit-panel');
@@ -370,12 +370,14 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
       found.item.y = start.iy + (dy / rect.height) * 100;
       el.style.left = `${found.item.x}%`;
       el.style.top = `${found.item.y}%`;
+      onLive?.(found); // live: others see it move while you drag
     };
     const onUp = () => {
       el.removeEventListener('pointermove', onMove);
       el.removeEventListener('pointerup', onUp);
       el.removeEventListener('pointercancel', onUp);
       el.classList.remove('lifting');
+      onLive?.(null);
       if (!moved) return;
       // Dropped past the fold: move the item onto the other page.
       const box = el.getBoundingClientRect();
@@ -428,12 +430,14 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
         found.item.rotation = Math.round(((deg + 540) % 360) - 180);
         el.style.transform = `rotate(${found.item.rotation}deg)`;
       }
+      onLive?.(found);
     };
     const onUp = () => {
       handle.removeEventListener('pointermove', onMove);
       handle.removeEventListener('pointerup', onUp);
       handle.removeEventListener('pointercancel', onUp);
       el.classList.remove('lifting');
+      onLive?.(null);
       if (snapshot() !== snap) { record(snap); save(); }
     };
     handle.addEventListener('pointermove', onMove);
@@ -528,8 +532,10 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
       if (item.type === 'text') el.style.fontSize = textFontSize(item);
       panel.querySelector('#sel-size-out').textContent = `${item.width}%`;
     }
+    onLive?.(found);
   }
   function onSliderDone() {
+    onLive?.(null);
     if (sliderSnap && sliderSnap !== snapshot()) { record(sliderSnap); save(); updatePanel(); }
     sliderSnap = null;
   }

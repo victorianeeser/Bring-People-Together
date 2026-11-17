@@ -261,6 +261,8 @@ export async function startPresence(me) {
   });
 }
 
+export const getMyColor = () => myPlace.color || null;
+
 // Where you are: { book, spread, page, editing }. Only the fields you pass change.
 export function setPresence(fields) {
   const next = { ...myPlace, ...fields };

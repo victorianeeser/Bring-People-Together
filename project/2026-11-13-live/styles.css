@@ -17,7 +17,7 @@
   --display: Inter, system-ui, sans-serif;
   --hand: Inter, system-ui, sans-serif;
   --page-font: Inter, system-ui, sans-serif;
-  --book-h: clamp(180px, min(52vh, calc(100vh - 370px)), 470px);
+  --book-h: clamp(170px, min(46vh, calc(100vh - 380px)), 420px);
   --book-w: calc(var(--book-h) * 0.75);
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   /* One shadow for books on the shelf, open pages, and the cover while it opens */
@@ -99,7 +99,7 @@ svg .fill { fill: currentColor; stroke: none; }
 .avatars { display: inline-flex; padding-left: 6px; }
 .avatar {
   display: grid; place-items: center; width: 28px; height: 28px; margin-left: -6px; border-radius: 50%;
-  background: var(--avatar, #D9DEEA); color: var(--ink); font: 600 12px/1 var(--ui);
+  background: var(--avatar, #D9DEEA); color: var(--avatar-ink, var(--ink)); font: 600 12px/1 var(--ui);
   box-shadow: 0 0 0 2px var(--bg);
 }
 .avatar.more { background: #D5D8DF; color: var(--ink); font-size: 11px; }
@@ -238,18 +238,31 @@ svg .fill { fill: currentColor; stroke: none; }
 
 /* Open book */
 :root {
-  --page-h: min(calc(100vh - 226px), calc((100vw - 240px) / 1.5));
+  --page-h: min(calc(100vh - 196px), calc((100vw - 200px) / 1.5));
   --page-w: calc(var(--page-h) * 0.75);
 }
 .book-view { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
 .book-view.missing { display: grid; place-content: center; justify-items: center; gap: 16px; color: var(--on-dark-muted); }
-.book-top { display: grid; grid-template-columns: 44px 1fr 44px; padding: 18px 28px 8px; }
+.book-top { display: grid; grid-template-columns: minmax(44px, 1fr) auto minmax(44px, 1fr); align-items: start; padding: 18px 28px 8px; }
+.book-top > .icon-btn { justify-self: start; }
+.book-top-right { display: flex; align-items: center; justify-content: flex-end; gap: 14px; }
+.book-here { display: flex; align-items: center; }
+.book-here-label { margin-right: 10px; color: var(--on-dark-muted); font-size: 12.5px; font-weight: 500; }
+.here-face {
+  display: grid; place-items: center; width: 30px; height: 30px; margin-left: -6px; padding: 0; border: 2px solid var(--bg-book, #E3E5EA);
+  border-radius: 50%; background: var(--live); color: #FFFFFF; font: 700 12px/1 var(--ui); cursor: pointer;
+  transition: transform 0.15s var(--ease);
+}
+.here-face:first-of-type { margin-left: 0; }
+.here-face:hover { transform: translateY(-2px); }
+.here-face.is-same { box-shadow: 0 0 0 2px var(--live); }
 .book-heading { text-align: center; }
 .book-heading h1 { font-size: 18px; font-weight: 600; }
 .book-heading p { color: var(--on-dark-muted); font-size: 13px; font-variant-numeric: tabular-nums; }
-.edit-pill { min-height: 30px; margin-top: 6px; padding: 4px 16px; font-size: 13px; }
-/* Keep its space when hidden (on the bucket list page), so the book never shifts during a page turn. */
-.edit-pill.is-off { visibility: hidden; }
+.book-actions { display: flex; justify-content: center; gap: 8px; margin-top: 6px; }
+.edit-pill { min-height: 30px; padding: 4px 16px; font-size: 13px; }
+/* Hidden on the bucket list page. Add pages stays in the row, so the book never shifts during a page turn. */
+.edit-pill.is-off { display: none; }
 .edit-pill[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #FFFFFF; }
 .edit-pill[aria-pressed="true"]:hover { background: #33394D; }
 .book-stage { display: grid; justify-items: center; align-content: center; gap: 14px; padding-bottom: 18px; }
@@ -442,6 +455,8 @@ fieldset.field legend { margin-bottom: 6px; padding: 0; }
 .edges:focus-visible { outline: none; }
 .edges:focus-visible .edge:first-child { box-shadow: 0 0 0 3px var(--focus); }
 .turn-controls { display: flex; align-items: center; gap: 12px; }
+.add-pages { gap: 5px; min-height: 30px; padding: 4px 14px 4px 10px; font-size: 13px; }
+.add-pages svg { width: 14px; height: 14px; }
 .icon-btn.small { width: 36px; height: 36px; }
 .icon-btn.small svg { width: 18px; height: 18px; }
 .icon-btn:disabled { opacity: 0.4; cursor: default; }
@@ -449,7 +464,7 @@ fieldset.field legend { margin-bottom: 6px; padding: 0; }
 /* Editing a spread in place: the panel slides in from the right */
 .book-view.editing {
   --panel-w: 340px;
-  --page-h: min(calc(100vh - 226px), calc((100vw - var(--panel-w) - 160px) / 1.5));
+  --page-h: min(calc(100vh - 196px), calc((100vw - var(--panel-w) - 120px) / 1.5));
   --page-w: calc(var(--page-h) * 0.75);
 }
 .book-view.editing .book-stage { padding-right: var(--panel-w); }
@@ -637,11 +652,9 @@ fieldset.field legend { margin-bottom: 6px; padding: 0; }
 .presence-faces { display: flex; }
 .presence-face {
   display: grid; place-items: center; width: 26px; height: 26px; flex: none; margin-left: -6px; border: 2px solid var(--paper);
-  border-radius: 50%; color: #FFFFFF; font-size: 11px; font-weight: 700;
+  border-radius: 50%; color: #FFFFFF; font: 600 12px/1 var(--ui);
 }
 .presence-faces .presence-face:first-child { margin-left: 0; }
-.presence-copy { min-height: 34px; padding: 4px 14px; border: 1px solid var(--glass-line); border-radius: 999px; background: transparent; color: var(--ink); font: inherit; font-weight: 600; cursor: pointer; }
-.presence-copy:hover { background: var(--glass-hover); }
 
 /* Who's here: opens above the bar */
 .presence-list {
@@ -671,28 +684,24 @@ fieldset.field legend { margin-bottom: 6px; padding: 0; }
 }
 .live-cursor.no-tag .live-tag { display: none; }
 .live-tag.is-sel { transform: translate(-100%, -55%); left: auto; }
+.spread .pi.live-moving { transition: left 0.1s linear, top 0.1s linear, width 0.1s linear, transform 0.1s linear, font-size 0.1s linear; }
 .spread .pi.live-sel { outline: 3px solid var(--live); outline-offset: 4px; border-radius: 2px; }
 
-/* Join a book */
-.join-books p { color: #4A4E5A; }
-.join-list { display: grid; gap: 8px; max-height: min(52vh, 420px); overflow-y: auto; margin: 16px 0 0; padding: 2px; list-style: none; }
-.join-choice {
-  position: relative; display: grid; grid-template-columns: 44px 1fr 24px; align-items: center; gap: 14px;
-  padding: 10px 14px 10px 10px; border: 1px solid var(--glass-line); border-radius: 14px; background: #FFFFFF; cursor: pointer;
-}
-.join-choice:hover { border-color: #C5C9D3; }
-.join-choice input { position: absolute; opacity: 0; width: 0; height: 0; }
-.join-choice:has(input:checked) { border-color: var(--ink); box-shadow: 0 0 0 1px var(--ink); }
-html.kbd .join-choice:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 2px; }
-.join-cover { position: relative; display: block; width: 44px; aspect-ratio: 3 / 4; border-radius: 2px 6px 6px 2px; overflow: hidden; box-shadow: 0 4px 10px -4px rgba(20, 24, 40, 0.4); }
-.join-cover .cover-title { display: none; }
-.join-text { display: grid; gap: 4px; min-width: 0; }
-.join-text strong { font-size: 15px; font-weight: 600; }
-.join-people { display: flex; align-items: center; gap: 8px; color: var(--on-dark-muted); font-size: 12.5px; }
-.join-people .avatar { width: 22px; height: 22px; font-size: 10px; }
-.join-check { width: 22px; height: 22px; border: 1.5px solid #B9BDC8; border-radius: 50%; }
-.join-choice:has(input:checked) .join-check {
-  border-color: var(--ink); background: var(--ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m6 12.5 4 4 8-9' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 14px no-repeat;
-}
 .empty .pill-btn { margin-top: 16px; }
 .empty .hint { margin-top: 14px; }
+
+/* Invite code (next to the people in the library) */
+.invite-code {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 30px; margin-left: 4px; padding: 3px 10px 3px 12px;
+  border: 1px dashed #B5BAC6; border-radius: 999px; background: rgba(255, 255, 255, 0.6); color: var(--on-dark-muted);
+  font: 500 12.5px/1 var(--ui); cursor: pointer;
+}
+.invite-code strong { color: var(--ink); font-weight: 700; letter-spacing: 0.08em; }
+.invite-code svg { width: 14px; height: 14px; }
+.invite-code:hover { border-style: solid; background: #FFFFFF; }
+.code-input { text-transform: uppercase; letter-spacing: 0.18em; font-weight: 700; font-size: 18px; }
+.code-input::placeholder { letter-spacing: 0.18em; font-weight: 500; opacity: 0.45; }
+
+/* TEMP for user testing: the class book's code in the join copy. Remove after testing. */
+.test-code { margin-top: 8px; color: var(--ink); }
+.test-code strong { letter-spacing: 0.08em; }

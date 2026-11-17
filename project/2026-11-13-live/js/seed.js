@@ -63,6 +63,7 @@ function roomies() {
   return {
     id: 'book-roomies',
     title: 'Friends',
+    code: 'FRND26',
     cover: { type: 'preset', presetId: 'terracotta-dots' },
     members: [MEMBERS.hannah, MEMBERS.maya, MEMBERS.jordan, MEMBERS.priya, MEMBERS.sam],
     hasBucketList: true,
@@ -83,6 +84,7 @@ function summer() {
   return {
     id: 'book-summer',
     title: "Summer '26",
+    code: 'SUMR26',
     cover: { type: 'preset', presetId: 'sun-arch' },
     members: [MEMBERS.hannah, MEMBERS.maya, MEMBERS.priya],
     hasBucketList: false,
@@ -106,6 +108,7 @@ function movieNights() {
   return {
     id: 'book-movies',
     title: 'Movie Nights',
+    code: 'MOVIE5',
     cover: { type: 'preset', presetId: 'night-stars' },
     members: [MEMBERS.hannah, MEMBERS.jordan, MEMBERS.sam],
     hasBucketList: false,
@@ -119,7 +122,31 @@ function movieNights() {
   };
 }
 
+// The class book. Nobody is in it at first: you join with the invite code IXD415.
+export const CLASS_BOOK_ID = 'book-ixd415';
+export function classBook() {
+  const idea = (id, title, location, when, season, category, cost = 'Free') => ({
+    id, title, addedBy: null, addedAt: daysAgo(2), location, when, cost, category, season,
+    notes: '', whosIn: [], status: 'idea', spreadId: null,
+  });
+  return {
+    id: CLASS_BOOK_ID,
+    title: 'IxD 415',
+    code: 'IXD415',
+    cover: { type: 'preset', presetId: 'teal-grid' },
+    members: [],
+    hasBucketList: true,
+    bucketList: [
+      idea('ix-photo', 'Group photo after final crit', 'Studio', 'Finals week', 'Fall', 'Creative'),
+      idea('ix-coffee', 'Coffee run between work sessions', 'Campus cafe', 'Any Wednesday', 'Fall', 'Food', '$'),
+      idea('ix-party', 'End of quarter celebration', 'TBD', 'December', 'Winter', 'Chill', '$'),
+    ],
+    spreads: [],
+    createdAt: daysAgo(14),
+  };
+}
+
 export function createSeed() {
   z = 0;
-  return { version: 1, books: [roomies(), summer(), movieNights()] };
+  return { version: 1, books: [classBook(), roomies(), summer(), movieNights()] };
 }

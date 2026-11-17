@@ -1,7 +1,7 @@
 // Library (home): carousel and grid of books, search, and book actions.
 
-import { myBooks, otherBooks, getBook, deleteBook, resetDemo, subscribe, addMember } from './state.js';
-import { openJoinBooks } from './join.js';
+import { myBooks, getBook, deleteBook, leaveBook, resetDemo, subscribe, addMember } from './state.js';
+import { openJoinBooks, inviteText } from './join.js';
 import { isEmail } from './model.js';
 import { bookHtml, hydrateCovers, pagesLabel } from './covers.js';
 import { ICONS, esc, toast, announce, confirmDialog, isTyping, dialogOpen, avatarStack } from './ui.js';
@@ -54,6 +54,7 @@ export function mountLibrary(root, { focus = true } = {}) {
           </button>
           <div class="menu" id="more-menu" hidden>
             <button type="button" class="menu-item" data-action="settings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-2.7-1.1l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3.6 14H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.1-2.7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg>Book settings</button>
+            <button type="button" class="menu-item" data-action="leave">${ICONS.leave}Leave book</button>
             <button type="button" class="menu-item" data-action="reset">${ICONS.reset}Reset demo data</button>
           </div>
         </div>
@@ -75,15 +76,16 @@ export function mountLibrary(root, { focus = true } = {}) {
     const books = visibleBooks();
     if (!books.some((b) => b.id === ui.selectedId)) ui.selectedId = books[0]?.id ?? null;
     root.querySelectorAll('[data-action="view"]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.view === ui.view));
-    root.querySelectorAll('[data-action="share"], [data-action="delete"], [data-action="settings"]').forEach((b) => { b.disabled = !ui.selectedId; });
+    root.querySelectorAll('[data-action="share"], [data-action="delete"], [data-action="settings"], [data-action="leave"]').forEach((b) => { b.disabled = !ui.selectedId; });
 
     if (!books.length) {
       main.innerHTML = ui.query
         ? `<p class="empty">No books match "${esc(ui.query)}".</p>`
         : `<div class="empty">
             <p>You're not in any books yet.</p>
-            ${otherBooks().length ? '<button type="button" class="pill-btn solid" data-action="join">Join a book</button>' : ''}
-            <p class="hint">Or start your own with <strong>New book</strong>.</p>
+            <p class="hint">Join a friend's book with their invite code, or start your own with <strong>New book</strong>.</p>
+            <p class="hint test-code">For testing, use the code <strong>IXD415</strong>.</p>
+            <button type="button" class="pill-btn solid" data-action="join">Join with a code</button>
           </div>`;
       return;
     }
@@ -152,6 +154,9 @@ export function mountLibrary(root, { focus = true } = {}) {
       <div class="member-row">
         ${avatarStack(current.members)}
         <button type="button" class="add-person" data-action="add-person" aria-label="Add someone to ${esc(current.title)}" title="Add someone">${ICONS.plus}</button>
+        <button type="button" class="invite-code" data-action="copy-code" aria-label="Invite code ${esc(current.code || '')}. Copy it" title="Copy the invite code">
+          Code <strong>${esc(current.code || '')}</strong>${ICONS.copy}
+        </button>
       </div>`;
   }
 
@@ -238,16 +243,46 @@ export function mountLibrary(root, { focus = true } = {}) {
     if (open) menu.querySelector('.menu-item')?.focus();
   }
 
+  // Share = copy an invite: the link plus the book's code (books are invite only).
   async function share() {
     const book = getBook(ui.selectedId);
     if (!book) return;
-    const url = `${location.origin}${location.pathname}#/book/${encodeURIComponent(book.id)}`;
+    const text = `${inviteText(book)}: ${location.origin}${location.pathname}${location.search}`;
     try {
-      await navigator.clipboard.writeText(url);
-      toast(`Link to "${book.title}" copied`);
+      await navigator.clipboard.writeText(text);
+      toast(`Invite to "${book.title}" copied`);
     } catch {
-      toast("Couldn't copy the link");
+      toast(`Invite code: ${book.code}`);
     }
+  }
+
+  async function copyCode() {
+    const book = getBook(ui.selectedId);
+    if (!book) return;
+    try {
+      await navigator.clipboard.writeText(book.code);
+      toast(`Copied the code ${book.code}`);
+    } catch {
+      toast(`Invite code: ${book.code}`);
+    }
+  }
+
+  async function leave() {
+    setMenu(false);
+    const books = visibleBooks();
+    const index = selectedIndex(books);
+    const book = books[index];
+    if (!book) return;
+    const ok = await confirmDialog({
+      title: `Leave "${book.title}"?`,
+      body: `It stays for everyone else. To come back, you'll need its invite code (${book.code}).`,
+      confirmLabel: 'Leave book',
+      danger: true,
+    });
+    if (!ok) return;
+    ui.selectedId = (books[index + 1] || books[index - 1])?.id ?? null;
+    leaveBook(book.id);
+    toast(`You left "${book.title}"`);
   }
 
   async function remove() {
@@ -292,11 +327,13 @@ export function mountLibrary(root, { focus = true } = {}) {
     reset,
     share,
     delete: remove,
+    leave,
+    'copy-code': copyCode,
     join: () => openJoinBooks({
-      onJoined: (ids) => {
+      onJoined: (id) => {
         ui.query = '';
         search.value = '';
-        ui.selectedId = ids[0];
+        ui.selectedId = id;
         renderMain();
       },
     }),
@@ -307,7 +344,7 @@ export function mountLibrary(root, { focus = true } = {}) {
         search.value = '';
         ui.selectedId = book.id;
         renderMain();
-        toast(`Made "${book.title}"`);
+        toast(`Made "${book.title}". Invite code: ${book.code}`);
         requestAnimationFrame(() => open(book.id));
       },
     }),

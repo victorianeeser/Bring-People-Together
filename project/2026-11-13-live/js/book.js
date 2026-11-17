@@ -1,9 +1,9 @@
 // Open book view: the current spread, page-edge stacks, page turns, and the spread overview.
 
-import { getBook, commit, subscribe } from './state.js';
-import { spreadsOf, spreadPagesHtml, ppLabel, spreadTitle, hydratePhotos } from './pages.js';
+import { getBook, commit, subscribe, addSpread } from './state.js';
+import { spreadsOf, spreadPagesHtml, ppLabel, spreadTitle, hydratePhotos, textFontSize } from './pages.js';
 import { ANIMATION, isAnimating, reducedMotion } from './animation.js';
-import { ICONS, esc, announce, isTyping, dialogOpen } from './ui.js';
+import { ICONS, esc, announce, isTyping, dialogOpen, toast, inkFor } from './ui.js';
 import { createIdeaPopover, openAddIdea } from './toc.js';
 import { panelHtml, createEditor } from './editor.js';
 import { ME } from './identity.js';
@@ -35,9 +35,15 @@ export function mountBook(root, bookId) {
         <div class="book-heading">
           <h1>${esc(book.title)}</h1>
           <p id="page-label" aria-live="polite"></p>
-          <button type="button" class="pill-btn edit-pill" data-action="toggle-edit" aria-pressed="false">Edit</button>
+          <div class="book-actions">
+            <button type="button" class="pill-btn edit-pill" data-action="toggle-edit" aria-pressed="false">Edit</button>
+            <button type="button" class="pill-btn add-pages" data-action="add-spread">${ICONS.plus}Add pages</button>
+          </div>
         </div>
-        <button type="button" class="icon-btn glass" data-action="overview" aria-label="See all spreads" aria-haspopup="dialog">${ICONS.grid}</button>
+        <div class="book-top-right">
+          <div class="book-here" aria-label="Who's in this book now"></div>
+          <button type="button" class="icon-btn glass" data-action="overview" aria-label="See all spreads" aria-haspopup="dialog">${ICONS.grid}</button>
+        </div>
       </header>
       <main class="book-stage">
         <div class="spread-area">
@@ -86,7 +92,7 @@ export function mountBook(root, bookId) {
     root.querySelector('#page-label').textContent = ppLabel(index);
     const pill = root.querySelector('.edit-pill');
     const canEdit = Boolean(currentSpread());
-    pill.classList.toggle('is-off', !canEdit); // hidden but still taking up its space
+    pill.classList.toggle('is-off', !canEdit); // the row keeps its height thanks to Add pages
     pill.textContent = editMode ? 'Done' : 'Edit';
     pill.setAttribute('aria-pressed', editMode);
     pill.setAttribute('aria-label', editMode ? 'Done editing' : 'Edit this spread');
@@ -103,7 +109,7 @@ export function mountBook(root, bookId) {
     hydratePhotos(spreadEl);
     updateChrome();
     editor?.refresh();
-    if (liveReady) { sharePlace(); paintLive(); }
+    if (liveReady) { sharePlace(); paintLive(); paintHere(); }
   }
 
   function pageFace(html, side) {
@@ -283,6 +289,22 @@ export function mountBook(root, bookId) {
       if (target !== index) jumpTo(target);
       spreadEl.focus();
     },
+    // Two blank pages right after the ones you're on, then straight into editing them.
+    'add-spread': async () => {
+      const entry = spreadsOf(book)[index];
+      const at = entry?.kind === 'spread' ? book.spreads.indexOf(entry.spread) + 1 : 0;
+      const spread = addSpread(bookId, at);
+      updateChrome();
+      const target = spreadsOf(book).findIndex((e) => e.kind === 'spread' && e.spread === spread);
+      await turnTo(target);
+      if (!editMode) setEditMode(true);
+      toast(`Added ${ppLabel(target)}`);
+    },
+    'go-to-person': (btn) => {
+      const key = btn.dataset.spread;
+      const target = key === 'contents' ? 0 : spreadsOf(book).findIndex((e) => e.kind === 'spread' && e.spread.id === key);
+      if (target >= 0 && target !== index) turnTo(target);
+    },
     move: (btn) => {
       const from = Number(btn.dataset.index);
       const to = from + Number(btn.dataset.dir);
@@ -313,6 +335,13 @@ export function mountBook(root, bookId) {
   editor = createEditor({
     root, book, spreadEl, currentSpread, rerender: showSpread, isEnabled: () => editMode, onDone: () => setEditMode(false),
     onSelect: (id) => { if (liveReady) { mySel = id; sendCursor(); } },
+    // While you drag, resize or rotate something, its position goes out with your cursor.
+    onLive: (found) => {
+      if (!liveReady) return;
+      const it = found?.item;
+      myDrag = it ? { id: it.id, side: found.side, x: round(it.x), y: round(it.y), width: round(it.width), rotation: it.rotation || 0, size: it.size ?? null } : null;
+      sendCursor();
+    },
   });
   root.addEventListener('click', onClick);
   document.addEventListener('keydown', onKeydown);
@@ -342,10 +371,13 @@ export function mountBook(root, bookId) {
 
   // ---------- live: other people's cursors and selections on this spread ----------
   const liveLayer = root.querySelector('.live-layer');
+  const hereEl = root.querySelector('.book-here');
   const stage = root.querySelector('.book-stage');
   const spreadKey = () => currentSpread()?.id || 'contents';
   let myPoint = null; // where your pointer is, as fractions of the spread
   let mySel = null;
+  let myDrag = null; // what you're dragging right now
+  const round = (n) => Math.round(n * 100) / 100;
   let others = {};
   let people = {};
 
@@ -355,8 +387,8 @@ export function mountBook(root, bookId) {
   }
 
   function sendCursor() {
-    if (!myPoint && !mySel) { setCursor(null); return; }
-    setCursor({ book: bookId, spread: spreadKey(), x: myPoint?.x ?? null, y: myPoint?.y ?? null, sel: mySel || null });
+    if (!myPoint && !mySel && !myDrag) { setCursor(null); return; }
+    setCursor({ book: bookId, spread: spreadKey(), x: myPoint?.x ?? null, y: myPoint?.y ?? null, sel: mySel || null, drag: myDrag });
   }
 
   function onMove(event) {
@@ -377,6 +409,7 @@ export function mountBook(root, bookId) {
   // Draws each other person's cursor (an arrow with their name) and outlines what they've selected.
   function paintLive() {
     spreadEl.querySelectorAll('.pi.live-sel').forEach((el) => { el.classList.remove('live-sel'); el.style.removeProperty('--live'); });
+    applyDrags();
     const here = Object.entries(others)
       .filter(([id, c]) => id !== ME && c && c.book === bookId && c.spread === spreadKey() && people[id]);
     const area = liveLayer.getBoundingClientRect();
@@ -389,9 +422,8 @@ export function mountBook(root, bookId) {
       if (el) {
         el.classList.add('live-sel');
         el.style.setProperty('--live', color);
-        const b = el.getBoundingClientRect();
-        // The name tag sits on the bottom-right corner of what they selected.
-        html += `<span class="live-tag is-sel" style="${style};left:${b.right - area.left}px;top:${b.bottom - area.top}px">${esc(name)}</span>`;
+        // The name tag sits on the bottom-right corner of what they selected (placed by placeTags).
+        html += `<span class="live-tag is-sel" data-for="${esc(c.sel)}" style="${style}">${esc(name)}</span>`;
       }
       if (c.x != null && c.y != null) {
         const left = r.left - area.left + c.x * r.width;
@@ -415,10 +447,64 @@ export function mountBook(root, bookId) {
       }
     }
     liveLayer.replaceChildren(...tmp.childNodes);
+    placeTags();
+  }
+
+  // Name tags follow the corner of the selected thing, even while it glides to a new spot.
+  let tagLoopUntil = 0;
+  function placeTags() {
+    const area = liveLayer.getBoundingClientRect();
+    liveLayer.querySelectorAll('.live-tag.is-sel').forEach((tag) => {
+      const el = spreadEl.querySelector(`.page-inner .pi[data-id="${CSS.escape(tag.dataset.for)}"]`);
+      if (!el) { tag.hidden = true; return; }
+      const b = el.getBoundingClientRect();
+      tag.style.left = `${b.right - area.left}px`;
+      tag.style.top = `${b.bottom - area.top}px`;
+    });
+    if (performance.now() < tagLoopUntil) requestAnimationFrame(placeTags);
+  }
+
+  // Someone else is dragging, resizing or rotating: glide their item to where they have it.
+  const gliding = new Set();
+  function applyDrags() {
+    const now = new Set();
+    for (const [id, c] of Object.entries(others)) {
+      const d = c?.drag;
+      if (id === ME || !d || c.book !== bookId || c.spread !== spreadKey()) continue;
+      const el = spreadEl.querySelector(`.page-inner .pi[data-id="${CSS.escape(d.id)}"]`);
+      if (!el || !el.closest(`.page.${d.side}`)) continue; // moved to the other page: wait for the drop
+      el.classList.add('live-moving');
+      el.style.left = `${d.x}%`;
+      el.style.top = `${d.y}%`;
+      el.style.width = `${d.width}%`;
+      el.style.transform = `rotate(${d.rotation}deg)`;
+      if (d.size != null && el.classList.contains('pi-text')) el.style.fontSize = textFontSize({ size: d.size });
+      now.add(el);
+    }
+    // Stop gliding once they let go (the dropped position arrives with the saved book).
+    gliding.forEach((el) => { if (!now.has(el)) el.classList.remove('live-moving'); });
+    gliding.clear();
+    now.forEach((el) => gliding.add(el));
+    if (now.size) tagLoopUntil = performance.now() + 250;
   }
 
   const offCursors = onCursors((next) => { others = next; paintLive(); });
-  const offPeople = onPresence((next) => { people = next; paintLive(); });
+  const offPeople = onPresence((next) => { people = next; paintLive(); paintHere(); });
+
+  // Top right: everyone in this book right now. Click someone to go to the pages they're on.
+  function paintHere() {
+    const inBook = Object.entries(people).filter(([id, p]) => id !== ME && p.book === bookId)
+      .sort(([, a], [, b]) => String(a.name).localeCompare(String(b.name)));
+    hereEl.innerHTML = inBook.length ? `
+      <span class="book-here-label">Here now</span>
+      ${inBook.map(([id, p]) => {
+        const where = `${p.page || ''}${p.editing ? ' · editing' : ''}`;
+        const same = p.spread === spreadKey();
+        return `<button type="button" class="here-face${same ? ' is-same' : ''}" data-action="go-to-person" data-spread="${esc(p.spread || '')}"
+          style="--live:${esc(p.color || '#3D6FE0')};color:${inkFor(p.color || '#3D6FE0')}" title="${esc(`${p.name}${where ? ` · ${where}` : ''}`)}"
+          aria-label="${esc(`${p.name}${where ? `, ${where}` : ''}. Go to their pages`)}">${esc(String(p.name || '?').trim().charAt(0).toUpperCase())}</button>`;
+      }).join('')}` : '';
+  }
   const onResizeLive = () => paintLive();
   window.addEventListener('resize', onResizeLive);
   liveReady = true;

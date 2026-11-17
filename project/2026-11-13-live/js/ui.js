@@ -7,6 +7,8 @@ export const ICONS = {
   carousel: svg('<rect x="7" y="5" width="10" height="14" rx="1.5"/><path d="M3.5 7.5v9M20.5 7.5v9"/>'),
   grid: svg('<rect x="4" y="4" width="6.5" height="6.5" rx="1.2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.2"/>'),
   join: svg('<circle cx="9.5" cy="8" r="3.5"/><path d="M3 19.5c.6-3.4 3.2-5.5 6.5-5.5s5.9 2.1 6.5 5.5M18.5 8v6M15.5 11h6"/>'),
+  leave: svg('<path d="M14 4h4.5A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5H14M10 16l-4-4 4-4M6 12h10"/>'),
+  copy: svg('<rect x="8.5" y="8.5" width="11" height="11" rx="2"/><path d="M15.5 8.5V6a1.5 1.5 0 0 0-1.5-1.5H6A1.5 1.5 0 0 0 4.5 6v8A1.5 1.5 0 0 0 6 15.5h2.5"/>'),
   search: svg('<circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/>'),
   more: svg('<circle cx="6" cy="12" r="1.4" class="fill"/><circle cx="12" cy="12" r="1.4" class="fill"/><circle cx="18" cy="12" r="1.4" class="fill"/>'),
   share: svg('<path d="M12 15V4M8 8l4-4 4 4"/><path d="M6 12v6.5A1.5 1.5 0 0 0 7.5 20h9a1.5 1.5 0 0 0 1.5-1.5V12"/>'),
@@ -17,6 +19,15 @@ export const ICONS = {
   reset: svg('<path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4.5h4.5"/>'),
 };
 
+// Letter color for a circle: dark ink on light colors, white on strong ones.
+export function inkFor(hex) {
+  const m = /^#?([0-9a-f]{6})$/i.exec(String(hex || ''));
+  if (!m) return '#1F2433';
+  const n = parseInt(m[1], 16);
+  const [r, g, b] = [n >> 16, (n >> 8) & 255, n & 255].map((v) => { const c = v / 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.3 ? '#1F2433' : '#FFFFFF';
+}
+
 // A row of small initial circles, one per member, in each member's color.
 export function avatarStack(members, { max = 6 } = {}) {
   const shown = members.slice(0, max);
@@ -24,7 +35,7 @@ export function avatarStack(members, { max = 6 } = {}) {
   const names = members.map((m) => m.name).join(', ');
   return `
     <span class="avatars" role="img" aria-label="${esc(`${members.length} ${members.length === 1 ? 'person' : 'people'}: ${names}`)}">
-      ${shown.map((m) => `<span class="avatar" style="--avatar:${esc(m.color)}" title="${esc(m.name)}" aria-hidden="true">${esc(m.name.trim().charAt(0).toUpperCase())}</span>`).join('')}
+      ${shown.map((m) => `<span class="avatar" style="--avatar:${esc(m.color)};--avatar-ink:${inkFor(m.color)}" title="${esc(m.name)}" aria-hidden="true">${esc(m.name.trim().charAt(0).toUpperCase())}</span>`).join('')}
       ${extra > 0 ? `<span class="avatar more" aria-hidden="true">+${extra}</span>` : ''}
     </span>`;
 }
@@ -60,10 +71,17 @@ export function confirmDialog({ title, body, confirmLabel = 'OK', danger = false
   dialog.showModal();
   dialog.querySelector('[value="cancel"]').focus();
   return new Promise((resolve) => {
-    dialog.addEventListener('close', () => {
-      resolve(dialog.returnValue === 'ok');
+    // Answer as soon as a button is pressed (the dialog's close event can arrive late),
+    // or when the dialog closes some other way (Esc counts as Cancel).
+    let done = false;
+    const finish = (ok) => {
+      if (done) return;
+      done = true;
+      resolve(ok);
       opener?.focus?.();
-    }, { once: true });
+    };
+    dialog.querySelector('form').addEventListener('submit', (event) => finish(event.submitter?.value === 'ok'), { once: true });
+    dialog.addEventListener('close', () => finish(dialog.returnValue === 'ok'), { once: true });
   });
 }
 
