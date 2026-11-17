@@ -1,5 +1,9 @@
 # To do
 
+Due by Wednesday, November 18
+
+<!-- tasks to be added -->
+
 Due by Monday, November 16
 
 - **Leandra:** create screen ideas for editing and crafting the scrapbook page
