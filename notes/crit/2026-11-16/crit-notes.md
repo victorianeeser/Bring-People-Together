@@ -20,7 +20,6 @@ Feedback on the live scrapbook prototype.
 
 **Bugs**
 - It lags when you swipe through, and it swipes through automatically
-- There is a lot of lag, so we should fix it
 
 **Safety**
 - Look at threats and add security features
