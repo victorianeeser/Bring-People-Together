@@ -58,4 +58,4 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 
 ## Nov 16
 
-- **Maya:** added [crit notes](notes/crit/2026-11-16/crit-notes.md) from class
+- **Maya:** added [crit notes](notes/crit/2026-11-16/crit-notes.md) from class, made the [to do list](todo.md) for Wednesday, November 18
