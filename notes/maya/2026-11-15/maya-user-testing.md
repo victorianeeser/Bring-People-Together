@@ -21,12 +21,13 @@ Tested the [live scrapbook](../../../project/2026-11-13-live/) ([try it](https:/
 
 1. **Easy to navigate.** All 5 participants knew exactly what to click, what to edit and how to add things.
 2. **Adding friends is easy.** Including and adding friends was simple.
-3. **Live presence works.** It shows when several people are in the book at the same time.
+3. **Live button updates.** The live button in the corner updates when multiple people are in the book.
 
 ## Problems
 
 1. **Stickers can't be deleted.** Once you add a sticker, you can't remove it.
 2. **Stickers show up on every spread.** A sticker added on one spread stays on all the spreads.
+3. **No live presence per page.** You can't see who is on each page, so when something changes it just pops up with no warning.
 
 ## Next steps
 
