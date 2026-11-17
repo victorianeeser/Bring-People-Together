@@ -18,6 +18,10 @@ Feedback on the live scrapbook prototype.
 **Sharing**
 - Find a way to add only certain people to each book, instead of adding everyone who joins to the book right away
 
+**Empty states**
+- Think about what it looks like when it's empty
+- Design the different states
+
 **Bugs**
 - It lags when you swipe through, and it swipes through automatically
 
@@ -32,5 +36,6 @@ Feedback on the live scrapbook prototype.
 - **Research who uses the bucket list and why.**
 - **Add an add page section** for books without a bucket list.
 - **Let people choose who is in each book**, instead of adding everyone who joins.
+- **Design the empty states** and the other states, so a book still looks good with nothing in it.
 - **Fix the lag** and the automatic swiping between spreads.
 - **Go back to [threats.md](../../../threats.md)** and add security features.
