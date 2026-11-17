@@ -25,6 +25,3 @@ Made 14 hand-drawn stickers in the same style. Each one is a component in Figma,
 Designed 9 states based on the 11/16 crit notes and our weekend testing: who's here, what someone is touching, smooth drag, someone typing, who's on which page, a heads up when something changes, picking who's in a book, an empty book, and being the only one there.
 
 ![Multiplayer states](multiplayer-states.png)
-
-## 4. Loose pieces
-Also put every piece from the boards (logos, colors, doodles, tape, stickers, live presence pieces) loose on the Figma page next to the boards, so anyone can grab them.
