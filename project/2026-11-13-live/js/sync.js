@@ -214,9 +214,13 @@ export async function clearRemotePhotos() {
   await fb.remove(roomRef('photos'));
 }
 
-// ---------- presence: who has the page open ----------
+// ---------- presence: who has the page open, and where ----------
+// presence/<id> = { name, color, book, spread, page, editing }  (changes now and then)
+// cursors/<id>  = { book, spread, x, y, sel }                    (changes many times a second)
+// Both are removed when the person closes the tab.
 let presence = {};
 let myPresence = null;
+let myPlace = { book: '', spread: '', page: '', editing: false }; // kept even before presence starts
 const presenceListeners = new Set();
 
 export function onPresence(fn) {
@@ -228,20 +232,71 @@ export function onPresence(fn) {
 export async function startPresence(me) {
   const api = await init();
   if (!api) return;
-  myPresence = { ref: roomRef(`presence/${me.id}`), value: { name: me.name, color: me.color, book: '' } };
+  myPresence = {
+    ref: roomRef(`presence/${me.id}`),
+    cursorRef: roomRef(`cursors/${me.id}`),
+  };
+  myPlace = { ...myPlace, name: me.name, color: me.color };
   api.onValue(api.ref(api.db, '.info/connected'), (snap) => {
     if (!snap.val()) return;
     api.onDisconnect(myPresence.ref).remove();
-    api.set(myPresence.ref, { ...myPresence.value, at: api.serverTimestamp() });
+    api.onDisconnect(myPresence.cursorRef).remove();
+    api.set(myPresence.ref, { ...myPlace, at: api.serverTimestamp() });
   });
   api.onValue(roomRef('presence'), (snap) => {
     presence = snap.val() || {};
+    // If someone else here has your color, one of you (the later id) switches to a color nobody is using.
+    const others = Object.entries(presence).filter(([id]) => id !== me.id);
+    const taken = new Set(others.map(([, p]) => p.color));
+    const clash = others.some(([id, p]) => p.color === myPlace.color && id < me.id);
+    if (presence[me.id] && clash && me.palette) {
+      const free = me.palette.find((c) => !taken.has(c));
+      if (free) setPresence({ color: free });
+    }
     presenceListeners.forEach((fn) => fn(presence));
+  });
+  api.onValue(roomRef('cursors'), (snap) => {
+    cursors = snap.val() || {};
+    cursorListeners.forEach((fn) => fn(cursors));
   });
 }
 
-export function setPresenceBook(bookId) {
+// Where you are: { book, spread, page, editing }. Only the fields you pass change.
+export function setPresence(fields) {
+  const next = { ...myPlace, ...fields };
+  if (stable(next) === stable(myPlace)) return;
+  myPlace = next;
+  if (fb && myPresence) fb.update(myPresence.ref, fields).catch(() => {});
+}
+
+export const setPresenceBook = (bookId) => setPresence({ book: bookId || '', ...(bookId ? {} : { spread: '', page: '', editing: false }) });
+
+// ---------- live cursors and selections ----------
+let cursors = {};
+const cursorListeners = new Set();
+
+export function onCursors(fn) {
+  cursorListeners.add(fn);
+  fn(cursors);
+  return () => cursorListeners.delete(fn);
+}
+
+// Sends your cursor at most every 50ms (the last position always gets through).
+let cursorValue = null;
+let cursorTimer = null;
+let cursorSentAt = 0;
+function flushCursor() {
+  cursorTimer = null;
+  cursorSentAt = Date.now();
   if (!fb || !myPresence) return;
-  myPresence.value.book = bookId || '';
-  fb.update(myPresence.ref, { book: myPresence.value.book }).catch(() => {});
+  (cursorValue ? fb.set(myPresence.cursorRef, cursorValue) : fb.remove(myPresence.cursorRef)).catch(() => {});
+}
+
+// value = { book, spread, x, y, sel } with x and y as fractions of the open spread, or null to hide.
+export function setCursor(value) {
+  if (stable(value) === stable(cursorValue)) return;
+  cursorValue = value;
+  if (cursorTimer) return;
+  const wait = Math.max(0, 50 - (Date.now() - cursorSentAt));
+  cursorTimer = setTimeout(flushCursor, wait);
 }

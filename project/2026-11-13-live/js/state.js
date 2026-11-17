@@ -6,7 +6,7 @@ import { loadData, saveData, deletePhotos, clearPhotos } from './storage.js';
 import { createSeed } from './seed.js';
 import { photoKeysInBook, MEMBER_COLORS, uid, createSpread, createBucketItem, guessSeason } from './model.js';
 import { ME, ME_NAME } from './identity.js';
-import { startSync, push, reconcile, clearRemotePhotos } from './sync.js';
+import { startSync, push, reconcile, clearRemotePhotos, liveEnabled } from './sync.js';
 
 const isValid = (data) => data && data.version === 1 && Array.isArray(data.books);
 
@@ -49,21 +49,36 @@ export function commit() {
 
 export const lastSaveFailed = () => saveFailed;
 
-// Everyone who joins the room is added to every book, so their "I'm in" and ideas show their face.
 function nextColor(book) {
   const used = new Set(book.members.map((m) => m.color));
   return MEMBER_COLORS.find((c) => !used.has(c)) || MEMBER_COLORS[book.members.length % MEMBER_COLORS.length];
 }
 
+// Books you're in, and books in this room you could join.
+const isMine = (book) => book.members.some((m) => m.id === ME);
+export const myBooks = () => data.books.filter(isMine);
+export const otherBooks = () => data.books.filter((b) => !isMine(b));
+
+// Adds you to a book you picked.
+export function joinBook(bookId) {
+  const book = getBook(bookId);
+  if (!book || !ME_NAME || isMine(book)) return false;
+  book.members.push({ id: ME, name: ME_NAME, color: nextColor(book) });
+  commit();
+  return true;
+}
+
+// Keeps your name up to date in the books you're in. In live mode you pick which books to join;
+// without live sync (one person on one computer) you're simply in every book.
 export function ensureMe() {
   if (!ME_NAME) return false;
   let changed = false;
   for (const book of data.books) {
     const me = book.members.find((m) => m.id === ME);
-    if (!me) {
+    if (!me && !liveEnabled) {
       book.members.push({ id: ME, name: ME_NAME, color: nextColor(book) });
       changed = true;
-    } else if (me.name !== ME_NAME) {
+    } else if (me && me.name !== ME_NAME) {
       me.name = ME_NAME;
       changed = true;
     }

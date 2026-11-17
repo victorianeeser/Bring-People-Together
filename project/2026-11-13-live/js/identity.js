@@ -31,3 +31,9 @@ export function setMyName(name) {
 }
 
 export const hasName = () => Boolean(ME_NAME);
+
+// Your live color: your cursor, your outline on things you've selected, and your circle in "who's here".
+// Bright enough for white text, and picked from your id so it stays the same on every visit.
+export const LIVE_COLORS = ['#3D6FE0', '#D9534F', '#8A4FC7', '#1E9467', '#D9730D', '#D23C8A', '#0F86A0', '#8B5A2B'];
+const hash = [...ME].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);
+export const MY_COLOR = LIVE_COLORS[hash % LIVE_COLORS.length];

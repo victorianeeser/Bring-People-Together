@@ -12,8 +12,9 @@ Everyone who opens the same link shares the same books. When someone adds an ide
 
 ## What's different from the original
 
-- **Join with your name.** The first time you open it, it asks what your friends should call you. You're added to every book, so your face shows up on ideas and "I'm in".
-- **Who's here.** A bar in the bottom-left corner shows **Live**, how many people are here, and a circle for each person. Hover over a circle to see which book they're in. **Copy link** copies the link to send to others.
+- **Join with your name, then pick your books.** The first time you open it, it asks what your friends should call you, then which books you're in. The library shows only your books. **Join a book** (next to New book) lists the others in the room.
+- **Who's here.** A bar in the bottom-left corner shows **Live**, how many people are here, and a circle for each person. Click it to see a list of everyone here and where they are (which book, which pages, and whether they're editing). **Copy link** copies the link to send to others.
+- **Live cursors.** On a spread, you see everyone else on the same pages: their cursor with their name, and a colored outline around whatever they've selected. Each person gets their own color.
 - **Rooms.** The link ends in `?room=class`. A different room name (`?room=test1`) is a separate set of books, so each test can start fresh.
 - **Photos are shared.** Uploaded photos are saved to the room, so everyone sees them. They're shrunk to 1200px to keep them quick to load.
 - **Reset demo data** resets the room **for everyone** on that link.
@@ -58,10 +59,11 @@ With GitHub Pages on, the link to share is:
 | File | What it does |
 |---|---|
 | `js/firebase-config.js` | Your Firebase project's config |
-| `js/sync.js` | Sends changes to the room and applies other people's changes, shares photos, tracks who's here |
-| `js/identity.js` | Who you are in this browser: an id and the name you typed |
+| `js/sync.js` | Sends changes to the room and applies other people's changes, shares photos, tracks who's here and their cursors |
+| `js/identity.js` | Who you are in this browser: an id, the name you typed, and your live color |
+| `js/join.js` | The "Join a book" picker |
 | `js/state.js` | Same as before, plus sending every change to the room and adding you to each book |
 | `js/storage.js` | Same as before, plus uploading and downloading shared photos |
-| `js/book.js` | Same as before, plus redrawing an open book when someone else changes it (it waits until you finish a drag or a page turn) |
+| `js/book.js` | Same as before, plus redrawing an open book when someone else changes it (it waits until you finish a drag or a page turn) and drawing other people's cursors |
 | `js/main.js` | Same as before, plus the join dialog and the "who's here" bar |
 | `js/seed.js` | The demo books use a member called Hannah instead of "you" |

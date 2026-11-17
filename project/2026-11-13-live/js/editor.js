@@ -70,7 +70,7 @@ export function panelHtml() {
     </aside>`;
 }
 
-export function createEditor({ root, book, spreadEl, currentSpread, rerender, isEnabled = () => true, onDone }) {
+export function createEditor({ root, book, spreadEl, currentSpread, rerender, isEnabled = () => true, onDone, onSelect }) {
   // Editing only works on a regular spread while edit mode is on.
   const editable = () => Boolean(currentSpread()) && isEnabled();
   const panel = root.querySelector('#edit-panel');
@@ -134,6 +134,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
       }
     }
     updatePanel();
+    onSelect?.(selectedId); // live: others see what you've selected
   }
 
   // The panel's "Selected" section mirrors the selected item.

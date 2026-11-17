@@ -1,6 +1,7 @@
 // Library (home): carousel and grid of books, search, and book actions.
 
-import { getBooks, getBook, deleteBook, resetDemo, subscribe, addMember } from './state.js';
+import { myBooks, otherBooks, getBook, deleteBook, resetDemo, subscribe, addMember } from './state.js';
+import { openJoinBooks } from './join.js';
 import { isEmail } from './model.js';
 import { bookHtml, hydrateCovers, pagesLabel } from './covers.js';
 import { ICONS, esc, toast, announce, confirmDialog, isTyping, dialogOpen, avatarStack } from './ui.js';
@@ -17,9 +18,10 @@ const ui = {
   menuOpen: false,
 };
 
+// The library shows only the books you're in. Others in the room are under "Join a book".
 const visibleBooks = () => {
   const q = ui.query.trim().toLowerCase();
-  return q ? getBooks().filter((b) => b.title.toLowerCase().includes(q)) : getBooks();
+  return q ? myBooks().filter((b) => b.title.toLowerCase().includes(q)) : myBooks();
 };
 
 export function showInLibrary(bookId) {
@@ -57,6 +59,7 @@ export function mountLibrary(root, { focus = true } = {}) {
         </div>
         <button type="button" class="action" data-action="share"><span class="circle glass">${ICONS.share}</span><span class="action-label">Share</span></button>
         <button type="button" class="action" data-action="delete"><span class="circle glass">${ICONS.trash}</span><span class="action-label">Delete</span></button>
+        <button type="button" class="action" data-action="join"><span class="circle glass">${ICONS.join}</span><span class="action-label">Join a book</span></button>
         <button type="button" class="action" data-action="new"><span class="circle solid">${ICONS.plus}</span><span class="action-label">New book</span></button>
       </nav>
     </div>`;
@@ -75,7 +78,13 @@ export function mountLibrary(root, { focus = true } = {}) {
     root.querySelectorAll('[data-action="share"], [data-action="delete"], [data-action="settings"]').forEach((b) => { b.disabled = !ui.selectedId; });
 
     if (!books.length) {
-      main.innerHTML = `<p class="empty">${ui.query ? `No books match "${esc(ui.query)}".` : 'No books yet. Make one with New book.'}</p>`;
+      main.innerHTML = ui.query
+        ? `<p class="empty">No books match "${esc(ui.query)}".</p>`
+        : `<div class="empty">
+            <p>You're not in any books yet.</p>
+            ${otherBooks().length ? '<button type="button" class="pill-btn solid" data-action="join">Join a book</button>' : ''}
+            <p class="hint">Or start your own with <strong>New book</strong>.</p>
+          </div>`;
       return;
     }
     if (ui.view === 'grid') {
@@ -283,6 +292,14 @@ export function mountLibrary(root, { focus = true } = {}) {
     reset,
     share,
     delete: remove,
+    join: () => openJoinBooks({
+      onJoined: (ids) => {
+        ui.query = '';
+        search.value = '';
+        ui.selectedId = ids[0];
+        renderMain();
+      },
+    }),
     // New book: after creating it, select it and open it (to the bucket list, or its first blank spread).
     new: () => openBookForm({
       onSaved: (book) => {

@@ -6,10 +6,11 @@ import { mountLibrary, showInLibrary } from './library.js';
 import { mountBook } from './book.js';
 import { openTransition, closeTransition } from './transitions.js';
 import { isAnimating, setAnimating, initDevPanel } from './animation.js';
-import { startLive, ensureMe, getBook } from './state.js';
-import { ME, ME_NAME, hasName, setMyName } from './identity.js';
+import { startLive, ensureMe, getBook, subscribe, myBooks, otherBooks } from './state.js';
+import { openJoinBooks } from './join.js';
+import { ME, ME_NAME, MY_COLOR, LIVE_COLORS, hasName, setMyName } from './identity.js';
 import { ROOM, liveEnabled, onStatus, onPresence, startPresence, setPresenceBook } from './sync.js';
-import { esc, toast } from './ui.js';
+import { esc, toast, dialogOpen } from './ui.js';
 
 const app = document.getElementById('app');
 const backdrop = document.getElementById('backdrop');
@@ -156,36 +157,78 @@ const STATUS_TEXT = {
   error: "Can't reach the shared books. Changes are only saved on this computer.",
 };
 
+// Bottom-left bar: Live status, who's here, and Copy link. Click it to see who's here and where.
+function whereText(p) {
+  const book = p.book ? getBook(p.book) : null;
+  if (!book) return 'In the library';
+  const parts = [`In ${book.title}`];
+  if (p.page) parts.push(p.page);
+  if (p.editing) parts.push('editing');
+  return parts.join(' · ');
+}
+
 function mountPresenceBar() {
   const bar = document.createElement('div');
   bar.className = 'presence-bar';
-  bar.setAttribute('role', 'status');
+  bar.innerHTML = `
+    <button type="button" class="presence-toggle" aria-expanded="false" aria-controls="presence-list"></button>
+    ${liveEnabled ? '<button type="button" class="presence-copy">Copy link</button>' : ''}
+    <div class="presence-list" id="presence-list" role="region" aria-label="Who's here" hidden></div>`;
   document.body.append(bar);
+  const toggle = bar.querySelector('.presence-toggle');
+  const list = bar.querySelector('.presence-list');
   let status = 'off';
   let people = {};
+
+  const face = (p) => `<span class="presence-face" style="background:${esc(p.color || '#9AA0AE')}" aria-hidden="true">${esc(String(p.name || '?').trim().slice(0, 1).toUpperCase())}</span>`;
+
   function render() {
-    const here = Object.entries(people).map(([id, p]) => ({ id, ...p }))
-      .sort((a, b) => (b.id === ME) - (a.id === ME) || String(a.name).localeCompare(String(b.name)));
-    const faces = here.map((p) => {
-      const where = p.book ? getBook(p.book)?.title : '';
-      const label = `${p.id === ME ? 'You' : p.name || 'Someone'}${where ? `, in ${where}` : ', in the library'}`;
-      return `<span class="presence-face" style="background:${esc(p.color || '#ccc')}" title="${esc(label)}" aria-label="${esc(label)}">${esc(String(p.name || '?').slice(0, 1).toUpperCase())}</span>`;
-    }).join('');
-    bar.innerHTML = `
+    const live = status === 'live';
+    const here = live ? Object.entries(people).map(([id, p]) => ({ id, ...p }))
+      .sort((a, b) => (b.id === ME) - (a.id === ME) || String(a.name).localeCompare(String(b.name))) : [];
+    toggle.disabled = !live;
+    toggle.innerHTML = `
       <span class="presence-dot is-${status}" aria-hidden="true"></span>
-      <span class="presence-text">${esc(STATUS_TEXT[status] || '')}${status === 'live' ? ` · ${here.length} here` : ''}</span>
-      ${status === 'live' ? `<span class="presence-faces">${faces}</span>` : ''}
-      ${liveEnabled ? '<button type="button" class="presence-copy">Copy link</button>' : ''}`;
+      <span class="presence-text">${esc(STATUS_TEXT[status] || '')}${live ? ` · ${here.length} here` : ''}</span>
+      ${live ? `<span class="presence-faces">${here.slice(0, 6).map(face).join('')}</span>` : ''}
+      ${live ? '<svg class="presence-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>' : ''}`;
+    toggle.setAttribute('aria-label', live ? `Live, ${here.length} here. Show who's here` : STATUS_TEXT[status] || '');
+    list.innerHTML = `
+      <h2>Here now <span>${here.length}</span></h2>
+      <ul>
+        ${here.map((p) => `
+          <li>
+            ${face(p)}
+            <span class="presence-who">
+              <strong>${esc(p.name || 'Someone')}${p.id === ME ? ' <em>(you)</em>' : ''}</strong>
+              <span>${esc(whereText(p))}</span>
+            </span>
+          </li>`).join('')}
+      </ul>`;
+    if (!live) setOpen(false);
   }
+
+  function setOpen(open) {
+    list.hidden = !open;
+    toggle.setAttribute('aria-expanded', String(open));
+    bar.classList.toggle('is-open', open);
+  }
+
   bar.addEventListener('click', (event) => {
+    if (event.target.closest('.presence-toggle')) { setOpen(list.hidden); return; }
     if (!event.target.closest('.presence-copy')) return;
     const url = new URL(location.href);
     url.hash = '';
     url.searchParams.set('room', ROOM);
     navigator.clipboard.writeText(url.toString()).then(() => toast('Link copied. Send it to your friends.'), () => toast(url.toString()));
   });
+  document.addEventListener('pointerdown', (event) => { if (!bar.contains(event.target)) setOpen(false); });
+  bar.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !list.hidden) { event.stopPropagation(); setOpen(false); toggle.focus(); }
+  });
   onStatus((next) => { status = next; render(); });
   onPresence((next) => { people = next; render(); });
+  subscribe(() => { if (!list.hidden) render(); }); // book titles can change
 }
 
 async function startLiveMode() {
@@ -194,13 +237,19 @@ async function startLiveMode() {
   ensureMe();
   if (!liveEnabled) return;
   startLive();
-  const myColor = getBook(bookIdFromHash())?.members.find((m) => m.id === ME)?.color || '#F4A988';
-  startPresence({ id: ME, name: ME_NAME, color: myColor });
+  startPresence({ id: ME, name: ME_NAME, color: MY_COLOR, palette: LIVE_COLORS });
   setPresenceBook(bookIdFromHash());
   window.addEventListener('hashchange', () => setPresenceBook(bookIdFromHash()));
   // setHash() changes the hash without always firing our router, so check after transitions too.
   window.addEventListener('book:open', () => setTimeout(() => setPresenceBook(bookIdFromHash()), 1500));
   window.addEventListener('book:close', () => setTimeout(() => setPresenceBook(bookIdFromHash()), 1500));
+
+  // The first time the room's books arrive, ask which books you're in (if you're in none yet).
+  const stop = subscribe((info) => {
+    if (!info?.remote) return;
+    stop();
+    if (!myBooks().length && otherBooks().length && !dialogOpen() && !bookIdFromHash()) openJoinBooks({ firstTime: true });
+  });
 }
 
 startLiveMode();

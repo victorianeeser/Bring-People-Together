@@ -6,6 +6,8 @@ import { ANIMATION, isAnimating, reducedMotion } from './animation.js';
 import { ICONS, esc, announce, isTyping, dialogOpen } from './ui.js';
 import { createIdeaPopover, openAddIdea } from './toc.js';
 import { panelHtml, createEditor } from './editor.js';
+import { ME } from './identity.js';
+import { setPresence, setCursor, onCursors, onPresence } from './sync.js';
 
 const MAX_EDGES = 8;
 const CHEVRON_LEFT = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
@@ -45,6 +47,7 @@ export function mountBook(root, bookId) {
             <div class="page left"><div class="page-inner" id="page-left"></div></div>
             <div class="page right"><div class="page-inner" id="page-right"></div></div>
           </div>
+          <div class="live-layer" aria-hidden="true"></div>
         </div>
         <div class="turn-controls">
           <button type="button" class="icon-btn glass small" data-action="prev" aria-label="Previous spread">${CHEVRON_LEFT}</button>
@@ -65,6 +68,7 @@ export function mountBook(root, bookId) {
     return entry?.kind === 'spread' ? entry.spread : null;
   };
   let editor = null;
+  let liveReady = false; // the live cursor code below is set up after the first draw
   let editMode = false; // the Edit / Done pill turns editing on and off
   let tocSeason = null; // season tab on the bucket list page (null = All)
 
@@ -81,7 +85,8 @@ export function mountBook(root, bookId) {
     root.querySelectorAll('[data-action="next"]').forEach((b) => { b.disabled = index >= total() - 1; });
     root.querySelector('#page-label').textContent = ppLabel(index);
     const pill = root.querySelector('.edit-pill');
-    pill.hidden = !currentSpread();
+    const canEdit = Boolean(currentSpread());
+    pill.classList.toggle('is-off', !canEdit); // hidden but still taking up its space
     pill.textContent = editMode ? 'Done' : 'Edit';
     pill.setAttribute('aria-pressed', editMode);
     pill.setAttribute('aria-label', editMode ? 'Done editing' : 'Edit this spread');
@@ -98,6 +103,7 @@ export function mountBook(root, bookId) {
     hydratePhotos(spreadEl);
     updateChrome();
     editor?.refresh();
+    if (liveReady) { sharePlace(); paintLive(); }
   }
 
   function pageFace(html, side) {
@@ -246,6 +252,7 @@ export function mountBook(root, bookId) {
 
   function setEditMode(on) {
     editMode = on;
+    if (liveReady) sharePlace();
     if (!on) editor.deselect();
     updateChrome();
     editor.refresh();
@@ -303,7 +310,10 @@ export function mountBook(root, bookId) {
     if (event.key === 'Escape') { event.preventDefault(); actions.back(); }
   }
 
-  editor = createEditor({ root, book, spreadEl, currentSpread, rerender: showSpread, isEnabled: () => editMode, onDone: () => setEditMode(false) });
+  editor = createEditor({
+    root, book, spreadEl, currentSpread, rerender: showSpread, isEnabled: () => editMode, onDone: () => setEditMode(false),
+    onSelect: (id) => { if (liveReady) { mySel = id; sendCursor(); } },
+  });
   root.addEventListener('click', onClick);
   document.addEventListener('keydown', onKeydown);
   showSpread();
@@ -329,6 +339,90 @@ export function mountBook(root, bookId) {
     showSpread();
   }
   const unsubscribe = subscribe((info) => { if (info?.remote) applyRemoteChange(); });
+
+  // ---------- live: other people's cursors and selections on this spread ----------
+  const liveLayer = root.querySelector('.live-layer');
+  const stage = root.querySelector('.book-stage');
+  const spreadKey = () => currentSpread()?.id || 'contents';
+  let myPoint = null; // where your pointer is, as fractions of the spread
+  let mySel = null;
+  let others = {};
+  let people = {};
+
+  function sharePlace() {
+    setPresence({ book: bookId, spread: spreadKey(), page: ppLabel(index), editing: editMode && Boolean(currentSpread()) });
+    sendCursor();
+  }
+
+  function sendCursor() {
+    if (!myPoint && !mySel) { setCursor(null); return; }
+    setCursor({ book: bookId, spread: spreadKey(), x: myPoint?.x ?? null, y: myPoint?.y ?? null, sel: mySel || null });
+  }
+
+  function onMove(event) {
+    if (turning) return;
+    const r = spreadEl.getBoundingClientRect();
+    const x = (event.clientX - r.left) / r.width;
+    const y = (event.clientY - r.top) / r.height;
+    // Share only while near the book, rounded so tiny jitters don't send anything.
+    myPoint = x > -0.08 && x < 1.08 && y > -0.08 && y < 1.08 ? { x: Math.round(x * 1000) / 1000, y: Math.round(y * 1000) / 1000 } : null;
+    sendCursor();
+  }
+  const onLeave = () => { myPoint = null; sendCursor(); };
+  stage.addEventListener('pointermove', onMove);
+  stage.addEventListener('pointerleave', onLeave);
+
+  const CURSOR = '<svg class="live-arrow" viewBox="0 0 24 24"><path d="M4 2.5 20 11l-7.2 1.8L9 20z"/></svg>';
+
+  // Draws each other person's cursor (an arrow with their name) and outlines what they've selected.
+  function paintLive() {
+    spreadEl.querySelectorAll('.pi.live-sel').forEach((el) => { el.classList.remove('live-sel'); el.style.removeProperty('--live'); });
+    const here = Object.entries(others)
+      .filter(([id, c]) => id !== ME && c && c.book === bookId && c.spread === spreadKey() && people[id]);
+    const area = liveLayer.getBoundingClientRect();
+    const r = spreadEl.getBoundingClientRect();
+    let html = '';
+    for (const [id, c] of here) {
+      const { name = 'Someone', color = '#3D6FE0' } = people[id];
+      const style = `--live:${esc(color)}`;
+      const el = c.sel ? spreadEl.querySelector(`.page-inner .pi[data-id="${CSS.escape(c.sel)}"]`) : null;
+      if (el) {
+        el.classList.add('live-sel');
+        el.style.setProperty('--live', color);
+        const b = el.getBoundingClientRect();
+        // The name tag sits on the bottom-right corner of what they selected.
+        html += `<span class="live-tag is-sel" style="${style};left:${b.right - area.left}px;top:${b.bottom - area.top}px">${esc(name)}</span>`;
+      }
+      if (c.x != null && c.y != null) {
+        const left = r.left - area.left + c.x * r.width;
+        const top = r.top - area.top + c.y * r.height;
+        // With something selected, their name sits on the selection (like the mockup), so the arrow goes without it.
+        html += `<span class="live-cursor${el ? ' no-tag' : ''}" data-id="${esc(id)}" style="${style};transform:translate(${left}px,${top}px)">${CURSOR}<span class="live-tag">${esc(name)}</span></span>`;
+      }
+    }
+    // Reuse cursor elements so they glide instead of jumping.
+    const prev = new Map([...liveLayer.querySelectorAll('.live-cursor')].map((el) => [el.dataset.id, el]));
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    for (const fresh of tmp.querySelectorAll('.live-cursor')) {
+      const old = prev.get(fresh.dataset.id);
+      if (old) {
+        old.style.cssText = fresh.style.cssText;
+        old.className = fresh.className;
+        old.querySelector('.live-tag').textContent = fresh.textContent;
+        fresh.replaceWith(old);
+        prev.delete(fresh.dataset.id);
+      }
+    }
+    liveLayer.replaceChildren(...tmp.childNodes);
+  }
+
+  const offCursors = onCursors((next) => { others = next; paintLive(); });
+  const offPeople = onPresence((next) => { people = next; paintLive(); });
+  const onResizeLive = () => paintLive();
+  window.addEventListener('resize', onResizeLive);
+  liveReady = true;
+  sharePlace();
   const retry = setInterval(() => { if (pendingRemote) applyRemoteChange(); }, 600);
 
   return {
@@ -338,6 +432,10 @@ export function mountBook(root, bookId) {
       window.removeEventListener('pointercancel', onUp);
       unsubscribe();
       clearInterval(retry);
+      offCursors();
+      offPeople();
+      window.removeEventListener('resize', onResizeLive);
+      setCursor(null);
       popover.close({ refocus: false });
       editor.destroy();
     },
