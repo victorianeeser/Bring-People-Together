@@ -55,3 +55,7 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 ## Nov 15
 
 - **Maya:** tested the [live scrapbook](project/2026-11-13-live/) with 5 people. Everyone knew what to click and how to add things, and adding friends was easy. Found that stickers can't be deleted and show up on every spread. [Notes, photos and video](notes/maya/2026-11-15/maya-user-testing.md)
+
+## Nov 16
+
+- **Maya:** added [crit notes](notes/crit/2026-11-16/crit-notes.md) from class
