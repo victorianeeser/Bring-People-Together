@@ -59,3 +59,7 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 ## Nov 16
 
 - **Maya:** added [crit notes](notes/crit/2026-11-16/crit-notes.md) from class, made the [to do list](todo.md) for Wednesday, November 18
+
+## Nov 17
+
+- **Maya:** made the logo more handwritten, made two handmade brand boards (Stuck Together and Keepsake), a sticker set, and 9 multiplayer state designs in Figma. [Notes and images](notes/maya/2026-11-17/maya.md)
