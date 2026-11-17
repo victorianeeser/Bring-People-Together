@@ -1,3 +1,35 @@
 # 11/16 | Crit notes from Monday's class
 
-<!-- notes to be added -->
+Feedback on the live scrapbook prototype.
+
+## Typed up
+
+**Look and feel**
+- We can fight the Canva idea of things
+- Make it more visually appealing
+
+**Live presence**
+- Highlight objects to show live presence
+
+**Bucket list**
+- Learn who uses the bucket list (who and why)
+- For scrapbooking without a bucket list, have an add page section
+
+**Sharing**
+- Find a way to add only certain people to each book, instead of adding everyone who joins to the book right away
+
+**Bugs**
+- It lags when you swipe through, and it swipes through automatically
+- There is a lot of lag, so we should fix it
+
+**Safety**
+- Look at threats and add security features
+
+## What we can do next
+- **Push back on the Canva comparison** and make the design more visually appealing.
+- **Highlight objects** someone else is working on, so live presence shows on the page.
+- **Research who uses the bucket list and why.**
+- **Add an add page section** for books without a bucket list.
+- **Let people choose who is in each book**, instead of adding everyone who joins.
+- **Fix the lag** and the automatic swiping between spreads.
+- **Go back to [threats.md](../../../threats.md)** and add security features.
