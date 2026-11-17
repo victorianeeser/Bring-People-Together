@@ -2,7 +2,7 @@
 
 Due by Wednesday, November 18
 
-- **Maya:** edit the logo to make it more handwritten and make two different brand boards, with a more crafty, handmade feel (look at Tori's ideas in Figma)
+- **Maya:** edit the logo to make it more handwritten and make two different brand boards, with a more crafty, handmade feel (look at Tori's ideas in Figma) **Done 11/17**
 - **Victoria:** work on multiplayer states and figure out how to visually show that multiple people are in the book
 - **Leandra:** look through [threats](threats.md) and add security features to the scrapbook
 
