@@ -1,17 +1,22 @@
 # 11/18 | Keepsake branded scrapbook
 
-A copy of the [live scrapbook](../2026-11-13-live/) (with Leandra's safety features), branded as **Keepsake** using Maya's handmade brand boards in Figma (Branding page: the Keepsake board, the sticker set and the multiplayer states). The `2026-11-13-live` folder and its Netlify link are unchanged.
+A copy of the [live scrapbook](../2026-11-13-live/) (with Leandra's safety features), branded as **Keepsake** using Maya's handmade brand boards in Figma (Branding page: the Keepsake board, the sticker set and the multiplayer states).
 
-It uses the same Firebase rooms, so `?room=class` shows the same books as the live link, just in the Keepsake look.
+**Live link: https://scrapbook-proto.netlify.app/?room=class**
 
-## Putting it online (for Leandra)
+Join the class book with the invite code **IXD415**. Change `class` to a new room name for each test session (for example `?room=test1`) so every group starts with fresh books.
 
-1. Download **[keepsake-netlify-drop.zip](../keepsake-netlify-drop.zip)** (click it, then the download button). Or `git pull` and use this `2026-11-18-keepsake` folder.
-2. Log into Netlify and go to [app.netlify.com/drop](https://app.netlify.com/drop).
-3. Drag the zip (or this folder) onto the page. Netlify makes a new site and gives you a link.
-4. Add `?room=class` to the end of the link to see the class books. Post the link in the group chat so Maya can add it here and in the log.
+It uses the same Firebase rooms as the 11/13 live version, so the books there show up here in the Keepsake look.
 
-To replace the old version at scrapbook-proto.netlify.app instead, open that site in Netlify, go to **Deploys**, and drag the zip there. The books are saved in Firebase, so nothing is lost either way.
+## Updating the live site
+
+Keepsake replaced the 11/13 version at scrapbook-proto.netlify.app on 11/18. The site was made with Netlify Drop, so it doesn't update itself when this folder changes. To put new changes online:
+
+1. Update **[keepsake-netlify-drop.zip](../keepsake-netlify-drop.zip)**, or `git pull` and use this `2026-11-18-keepsake` folder.
+2. In Netlify, open the **scrapbook-proto** site and go to **Deploys**.
+3. Drag the zip (or this folder) onto the page.
+
+The books are saved in Firebase, so nothing is lost when the site is updated.
 
 ## What the branding changed
 

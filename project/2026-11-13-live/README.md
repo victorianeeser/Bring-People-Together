@@ -2,11 +2,9 @@
 
 A copy of Victoria's [11/13 prototype](../2026-11-13/) that several people can use **at the same time**, for our 5-person live test. Victoria's folder is unchanged.
 
-**Live link: https://scrapbook-proto.netlify.app/?room=class**
+**As of 11/18, https://scrapbook-proto.netlify.app shows the [Keepsake version](../2026-11-18-keepsake/) instead of this folder.** Keepsake is this version with the Keepsake branding, and it uses the same Firebase rooms, so all the books are still there. To run this 11/13 version, use the steps under **Run it** below.
 
-Send that link to testers. Change `class` to a new room name for each test session (for example `?room=test1`) so every group starts with fresh books.
-
-The Netlify site was made with Netlify Drop, so it doesn't update itself when this folder changes. After changing the code, drag the `2026-11-13-live` folder onto the site's **Deploys** page in Netlify again. The books are stored in Firebase, so redeploying doesn't lose anything.
+Change `class` in the link to a new room name for each test session (for example `?room=test1`) so every group starts with fresh books.
 
 Everyone who opens the same link shares the same books. When someone adds an idea, clicks **I'm in** or **We did it!**, or edits a spread, everyone else sees it within a second or two, including spreads that are open on their screen.
 
