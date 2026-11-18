@@ -4,6 +4,15 @@ A copy of the [live scrapbook](../2026-11-13-live/) (with Leandra's safety featu
 
 It uses the same Firebase rooms, so `?room=class` shows the same books as the live link, just in the Keepsake look.
 
+## Putting it online (for Leandra)
+
+1. Download **[keepsake-netlify-drop.zip](../keepsake-netlify-drop.zip)** (click it, then the download button). Or `git pull` and use this `2026-11-18-keepsake` folder.
+2. Log into Netlify and go to [app.netlify.com/drop](https://app.netlify.com/drop).
+3. Drag the zip (or this folder) onto the page. Netlify makes a new site and gives you a link.
+4. Add `?room=class` to the end of the link to see the class books. Post the link in the group chat so Maya can add it here and in the log.
+
+To replace the old version at scrapbook-proto.netlify.app instead, open that site in Netlify, go to **Deploys**, and drag the zip there. The books are saved in Firebase, so nothing is lost either way.
+
 ## What the branding changed
 
 - **Logo.** The real Keepsake wordmark from Figma (Figma Hand, outlined, with the olive tape and the asterisk) is in the library header and the join dialog, with the tagline "every page, together". The berry drop mark is the browser tab icon. Files are in [`brand/`](brand/).
