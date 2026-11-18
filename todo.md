@@ -4,8 +4,8 @@ Due by Wednesday, November 18
 
 - **Maya:** edit the logo to make it more handwritten and make two different brand boards, with a more crafty, handmade feel (look at Tori's ideas in Figma) ✅ **Done**
 - **Maya:** brand the scrapbook prototype with the Keepsake brand board, stickers and multiplayer states ([prototype](project/2026-11-18-keepsake/)) ✅ **Done**
-- **Victoria:** work on multiplayer states and figure out how to visually show that multiple people are in the book
-- **Leandra:** look through [threats](threats.md) and add security features to the scrapbook
+- **Victoria:** work on multiplayer states and figure out how to visually show that multiple people are in the book ✅ **Done**
+- **Leandra:** look through [threats](threats.md) and add security features to the scrapbook ✅ **Done**
 
 Due by Monday, November 16
 
