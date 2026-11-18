@@ -64,3 +64,7 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 
 - **Maya:** made the logo more handwritten, made two handmade brand boards (Stuck Together and Keepsake), a sticker set, and 9 multiplayer state designs in Figma. [Notes and images](notes/maya/2026-11-17/maya.md)
 - **Leandra:** added safety features from [threats.md](threats.md) to the [live scrapbook](project/2026-11-13-live/) with Claude Code: every photo, note and sticker shows who added it; only the person who added something (or the book's creator) can change or remove it; anyone can report a photo, note, sticker or plan (hidden for them right away, for everyone after 2 reports, and intimate photos are removed on the first report with links to Take It Down and StopNCII); and a limit of 10 additions per person per spread per minute. Set up tighter Firebase database rules ([database.rules.json](project/2026-11-13-live/database.rules.json)) that block wiping a room, unexpected data and oversized uploads, and tested everything with two browsers
+
+## Nov 18
+
+- **Maya:** branded the scrapbook prototype as Keepsake with Claude Code: new logo, colors, fonts (secondary font changed to Avenir), stickers, tape and doodles, notebook covers, and all 9 multiplayer states. Tested it and fixed changes not saving. [Notes and images](notes/maya/2026-11-18/maya.md), [prototype](project/2026-11-18-keepsake/)
