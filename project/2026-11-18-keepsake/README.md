@@ -28,6 +28,96 @@ The site also sends these events ([`js/analytics.js`](js/analytics.js)). Each on
 
 Book events carry one label, `book`: either "IxD 415 class book" or "other book". Nothing a person types (names, titles, notes, invite codes, room names) is ever sent.
 
+## To do for Leandra (11/19): put the new changes online
+
+Two steps. Both need Leandra's logins, so nobody else can do them.
+
+**1. Update the live site (Netlify).** This puts the 11/19 changes online: invite-only book links, delete only removing a book for you, bucket list editing, backgrounds, the × remove button, videos, recently uploaded and the camera roll.
+
+1. Download **[keepsake-netlify-drop.zip](../keepsake-netlify-drop.zip)** (or `git pull` and use this folder).
+2. In [Netlify](https://app.netlify.com), open the **scrapbook-proto** site and go to **Deploys**.
+3. Drag the zip onto the page. Wait for it to say **Published**.
+
+**2. Publish the new database rules (Firebase).** This turns on videos. Until it's done, a video only shows for the person who added it, and everyone else sees a placeholder.
+
+1. Go to the [Firebase console](https://console.firebase.google.com) and open the **scrapbook-e2dc2** project.
+2. Open **Build > Realtime Database**, then the **Rules** tab.
+3. Select everything in the box, delete it, and paste in the rules below. They're the same as [`database.rules.json`](database.rules.json).
+4. Click **Publish**.
+
+What changed: the only new part is the **`videos`** section. It accepts videos (`data:video/...`) up to 10 MB each. Everything else is the same as before.
+
+```json
+{
+  "rules": {
+    "rooms": {
+      "$room": {
+        ".read": "$room.matches(/^[a-z0-9-]{1,40}$/)",
+        "seeded": {
+          ".write": true,
+          ".validate": "newData.isBoolean()"
+        },
+        "books": {
+          "$book": {
+            ".validate": "$book.matches(/^[A-Za-z0-9_-]{1,64}$/)",
+            "info": {
+              ".write": true,
+              ".validate": "newData.isString() && newData.val().length <= 20000"
+            },
+            "members": {
+              "$member": {
+                ".write": true,
+                ".validate": "$member.matches(/^[A-Za-z0-9_-]{1,64}$/) && newData.isString() && newData.val().length <= 2000"
+              }
+            },
+            "bucket": {
+              "$idea": {
+                ".write": true,
+                ".validate": "$idea.matches(/^[A-Za-z0-9_-]{1,64}$/) && newData.isString() && newData.val().length <= 10000"
+              }
+            },
+            "spreads": {
+              "$spread": {
+                ".write": true,
+                ".validate": "$spread.matches(/^[A-Za-z0-9_-]{1,64}$/) && newData.isString() && newData.val().length <= 200000"
+              }
+            },
+            "$other": { ".validate": false }
+          }
+        },
+        "photos": {
+          "$photo": {
+            ".write": true,
+            ".validate": "$photo.matches(/^[A-Za-z0-9_-]{1,64}$/) && newData.isString() && newData.val().beginsWith('data:image/') && newData.val().length <= 3000000"
+          }
+        },
+        "videos": {
+          "$video": {
+            ".write": true,
+            ".validate": "$video.matches(/^[A-Za-z0-9_-]{1,64}$/) && newData.isString() && newData.val().beginsWith('data:video/') && newData.val().length <= 10000000"
+          }
+        },
+        "presence": {
+          "$person": {
+            ".write": true,
+            ".validate": "$person.matches(/^[A-Za-z0-9_-]{1,64}$/) && newData.hasChild('name') && newData.child('name').isString() && newData.child('name').val().length <= 40"
+          }
+        },
+        "cursors": {
+          "$person": {
+            ".write": true,
+            ".validate": "$person.matches(/^[A-Za-z0-9_-]{1,64}$/) && newData.hasChildren()"
+          }
+        },
+        "$other": { ".validate": false }
+      }
+    }
+  }
+}
+```
+
+To check it worked: open the live link, go to a page, click **Edit**, and add a short video. If the "couldn't be shared yet" message doesn't show up, it's working.
+
 ## Updating the live site
 
 Keepsake replaced the 11/13 version at scrapbook-proto.netlify.app on 11/18. The site was made with Netlify Drop, so it doesn't update itself when this folder changes. To put new changes online:
@@ -71,7 +161,7 @@ What's still different from the board: the words don't appear letter by letter w
 - **Recently uploaded.** Under the photo drop zone in the edit panel, the 8 newest photos and videos in the book. Click one to put it on the page you're on.
 - **Camera roll.** The camera button in the book's top right (or **Camera roll** next to Recently uploaded) shows every photo and video in the book, from everyone. **Add photos or videos** uploads straight to it without putting them on a page, and clicking one adds it to the page you're on.
 
-**One step for Leandra so videos are shared:** the database only takes photos until the new rules are published. In the [Firebase console](https://console.firebase.google.com) open **Realtime Database > Rules**, replace everything with [`database.rules.json`](database.rules.json) (it adds a `videos` section), and click **Publish**. Until then, a video shows for the person who added it, and everyone else sees a placeholder.
+**Videos need the new database rules published.** See [To do for Leandra](#to-do-for-leandra-1119-put-the-new-changes-online) at the top. Until then, a video shows for the person who added it, and everyone else sees a placeholder.
 
 ## Bucket list editing and backgrounds (11/19, from the 11/18 crit)
 
