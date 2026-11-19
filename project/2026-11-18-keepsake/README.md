@@ -154,6 +154,15 @@ The books are saved in Firebase, so nothing is lost when the site is updated.
 
 What's still different from the board: the words don't appear letter by letter while someone types (they show when they finish), and the big moments use Kalam Bold because Figma Hand isn't a web font (the logo itself is the real Figma Hand artwork).
 
+## Texture (11/19)
+
+The handmade pieces look like real paper and tape now, everywhere they're used:
+- **Washi tape** (the tape stickers in any color, the tape on photos and covers, and the logo's tape): slightly rough edges, soft fibers running along it, and a fine grain.
+- **The little notebook** has paper grain and fibers.
+- **Covers, cover labels, polaroid borders, pages and the background** have a soft paper grain.
+
+The textures are in [`brand/textures/`](brand/textures/) (`grain.svg`, `fibers.svg`) and in the tape and notebook SVGs themselves.
+
 ## Home page polish (11/19)
 
 - **More of the brand kit, kept in the margins:** a polaroid taped on with olive tape, the "together" speech bubble, the little notebook, the drop mark, the berry star, the hand-drawn heart, star and sparkle, and pink tape across the bottom corner. Smaller screens hide the extras so the books have room.

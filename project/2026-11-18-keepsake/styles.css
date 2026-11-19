@@ -1357,3 +1357,31 @@ body {
 .new-hint img { width: 58px; transform: scaleX(-1) rotate(-18deg); margin: 0; order: -1; }
 /* Home page: the hand-drawn underline sits a little closer to the book title */
 .sel-title::after { bottom: -0.16em; }
+
+/* ------------------------------------------------------------------
+   Texture (11/19): real-paper feel on the handmade pieces
+   ------------------------------------------------------------------ */
+/* Book covers: paper grain over the color and pattern, and on the title label */
+.cover::after {
+  content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; border-radius: inherit;
+  background: url(./brand/textures/grain.svg) 0 0 / 180px 180px; mix-blend-mode: multiply; opacity: .7;
+}
+.cover-label { background-image: url(./brand/textures/grain.svg); background-size: 140px 140px; }
+/* Pages: a light grain so they read as paper, under everything on the page */
+.page::after {
+  content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background: url(./brand/textures/grain.svg) 0 0 / 220px 220px; mix-blend-mode: multiply; opacity: .45;
+}
+/* Polaroids: the white border is paper too */
+.photo-frame.frame-polaroid { background-image: url(./brand/textures/grain.svg); background-size: 150px 150px; }
+/* Photo tape: the washi fibers and grain on top of its color (the tape shape is still a mask) */
+.pi-photo .photo-frame::before { background-image: url(./brand/textures/fibers.svg), url(./brand/textures/grain.svg); background-size: 220px auto, 120px 120px; }
+.pi-photo .photo-frame::before { background-color: var(--tape, #D0C96B); }
+.pi-photo:nth-child(even) .photo-frame::before { background-color: var(--tape, #FF9797); }
+/* The book's background behind the spread gets a faint grain too */
+body { background-image: url(./brand/textures/grain.svg), radial-gradient(rgba(81, 12, 13, 0.05) 1px, transparent 1.2px), radial-gradient(ellipse 70% 60% at 50% 46%, var(--bg-center) 0%, var(--bg) 72%);
+  background-size: 260px 260px, 22px 22px, auto; background-blend-mode: multiply, normal, normal; }
+/* Texture, toned down: softer grain on the page background, covers and pages */
+.cover::after { opacity: .55; }
+.page::after { opacity: .35; }
+body { background-size: 300px 300px, 22px 22px, auto; }

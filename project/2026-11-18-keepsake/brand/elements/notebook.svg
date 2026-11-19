@@ -1,5 +1,16 @@
 <svg width="78.0005" height="100.912" viewBox="0 0 78.0005 100.912" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="Group 11">
+<defs><filter id="paper" x="-2%" y="-2%" width="104%" height="104%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="2" seed="6" result="edge"/>
+    <feDisplacementMap in="SourceGraphic" in2="edge" scale="0.9" xChannelSelector="R" yChannelSelector="G" result="rough"/>
+    <feTurbulence type="fractalNoise" baseFrequency="1.05" numOctaves="2" seed="13" result="g"/>
+    <feColorMatrix in="g" type="matrix" values="0 0 0 0 0.3  0 0 0 0 0.12  0 0 0 0 0.08  0 0 0 -0.9 0.42" result="grain"/>
+    <feComposite in="grain" in2="rough" operator="in" result="grainIn"/>
+    <feTurbulence type="fractalNoise" baseFrequency="0.035 0.5" numOctaves="1" seed="21" result="fib"/>
+    <feColorMatrix in="fib" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.1 -0.6" result="light"/>
+    <feComposite in="light" in2="rough" operator="in" result="lightIn"/>
+    <feMerge><feMergeNode in="rough"/><feMergeNode in="grainIn"/><feMergeNode in="lightIn"/></feMerge>
+  </filter></defs>
+<g id="Group 11" filter="url(#paper)">
 <path id="Rectangle 22" d="M43.7999 0L5.04555 9.25558V97.3276L48.2202 93.7608L43.7999 0Z" fill="#B98463"/>
 <path id="Rectangle 23" d="M78.0005 8.59964L12.6837 13.2607V100.912L76.7259 94.6127L78.0005 8.59964Z" fill="#E0C77C"/>
 <path id="Star 10" d="M44.2924 35.0098V46.091L34.0296 44.6894L40.5103 49.8731L29.9969 53.5203L40.5103 55.2218L34.0296 63.1999L44.2924 59.0039L47.8281 70.6722L49.6412 59.0039L56.6584 63.1999L53.4233 55.2218L63.1118 49.8731H53.4233L59.904 39.6103L49.6412 46.091L44.2924 35.0098Z" fill="white"/>
