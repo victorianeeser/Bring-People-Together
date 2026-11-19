@@ -34,7 +34,7 @@ Two steps. Both need Leandra's logins, so nobody else can do them.
 
 **1. Update the live site (Netlify).** This puts all of the 11/19 changes online: the 11/18 crit fixes (invite-only books, delete only for you, editable bucket list, backgrounds, the × remove button, videos, recently uploaded, camera roll, photo editor, tape colors, brand fonts, following someone), the cleaned-up edit panel and home page, and the paper textures.
 
-1. Download **[keepsake-netlify-drop.zip](../keepsake-netlify-drop.zip)** (or `git pull` and use this folder).
+1. Download **[keepsake-netlify-drop.zip](../2026-11-19/keepsake-netlify-drop.zip)** (or `git pull` and use this folder).
 2. In [Netlify](https://app.netlify.com), open the **scrapbook-proto** site and go to **Deploys**.
 3. Drag the zip onto the page. Wait for it to say **Published**.
 
@@ -122,7 +122,7 @@ To check it worked: open the live link, go to a page, click **Edit**, and add a 
 
 Keepsake replaced the 11/13 version at scrapbook-proto.netlify.app on 11/18. The site was made with Netlify Drop, so it doesn't update itself when this folder changes. To put new changes online:
 
-1. Update **[keepsake-netlify-drop.zip](../keepsake-netlify-drop.zip)**, or `git pull` and use this `2026-11-18-keepsake` folder.
+1. Update **[keepsake-netlify-drop.zip](../2026-11-19/keepsake-netlify-drop.zip)**, or `git pull` and use this `2026-11-18-keepsake` folder.
 2. In Netlify, open the **scrapbook-proto** site and go to **Deploys**.
 3. Drag the zip (or this folder) onto the page.
 

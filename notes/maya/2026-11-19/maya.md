@@ -2,7 +2,7 @@
 
 Fixed every item from the [11/18 crit notes](../../crit/2026-11-18/crit-notes.md) in the [Keepsake prototype](../../../project/2026-11-18-keepsake/) with Claude Code, then cleaned up the design and added texture. The full list of changes is in the [prototype README](../../../project/2026-11-18-keepsake/README.md).
 
-**To put it online, Leandra needs to:** drag [keepsake-netlify-drop.zip](../../../project/keepsake-netlify-drop.zip) onto the Netlify site's Deploys page, and publish the new Firebase rules for videos. The steps are at the top of the [README](../../../project/2026-11-18-keepsake/README.md#to-do-for-leandra-1119-put-the-new-changes-online).
+**To put it online, Leandra needs to:** drag [keepsake-netlify-drop.zip](../../../project/2026-11-19/keepsake-netlify-drop.zip) onto the Netlify site's Deploys page, and publish the new Firebase rules for videos. The steps are at the top of the [README](../../../project/2026-11-18-keepsake/README.md#to-do-for-leandra-1119-put-the-new-changes-online).
 
 ## Crit fixes
 
