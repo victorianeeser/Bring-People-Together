@@ -32,7 +32,7 @@ Book events carry one label, `book`: either "IxD 415 class book" or "other book"
 
 Two steps. Both need Leandra's logins, so nobody else can do them.
 
-**1. Update the live site (Netlify).** This puts the 11/19 changes online: invite-only book links, delete only removing a book for you, bucket list editing, backgrounds, the × remove button, videos, recently uploaded, the camera roll and the photo editor.
+**1. Update the live site (Netlify).** This puts all of the 11/19 changes online: the 11/18 crit fixes (invite-only books, delete only for you, editable bucket list, backgrounds, the × remove button, videos, recently uploaded, camera roll, photo editor, tape colors, brand fonts, following someone), the cleaned-up edit panel and home page, and the paper textures.
 
 1. Download **[keepsake-netlify-drop.zip](../keepsake-netlify-drop.zip)** (or `git pull` and use this folder).
 2. In [Netlify](https://app.netlify.com), open the **scrapbook-proto** site and go to **Deploys**.

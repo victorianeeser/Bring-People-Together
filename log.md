@@ -75,4 +75,4 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 ## Nov 19
 
 - **Maya:** fixed the [11/18 crit](notes/crit/2026-11-18/crit-notes.md) items in the [Keepsake prototype](project/2026-11-18-keepsake/) with Claude Code: invite-only books, delete only for you, editable bucket list, page backgrounds, videos, camera roll, photo editor (crop, cut-out stickers, filters), tape colors, all brand fonts, and following someone's pages
-- **Maya:** cleaned up the edit panel and home page, added more branding elements, and gave the tape, notebook, covers and pages a paper texture
+- **Maya:** cleaned up the edit panel and home page, added more branding elements and paper textures (also in Figma). [Notes and images](notes/maya/2026-11-19/maya.md), [zip for Leandra to put online](project/keepsake-netlify-drop.zip)
