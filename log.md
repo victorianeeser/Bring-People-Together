@@ -85,3 +85,4 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 - **Maya:** added every brand board font (Miniver, Figma Hand, Avenir, Inter) and note colors, redesigned the crowded edit panel with more spacing, added tape colors for tape and photos, and made it so you can follow someone from the who's here list to the pages they're on
 - **Maya:** gave the color choices more room (named chips in a grid) and made the edit panel stay with you while editing: picking a font or color keeps you typing in the note instead of closing it
 - **Maya:** moved the note's font and color options into a dropdown under "+ Add text box", and made a selected photo come to the front so it's easy to resize and delete
+- **Maya:** moved a note's size and angle sliders into the note dropdown so all of a note's options are together

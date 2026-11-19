@@ -1259,3 +1259,6 @@ body {
 .spread .page-inner .pi.selected { z-index: 900 !important; }
 .spread .page-inner .pi.selected.lifting { z-index: 999 !important; }
 .spread .page-inner .pi.editing { z-index: 900 !important; }
+/* Size & angle inside the note dropdown */
+.text-drop #sel-size-group { padding: 0 0 6px; border-top: 0; }
+.text-drop #sel-size-group + * { margin-top: 0; }

@@ -40,7 +40,7 @@ export function panelHtml() {
         <h3 id="selected-title">Selected</h3>
         <p class="sel-credit" id="sel-credit" hidden></p>
         <div id="sel-edit-tools">
-          <div class="sel-group">
+          <div class="sel-group" id="sel-size-group">
             <h4>Size &amp; angle</h4>
             <label class="slider-row"><span>Size</span><input type="range" id="sel-size" min="5" max="100" step="1"><output id="sel-size-out"></output></label>
             <label class="slider-row"><span>Rotate</span><input type="range" id="sel-rotate" min="-180" max="180" step="1"><output id="sel-rotate-out"></output></label>
@@ -98,6 +98,7 @@ export function panelHtml() {
         <!-- The note's options drop down right here when a note is selected (11/19 feedback) -->
           <div class="text-drop" id="sel-font-group" hidden>
             <p class="text-drop-head">Your note</p>
+            <div id="text-size-slot"></div>
             <h4>Font</h4>
             <div class="font-grid" id="sel-fonts" role="group" aria-label="Note font">
               ${Object.entries(FONTS).map(([id, f]) => `<button type="button" class="font-card" data-edit="font" data-font="${id}" aria-pressed="false">
@@ -250,7 +251,12 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
     }
     const textDrop = panel.querySelector('#sel-font-group');
     const wasHidden = textDrop.hidden;
-    textDrop.hidden = !(found && found.item.type === 'text' && mine(found));
+    const isNote = Boolean(found && found.item.type === 'text' && mine(found));
+    textDrop.hidden = !isNote;
+    // For a note, its Size & angle sliders sit in the note dropdown with its font and color, so it's all together.
+    const sizeGroup = panel.querySelector('#sel-size-group');
+    const home = isNote ? panel.querySelector('#text-size-slot') : panel.querySelector('#sel-edit-tools');
+    if (sizeGroup.parentElement !== home) home.prepend(sizeGroup);
     // When a note is picked, bring its options into view under "+ Add text box".
     if (wasHidden && !textDrop.hidden) requestAnimationFrame(() => textDrop.scrollIntoView({ block: 'nearest', behavior: 'smooth' }));
     const spread = currentSpread();
