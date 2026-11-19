@@ -6,7 +6,7 @@ import { mountLibrary, showInLibrary } from './library.js';
 import { mountBook } from './book.js';
 import { openTransition, closeTransition } from './transitions.js';
 import { isAnimating, setAnimating, initDevPanel } from './animation.js';
-import { startLive, ensureMe, getBook, subscribe, setMyColor } from './state.js';
+import { startLive, ensureMe, getBook, subscribe, setMyColor, isMine } from './state.js';
 import { ME, ME_NAME, MY_COLOR, LIVE_COLORS, hasName, setMyName } from './identity.js';
 import { ROOM, liveEnabled, onStatus, onPresence, startPresence, setPresenceBook, onSaveError } from './sync.js';
 import { esc, inkFor, brandColor, toast } from './ui.js';
@@ -109,6 +109,14 @@ async function closeBook({ id }) {
   }
 }
 
+// A book link opened before the shared books loaded (or before you joined) shows "invite only" or "doesn't exist".
+// Once the book is there and you're in it, show it.
+subscribe(() => {
+  if (current?.type !== 'book' || !(current.api?.locked || current.api?.missing) || isAnimating()) return;
+  const book = getBook(current.id);
+  if (book && isMine(book)) mountFromHash();
+});
+
 window.addEventListener('book:open', (event) => openBook(event.detail));
 window.addEventListener('book:close', (event) => closeBook(event.detail));
 window.addEventListener('hashchange', () => {
@@ -166,6 +174,7 @@ const STATUS_TEXT = {
 function whereText(p) {
   const book = p.book ? getBook(p.book) : null;
   if (!book) return 'In the library';
+  if (!isMine(book)) return 'In another book'; // don't show the names of books you're not in
   const parts = [`In ${book.title}`];
   if (p.page) parts.push(p.page);
   if (p.editing) parts.push('editing');

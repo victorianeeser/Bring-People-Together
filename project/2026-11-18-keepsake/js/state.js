@@ -235,9 +235,18 @@ export function reportIdea(bookId, itemId) {
   return true;
 }
 
+// People who have actually opened the scrapbook have ids starting with "me-". Names typed into the
+// New book form (and the demo people) are only labels, so they don't keep a book alive.
+const realPeople = (book) => book.members.filter((m) => String(m.id).startsWith('me-'));
+// True when deleting the book would remove it for nobody but you.
+export const onlyMeLeft = (book) => realPeople(book).every((m) => m.id === ME);
+
+// Delete takes the book off your shelf only; everyone else keeps it. If you're the last real person in it,
+// it's deleted for good (with its photos).
 export function deleteBook(id) {
   const book = getBook(id);
   if (!book) return false;
+  if (!onlyMeLeft(book)) return leaveBook(id);
   data.books = data.books.filter((b) => b.id !== id);
   deletePhotos(photoKeysInBook(book)).catch(() => {});
   return commit();

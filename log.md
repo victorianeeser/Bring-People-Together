@@ -71,3 +71,7 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 - **Maya:** added [crit notes](notes/crit/2026-11-18/crit-notes.md) from class
 - **Maya:** made the [to do list](todo.md) for Monday, November 23
 - **Leandra:** put the [Keepsake version](project/2026-11-18-keepsake/) online at the [live link](https://scrapbook-proto.netlify.app/?room=class) with Claude Code, replacing the 11/13 version. Added [Plausible](https://plausible.io) analytics to count visits (no cookies, no personal data), plus events for key actions like joining, opening or making a book, adding ideas, pages, photos, notes and stickers, and reporting something
+
+## Nov 19
+
+- **Maya:** fixed joining and deleting books in the [Keepsake prototype](project/2026-11-18-keepsake/) with Claude Code, from the [11/18 crit](notes/crit/2026-11-18/crit-notes.md): an invite code now only gets you into that one book (a link to a book you're not in asks for its code), and deleting a book only removes it from your own books unless you're the last one in it

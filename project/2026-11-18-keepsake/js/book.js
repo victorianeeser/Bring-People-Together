@@ -1,6 +1,7 @@
 // Open book view: the current spread, page-edge stacks, page turns, and the spread overview.
 
-import { getBook, commit, subscribe, addSpread } from './state.js';
+import { getBook, commit, subscribe, addSpread, isMine } from './state.js';
+import { openJoinBooks } from './join.js';
 import { spreadsOf, spreadPagesHtml, ppLabel, spreadTitle, hydratePhotos, textFontSize } from './pages.js';
 import { ANIMATION, isAnimating, reducedMotion } from './animation.js';
 import { ICONS, esc, announce, isTyping, dialogOpen, toast, inkFor, brandColor } from './ui.js';
@@ -25,7 +26,27 @@ export function mountBook(root, bookId) {
         <p>This book doesn't exist anymore.</p>
         <a class="pill-btn" href="#/">Back to library</a>
       </div>`;
-    return { cleanup() {}, spreadRect: () => new DOMRect(), spreadEl: null, index: () => 0, focus() {} };
+    return { missing: true, cleanup() {}, spreadRect: () => new DOMRect(), spreadEl: null, index: () => 0, focus() {} };
+  }
+  // Books are invite only: a link to a book you're not in doesn't open it. You need the book's code.
+  if (!isMine(book)) {
+    document.title = 'keepsake';
+    root.innerHTML = `
+      <div class="book-view missing locked">
+        <img class="locked-mark" src="./brand/mark.svg" alt="">
+        <h1>This book is invite only</h1>
+        <p>Ask a friend in the book for its invite code, then join with it.</p>
+        <div class="locked-actions">
+          <a class="pill-btn" href="#/">Back to library</a>
+          <button type="button" class="pill-btn solid" data-action="join-locked">Join with a code</button>
+        </div>
+      </div>`;
+    const onJoin = (event) => {
+      if (!event.target.closest('[data-action="join-locked"]')) return;
+      openJoinBooks({ onJoined: () => window.dispatchEvent(new HashChangeEvent('hashchange')) });
+    };
+    root.addEventListener('click', onJoin);
+    return { locked: true, cleanup() { root.removeEventListener('click', onJoin); }, spreadRect: () => new DOMRect(), spreadEl: null, index: () => 0, focus() { root.querySelector('[data-action="join-locked"]')?.focus(); } };
   }
   document.title = book.title;
   let index = 0; // a book always opens to its first spread (the bucket list, when it has one)

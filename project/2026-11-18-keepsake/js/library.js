@@ -1,7 +1,8 @@
 // Library (home): carousel and grid of books, search, and book actions.
 
-import { myBooks, getBook, deleteBook, leaveBook, resetDemo, subscribe, addMember } from './state.js';
+import { myBooks, getBook, deleteBook, leaveBook, resetDemo, subscribe, addMember, onlyMeLeft } from './state.js';
 import { openJoinBooks, inviteText } from './join.js';
+import { ROOM } from './sync.js'; // Reset wipes every book for everyone, so it's hidden in the real class room
 import { isEmail } from './model.js';
 import { bookHtml, hydrateCovers, pagesLabel } from './covers.js';
 import { ICONS, esc, toast, announce, confirmDialog, isTyping, dialogOpen, avatarStack } from './ui.js';
@@ -55,7 +56,7 @@ export function mountLibrary(root, { focus = true } = {}) {
           <div class="menu" id="more-menu" hidden>
             <button type="button" class="menu-item" data-action="settings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-2.7-1.1l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3.6 14H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.1-2.7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg>Book settings</button>
             <button type="button" class="menu-item" data-action="leave">${ICONS.leave}Leave book</button>
-            <button type="button" class="menu-item" data-action="reset">${ICONS.reset}Reset demo data</button>
+            ${ROOM === 'class' ? '' : `<button type="button" class="menu-item" data-action="reset">${ICONS.reset}Reset demo data</button>`}
           </div>
         </div>
         <button type="button" class="action" data-action="share"><span class="circle glass">${ICONS.share}</span><span class="action-label">Share</span></button>
@@ -290,17 +291,23 @@ export function mountLibrary(root, { focus = true } = {}) {
     const index = selectedIndex(books);
     const book = books[index];
     if (!book) return;
-    const ok = await confirmDialog({
+    const forGood = onlyMeLeft(book);
+    const ok = await confirmDialog(forGood ? {
       title: `Delete "${book.title}"?`,
-      body: `This deletes all ${pagesLabel(book)} and their photos. It can't be undone.`,
+      body: `You're the only one in this book, so this deletes all ${pagesLabel(book)} and their photos. It can't be undone.`,
       confirmLabel: 'Delete book',
+      danger: true,
+    } : {
+      title: `Remove "${book.title}" from your books?`,
+      body: `It stays for everyone else in it. You can join again with its invite code, ${book.code}.`,
+      confirmLabel: 'Remove from my books',
       danger: true,
     });
     if (!ok) return;
     const next = books[index + 1] || books[index - 1];
     ui.selectedId = next?.id ?? null;
     deleteBook(book.id);
-    toast(`Deleted "${book.title}"`);
+    toast(forGood ? `Deleted "${book.title}"` : `Removed "${book.title}" from your books`);
   }
 
   async function reset() {

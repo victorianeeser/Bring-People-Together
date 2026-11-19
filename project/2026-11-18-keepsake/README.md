@@ -64,6 +64,15 @@ The books are saved in Firebase, so nothing is lost when the site is updated.
 
 What's still different from the board: the words don't appear letter by letter while someone types (they show when they finish), and the big moments use Kalam Bold because Figma Hand isn't a web font (the logo itself is the real Figma Hand artwork).
 
+## Invite-only fixes (11/19, from the 11/18 crit)
+
+- **A book link doesn't open a book you're not in.** Opening a link to someone else's book (like `#/book/book-ixd415`) shows "This book is invite only" with **Join with a code**. Once you join with the right code, the book opens. Your library only ever shows the books you've joined.
+- **The who's here list doesn't name books you're not in.** It says "In another book" instead.
+- **Delete only removes the book for you.** If anyone else is in the book, Delete becomes **Remove from my books**: it leaves your library and stays for everyone else, and you can join again with its code. It's only deleted for good when you're the last person in it.
+- **Reset demo data is hidden in the class room** (`?room=class`), because it wipes every book for everyone. It still shows in test rooms.
+
+People who used the 11/13 version before invite codes were added to every book automatically, and they're still members of those books.
+
 ## Saving fixes (11/18)
 
 - **Edit waits until it's connected.** Before, anything you did while the bottom bar said "Connecting…" was never sent, and it was wiped when the shared books loaded. Now Edit says "Still connecting…" until the books have loaded.
