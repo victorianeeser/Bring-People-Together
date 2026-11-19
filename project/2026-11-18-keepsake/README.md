@@ -162,7 +162,9 @@ In Edit mode, **double-click a photo or video** (or select it and click **Edit p
 - **Frame & cut-out.** **Polaroid** (white border and tape, the default), **Plain** (just the photo with a soft shadow), or **Cut-out sticker**: the photo in a circle, heart, star, scallop or rounded shape with a white die-cut edge, like the sticker set. Round shapes square up the crop automatically.
 - **Filter.** Original, Warm, Vintage, B&W, Faded, Rosy, Film or Cool.
 
-**Save** applies it for everyone, and Undo takes it back. Only the person who added the photo (or the book's creator) can edit it.
+**Save** applies it for everyone, and Undo takes it back.
+
+**Who can edit a photo.** Only the person who added it (or the book's creator), unless they turn on **Let others in the book edit this photo** at the bottom of the photo editor. Then anyone in the book can crop, filter, reframe, move and resize it, and the panel says so. Removing it still stays with the person who added it (and the book's creator), so nobody can delete someone else's photo. The switch only shows for the person who added it.
 
 ## Editing the page (11/19, from the 11/18 crit)
 

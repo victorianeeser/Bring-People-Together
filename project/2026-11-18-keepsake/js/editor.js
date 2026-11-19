@@ -147,9 +147,13 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
   const save = () => commit();
   // Only your own things (or anything, if you made the book) can be moved, changed or removed.
   const mine = (found) => Boolean(found) && canChange(book, found.item);
+  // The person who added a photo can let everyone in the book edit it (crop, frame, filter, move, resize).
+  // Removing it still stays with them (and the book's creator).
+  const canEdit = (found) => mine(found) || (Boolean(found) && found.item.type === 'photo' && found.item.openToAll === true);
   function explainLocked(found) {
     const adder = adderOf(book, found.item);
-    toast(`Only ${adder?.name || 'the person who added it'} can change this. You can report it if it's not OK.`);
+    const who = adder?.name || 'the person who added it';
+    toast(found.item.openToAll ? `Anyone can edit this, but only ${who} can remove it.` : `Only ${who} can change this. You can report it if it's not OK.`);
   }
   // A cap on how fast one person can add things to a spread (threats.md: "Piling on").
   function underLimit(spread, count = 1) {
@@ -174,7 +178,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
     if (el) {
       el.classList.add('selected');
       el.setAttribute('aria-pressed', 'true');
-      if (editingId !== selectedId && mine(find(selectedId))) {
+      if (editingId !== selectedId && canEdit(find(selectedId))) {
         // No whitespace between handles: notes read their text from the element.
         el.insertAdjacentHTML('beforeend', `<span class="handle h-rotate" aria-hidden="true">${ROTATE_ICON}</span><span class="handle h-resize" aria-hidden="true"></span>`);
       }
@@ -197,9 +201,11 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
       credit.hidden = !adder;
       if (adder) {
         credit.innerHTML = `Added by <span class="credit-name" style="--by:${esc(brandColor(adder.color))}">${adder.id === ME ? 'you' : esc(adder.name)}</span>`
-          + (mine(found) ? '' : `. Only ${esc(adder.name)} can change it.`);
+          + (mine(found) ? (item.openToAll ? '. Everyone in the book can edit it.' : '')
+            : item.openToAll ? `. ${esc(adder.name)} lets everyone edit it, but only they can remove it.` : `. Only ${esc(adder.name)} can change it.`);
       }
-      panel.querySelector('#sel-edit-tools').hidden = !mine(found);
+      panel.querySelector('#sel-edit-tools').hidden = !canEdit(found);
+      panel.querySelector('[data-edit="delete"]').hidden = !mine(found);
       panel.querySelector('[data-edit="report"]').hidden = !canReport(item);
       rotateInput.value = Math.round(item.rotation || 0);
       panel.querySelector('#sel-rotate-out').textContent = `${Math.round(item.rotation || 0)}°`;
@@ -352,7 +358,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
 
   function restack(direction) {
     const found = find(selectedId);
-    if (!found || !mine(found)) return;
+    if (!found || !canEdit(found)) return;
     record();
     const items = allItems(found.spread).sort((a, b) => (a.z || 0) - (b.z || 0));
     const i = items.indexOf(found.item);
@@ -366,7 +372,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
 
   function duplicate() {
     const found = find(selectedId);
-    if (!found || !mine(found) || !underLimit(found.spread)) return;
+    if (!found || !canEdit(found) || !underLimit(found.spread)) return;
     record();
     const { reports, removedForAll, ...rest } = JSON.parse(JSON.stringify(found.item));
     const copy = { ...rest, addedBy: ME, id: uid('pi'), x: found.item.x + 4, y: found.item.y + 4, z: topZ(found.spread) + 1 };
@@ -587,7 +593,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
       event.preventDefault();
       if (selectedId !== found.item.id) select(found.item.id);
       el.focus({ preventScroll: true });
-      if (!mine(found)) return; // you can select it (to see who added it, or report it), not move it
+      if (!canEdit(found)) return; // you can select it (to see who added it, or report it), not move it
       if (handle) startHandle(event, el, found, handle.classList.contains('h-resize') ? 'resize' : 'rotate');
       else startMove(event, el, found);
       return;
@@ -607,9 +613,10 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
     const found = find(id);
     if (!found || found.item.type !== 'photo') return;
     if (!found.item.photoKey) { toast("This one's a placeholder from the demo, so there's no photo to edit"); return; }
-    if (!mine(found)) { explainLocked(found); return; }
+    if (!canEdit(found)) { explainLocked(found); return; }
     const snap = snapshot();
     await openPhotoEditor(found.item, {
+      canShare: mine(found), // only the person who added it (or the book's creator) can open it up to others
       onSave: (changes) => {
         record(snap);
         Object.assign(found.item, changes);
@@ -675,7 +682,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
   let sliderSnap = null;
   function onSlider(event) {
     const found = find(selectedId);
-    if (!found || !mine(found)) return;
+    if (!found || !canEdit(found)) return;
     if (!sliderSnap) sliderSnap = snapshot();
     const { item } = found;
     const el = itemEl(selectedId);
@@ -803,7 +810,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
   function nudge(change) {
     const found = find(selectedId);
     if (!found) return;
-    if (!mine(found)) { explainLocked(found); return; }
+    if (!canEdit(found)) { explainLocked(found); return; }
     if (performance.now() - lastNudge > 700) record();
     lastNudge = performance.now();
     change(found.item);
