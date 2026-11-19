@@ -45,18 +45,6 @@ export function panelHtml() {
             <label class="slider-row"><span>Size</span><input type="range" id="sel-size" min="5" max="100" step="1"><output id="sel-size-out"></output></label>
             <label class="slider-row"><span>Rotate</span><input type="range" id="sel-rotate" min="-180" max="180" step="1"><output id="sel-rotate-out"></output></label>
           </div>
-          <div class="sel-group" id="sel-font-group" hidden>
-            <h4>Font</h4>
-            <div class="font-grid" id="sel-fonts" role="group" aria-label="Note font">
-              ${Object.entries(FONTS).map(([id, f]) => `<button type="button" class="font-card" data-edit="font" data-font="${id}" aria-pressed="false">
-                <span class="font-sample" style="font-family:${f.family};font-weight:${f.weight || 400};font-size:${Math.round(30 * (f.size || 1))}px">Aa</span>
-                <span class="font-name">${f.label}</span><span class="font-role">${f.role}</span></button>`).join('')}
-            </div>
-            <h4 class="sel-sub">Color</h4>
-            <div class="swatch-row" id="sel-text-colors" role="group" aria-label="Note color">
-              ${Object.entries(TEXT_COLORS).map(([name, hex]) => `<button type="button" class="color-chip" data-edit="text-color" data-color="${hex}" aria-label="${name}" aria-pressed="false"><span class="swatch-dot" style="background:${hex}"></span>${name}</button>`).join('')}
-            </div>
-          </div>
           <div class="sel-group" id="sel-tape-group" hidden>
             <h4>Tape color</h4>
             <div class="swatch-row" id="sel-tape-colors" role="group" aria-label="Tape color">
@@ -107,6 +95,20 @@ export function panelHtml() {
       <section class="panel-section" aria-labelledby="text-title">
         <h3 id="text-title">Text</h3>
         <button type="button" class="pill-btn" data-edit="text">+ Add text box</button>
+        <!-- The note's options drop down right here when a note is selected (11/19 feedback) -->
+          <div class="text-drop" id="sel-font-group" hidden>
+            <p class="text-drop-head">Your note</p>
+            <h4>Font</h4>
+            <div class="font-grid" id="sel-fonts" role="group" aria-label="Note font">
+              ${Object.entries(FONTS).map(([id, f]) => `<button type="button" class="font-card" data-edit="font" data-font="${id}" aria-pressed="false">
+                <span class="font-sample" style="font-family:${f.family};font-weight:${f.weight || 400};font-size:${Math.round(30 * (f.size || 1))}px">Aa</span>
+                <span class="font-name">${f.label}</span><span class="font-role">${f.role}</span></button>`).join('')}
+            </div>
+            <h4 class="sel-sub">Color</h4>
+            <div class="swatch-row" id="sel-text-colors" role="group" aria-label="Note color">
+              ${Object.entries(TEXT_COLORS).map(([name, hex]) => `<button type="button" class="color-chip" data-edit="text-color" data-color="${hex}" aria-label="${name}" aria-pressed="false"><span class="swatch-dot" style="background:${hex}"></span>${name}</button>`).join('')}
+            </div>
+          </div>
       </section>
 
       <section class="panel-section" aria-labelledby="stickers-title">
@@ -241,11 +243,16 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
       panel.querySelector('#sel-colors').querySelectorAll('.swatch').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.color === item.color)));
       panel.querySelector('#sel-tape-group').hidden = !tape;
       panel.querySelector('#sel-tape-colors').querySelectorAll('.color-chip').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.color === item.color)));
-      panel.querySelector('#sel-font-group').hidden = item.type !== 'text';
+
       const current = FONTS[item.font] ? item.font : 'miniver';
       panel.querySelectorAll('#sel-fonts .font-card').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.font === current)));
       panel.querySelectorAll('#sel-text-colors .color-chip').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.color.toLowerCase() === String(item.color || '').toLowerCase())));
     }
+    const textDrop = panel.querySelector('#sel-font-group');
+    const wasHidden = textDrop.hidden;
+    textDrop.hidden = !(found && found.item.type === 'text' && mine(found));
+    // When a note is picked, bring its options into view under "+ Add text box".
+    if (wasHidden && !textDrop.hidden) requestAnimationFrame(() => textDrop.scrollIntoView({ block: 'nearest', behavior: 'smooth' }));
     const spread = currentSpread();
     renderRecent();
     const bgNow = pageBg(spread?.bg);

@@ -1242,3 +1242,20 @@ body {
 /* More space between the panel's sections */
 .edit-panel { gap: 26px; }
 .sel-group { padding: 16px 0 8px; }
+
+/* The note's options drop down under "+ Add text box" when a note is selected */
+.text-drop {
+  margin-top: 12px; padding: 14px 14px 12px; border: 1.5px solid #E2D2CF; border-radius: 16px; background: #FFFFFF;
+  animation: text-drop-in .18s var(--ease);
+}
+.text-drop[hidden] { display: none; }
+.text-drop-head { margin: 0 0 10px; color: var(--ink); font: 700 16px/1.2 var(--big); }
+.text-drop h4 { margin: 0 0 10px; color: var(--on-dark-muted); font: 600 11px/1.2 var(--ui); letter-spacing: .08em; text-transform: uppercase; }
+.text-drop h4.sel-sub { margin-top: 16px; }
+@keyframes text-drop-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+/* Whatever you select comes to the front on your screen (so tape or other photos can't get in the way of
+   resizing or removing it). The real stacking order doesn't change; use Bring forward for that. */
+.spread .page-inner .pi.selected { z-index: 900 !important; }
+.spread .page-inner .pi.selected.lifting { z-index: 999 !important; }
+.spread .page-inner .pi.editing { z-index: 900 !important; }
