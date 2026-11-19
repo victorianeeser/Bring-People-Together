@@ -3,7 +3,7 @@
 Due by Monday, November 23
 
 - **Leandra:** get some kind of analytics running on our project (the minimum metric is the # of users), and user test with 10–15 people
-- **Maya:** user test with 10–15 people
+- **Maya:** user test with 10–15 people, and add more branding elements and stickers to the scrapbook, making them look more like real scrapbook pieces
 - **Victoria:** user test with 10–15 people
 
 Due by Wednesday, November 18
