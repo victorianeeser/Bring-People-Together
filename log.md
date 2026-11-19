@@ -67,24 +67,12 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 
 ## Nov 18
 
-- **Maya:** branded the scrapbook prototype as Keepsake with Claude Code: new logo, colors, fonts (secondary font changed to Avenir), stickers, tape and doodles, notebook covers, and all 9 multiplayer states. Tested it and fixed changes not saving. [Notes and images](notes/maya/2026-11-18/maya.md), [prototype](project/2026-11-18-keepsake/)
+- **Maya:** branded the prototype as [Keepsake](project/2026-11-18-keepsake/) (logo, colors, fonts, stickers, covers, multiplayer states). [Notes](notes/maya/2026-11-18/maya.md)
 - **Maya:** added [crit notes](notes/crit/2026-11-18/crit-notes.md) from class
 - **Maya:** made the [to do list](todo.md) for Monday, November 23
 - **Leandra:** put the [Keepsake version](project/2026-11-18-keepsake/) online at the [live link](https://scrapbook-proto.netlify.app/?room=class) with Claude Code, replacing the 11/13 version. Added [Plausible](https://plausible.io) analytics to count visits (no cookies, no personal data), plus events for key actions like joining, opening or making a book, adding ideas, pages, photos, notes and stickers, and reporting something
 
 ## Nov 19
 
-- **Maya:** fixed joining and deleting books in the [Keepsake prototype](project/2026-11-18-keepsake/) with Claude Code, from the [11/18 crit](notes/crit/2026-11-18/crit-notes.md): an invite code now only gets you into that one book (a link to a book you're not in asks for its code), and deleting a book only removes it from your own books unless you're the last one in it
-- **Maya:** made the bucket list editable in the [Keepsake prototype](project/2026-11-18-keepsake/) with Claude Code (edit or remove ideas), and added backgrounds for the bucket list and every page: paper, graph paper, dots, lined, gingham, rose, butter and sage
-- **Maya:** added more page editing to the [Keepsake prototype](project/2026-11-18-keepsake/) with Claude Code: a × to remove things, videos on the page, a recently uploaded row, and a camera roll for each book with every photo and video in it
-- **Maya:** added a photo editor to the [Keepsake prototype](project/2026-11-18-keepsake/) with Claude Code: double-click a photo or video to crop it, turn it into a cut-out sticker (circle, heart, star, scallop or rounded), change its frame, or add a filter. Also put the steps for Leandra (update Netlify and publish the video rules) at the top of the README
-- **Maya:** made every photo editable by anyone in the book with no permission messages (only the person who added a photo can still remove it)
-- **Maya:** fixed the "who added this" tag getting cut off when you hover over a photo, and made every photo open the photo editor with a double-click, even when Edit is off
-- **Maya:** added zoom and drag to the photo editor so a photo can be fit inside a cut-out sticker shape or frame
-- **Maya:** fixed the × on selected photos getting cut off at the page edge or hidden behind tape
-- **Maya:** added every brand board font (Miniver, Figma Hand, Avenir, Inter) and note colors, redesigned the crowded edit panel with more spacing, added tape colors for tape and photos, and made it so you can follow someone from the who's here list to the pages they're on
-- **Maya:** gave the color choices more room (named chips in a grid) and made the edit panel stay with you while editing: picking a font or color keeps you typing in the note instead of closing it
-- **Maya:** moved the note's font and color options into a dropdown under "+ Add text box", and made a selected photo come to the front so it's easy to resize and delete
-- **Maya:** moved a note's size and angle sliders into the note dropdown so all of a note's options are together
-- **Maya:** evened out the selection ring on page backgrounds and colors, and gave the color choices more room
-- **Maya:** polished the home page: more branding elements (taped polaroid, together bubble, notebook, stars and doodles), the "every page, together" tagline, a "start a new book" arrow, and better spacing
+- **Maya:** fixed the [11/18 crit](notes/crit/2026-11-18/crit-notes.md) items in the [Keepsake prototype](project/2026-11-18-keepsake/) with Claude Code: invite-only books, delete only for you, editable bucket list, page backgrounds, videos, camera roll, photo editor (crop, cut-out stickers, filters), tape colors, all brand fonts, and following someone's pages
+- **Maya:** cleaned up the edit panel and home page, and added more branding elements
