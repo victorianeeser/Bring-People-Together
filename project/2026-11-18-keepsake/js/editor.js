@@ -3,6 +3,7 @@
 // Every change saves right away. Item positions are percentages of the page.
 
 import { commit, reportPageItem } from './state.js';
+import { track, EVENTS } from './analytics.js';
 import { ME } from './identity.js';
 import { canChange, canReport, adderOf, allowAdds } from './moderation.js';
 import { openReportDialog, showTakeDownHelp } from './report.js';
@@ -257,6 +258,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
     if (!lastId) return;
     record(snap);
     save();
+    track(EVENTS.addedPhoto);
     selectedId = lastId;
     redraw({ focus: true });
     announce(images.length > 1 ? `${images.length} photos added` : 'Photo added');
@@ -266,6 +268,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
     const spread = currentSpread();
     if (!spread || !underLimit(spread)) return;
     record();
+    track(EVENTS.addedNote);
     const item = createPageItem('text', { addedBy: ME, width: 56, content: '', font: 'miniver', size: 7, color: '#510C0D' });
     placeNew(spread, targetSide(spread), item);
     save();
@@ -278,6 +281,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
     const spread = currentSpread();
     if (!spread || !underLimit(spread)) return;
     record();
+    track(EVENTS.addedSticker);
     const item = createPageItem('sticker', { addedBy: ME, kind, width: STICKER_WIDTH[kind] || 18, rotation: Math.round((Math.random() - 0.5) * 16) });
     placeNew(spread, side || targetSide(spread), item, point);
     save();

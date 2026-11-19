@@ -6,6 +6,7 @@ import { loadData, saveData, deletePhotos, clearPhotos } from './storage.js';
 import { createSeed, classBook, CLASS_BOOK_ID } from './seed.js';
 import { photoKeysInBook, MEMBER_COLORS, uid, createSpread, createBucketItem, guessSeason, codeFromId, normalizeCode } from './model.js';
 import { ME, ME_NAME } from './identity.js';
+import { track, EVENTS } from './analytics.js';
 import { startSync, push, reconcile, removeRemotePhotos, liveEnabled, getMyColor } from './sync.js';
 
 const isValid = (data) => data && data.version === 1 && Array.isArray(data.books);
@@ -73,6 +74,7 @@ export function leaveBook(bookId) {
   book.members = book.members.filter((m) => m.id !== ME);
   for (const item of book.bucketList) item.whosIn = item.whosIn.filter((id) => id !== ME);
   commit();
+  track(EVENTS.leftBook, whichBook(bookId));
   return true;
 }
 
@@ -82,6 +84,7 @@ export function joinBook(bookId) {
   if (!book || !ME_NAME || isMine(book)) return false;
   book.members.push({ id: ME, name: ME_NAME, color: getMyColor() || nextColor(book) });
   commit();
+  track(EVENTS.joinedBook, whichBook(bookId));
   return true;
 }
 
@@ -132,6 +135,7 @@ export function addBook(book) {
   data.books.push(book);
   const ok = commit();
   ensureMe();
+  track(EVENTS.createdBook);
   return ok;
 }
 
@@ -154,6 +158,9 @@ export function addMember(bookId, { name, email }) {
 }
 
 // Bucket list actions. "You" are the member with id ME.
+// Labels for analytics: only whether it's the class book, never a book's title or code.
+const whichBook = (bookId) => ({ book: bookId === CLASS_BOOK_ID ? 'IxD 415 class book' : 'other book' });
+
 const findItem = (book, itemId) => book?.bucketList.find((i) => i.id === itemId) || null;
 
 export function toggleImIn(bookId, itemId, memberId = ME) {
@@ -161,6 +168,7 @@ export function toggleImIn(bookId, itemId, memberId = ME) {
   if (!item) return false;
   item.whosIn = item.whosIn.includes(memberId) ? item.whosIn.filter((id) => id !== memberId) : [...item.whosIn, memberId];
   commit();
+  if (item.whosIn.includes(memberId)) track(EVENTS.imIn, whichBook(bookId));
   return item.whosIn.includes(memberId);
 }
 
@@ -177,6 +185,7 @@ export function markDone(bookId, itemId) {
   item.spreadId = spread.id;
   item.doneAt = new Date().toISOString();
   commit();
+  track(EVENTS.weDidIt, whichBook(bookId));
   return spread;
 }
 
@@ -187,6 +196,7 @@ export function addSpread(bookId, at) {
   const spread = createSpread();
   book.spreads.splice(Math.max(0, Math.min(at, book.spreads.length)), 0, spread);
   commit();
+  track(EVENTS.addedPages, whichBook(bookId));
   return spread;
 }
 
@@ -196,6 +206,7 @@ export function addBucketItem(bookId, fields) {
   const item = createBucketItem({ ...fields, addedBy: ME, whosIn: [ME] });
   book.bucketList.push(item);
   commit();
+  track(EVENTS.addedIdea, whichBook(bookId));
   return item;
 }
 
@@ -210,7 +221,7 @@ export function reportPageItem(bookId, itemId, options) {
   const book = getBook(bookId);
   for (const spread of book?.spreads || []) {
     const item = [...spread.leftPage.items, ...spread.rightPage.items].find((i) => i.id === itemId);
-    if (item) { addReport(item, options); commit(); return true; }
+    if (item) { addReport(item, options); commit(); track(EVENTS.reported, { kind: item.type }); return true; }
   }
   return false;
 }
@@ -220,6 +231,7 @@ export function reportIdea(bookId, itemId) {
   if (!item) return false;
   addReport(item);
   commit();
+  track(EVENTS.reported, { kind: 'plan' });
   return true;
 }
 

@@ -10,6 +10,7 @@ import { startLive, ensureMe, getBook, subscribe, setMyColor } from './state.js'
 import { ME, ME_NAME, MY_COLOR, LIVE_COLORS, hasName, setMyName } from './identity.js';
 import { ROOM, liveEnabled, onStatus, onPresence, startPresence, setPresenceBook, onSaveError } from './sync.js';
 import { esc, inkFor, brandColor, toast } from './ui.js';
+import { track, EVENTS } from './analytics.js';
 
 // A change the shared database wouldn't take: say so, instead of it quietly vanishing.
 onSaveError(() => toast("Couldn't save your last change. Check your connection, then try it again."));
@@ -145,6 +146,7 @@ function askName() {
       const name = dialog.querySelector('#join-name').value.trim().slice(0, 24);
       if (!name) { event.preventDefault(); return; }
       setMyName(name);
+      track(EVENTS.joinedScrapbook);
       dialog.close();
       dialog.remove();
       resolve(name);

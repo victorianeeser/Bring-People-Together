@@ -10,6 +10,24 @@ It uses the same Firebase rooms as the 11/13 live version, so the books there sh
 
 **Analytics:** visits to the live site are counted with [Plausible](https://plausible.io) (Leandra's account). Plausible uses no cookies and doesn't collect personal data. The script is in the `<head>` of [`index.html`](index.html). It only counts visits on scrapbook-proto.netlify.app, not when you run the site on your own computer.
 
+The site also sends these events ([`js/analytics.js`](js/analytics.js)). Each one only shows up in Plausible once it's added as a goal (**Site settings > Goals > Add goal > Custom event**, with the name exactly as written):
+
+| Event | When it's sent |
+|---|---|
+| `Joined the scrapbook` | Someone types their name the first time |
+| `Joined a book` | Someone joins a book with its invite code |
+| `Created a book` | Someone makes a new book |
+| `Left a book` | Someone leaves a book |
+| `Opened a book` | Someone opens a book |
+| `Added an idea` | A new plan on a bucket list |
+| `I'm in` | Someone says they're in for a plan |
+| `We did it` | A plan is marked done |
+| `Added pages` | Someone adds two blank pages |
+| `Added a photo` / `Added a note` / `Added a sticker` | Something added to a page |
+| `Reported something` | A report (with `kind`: photo, text, sticker or plan) |
+
+Book events carry one label, `book`: either "IxD 415 class book" or "other book". Nothing a person types (names, titles, notes, invite codes, room names) is ever sent.
+
 ## Updating the live site
 
 Keepsake replaced the 11/13 version at scrapbook-proto.netlify.app on 11/18. The site was made with Netlify Drop, so it doesn't update itself when this folder changes. To put new changes online:

@@ -9,6 +9,7 @@ import { panelHtml, createEditor } from './editor.js';
 import { ME, ME_NAME, MY_COLOR } from './identity.js';
 import { inviteText } from './join.js';
 import { setPresence, setCursor, onCursors, onPresence, isSynced } from './sync.js';
+import { track, EVENTS } from './analytics.js';
 
 const MAX_EDGES = 8;
 const CHEVRON_LEFT = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
@@ -17,6 +18,7 @@ const CHEVRON_RIGHT = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5
 
 export function mountBook(root, bookId) {
   const book = getBook(bookId);
+  if (book) track(EVENTS.openedBook, { book: bookId === 'book-ixd415' ? 'IxD 415 class book' : 'other book' });
   if (!book) {
     root.innerHTML = `
       <div class="book-view missing">
