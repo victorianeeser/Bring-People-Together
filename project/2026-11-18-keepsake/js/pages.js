@@ -40,7 +40,7 @@ export function itemStyle(item) {
 export const textFontSize = (item) => `${(item.size || 7) * 0.6}cqw`;
 
 export function itemLabel(item) {
-  if (item.type === 'photo') return 'Photo';
+  if (item.type === 'photo') return item.video ? 'Video' : 'Photo';
   if (item.type === 'text') return item.content.trim() ? `Note: ${item.content.trim().slice(0, 40)}` : 'Empty note';
   return `${STICKERS[item.kind]?.label || 'Sticker'} sticker`;
 }
@@ -54,7 +54,9 @@ function itemHtml(item, interactive, book) {
   const attrs = `data-id="${esc(item.id)}"${credit} style="${itemStyle(item)}${creditStyle}${item.type === 'text' ? `;${fontCss(item)};font-size:${textFontSize(item)};color:${esc(item.color || '#2B2B2B')}` : ''}"`
     + (interactive ? ` tabindex="0" role="button" aria-pressed="false" aria-label="${esc(itemLabel(item))}${adder ? `, added by ${esc(adder.name)}` : ''}"` : '');
   if (item.type === 'photo') {
-    const fill = item.photoKey
+    const fill = item.photoKey && item.video
+      ? `<video class="photo-img" data-photo-key="${esc(item.photoKey)}" muted loop playsinline autoplay draggable="false"></video><span class="video-badge" aria-hidden="true"></span>`
+      : item.photoKey
       ? `<img class="photo-img" data-photo-key="${esc(item.photoKey)}" alt="" draggable="false">`
       : `<span class="photo-fill" style="--ar:1 / ${item.aspect || 0.78};background:${esc(item.placeholder || '#DDD6CA')}"></span>`;
     return `<div class="pi pi-photo" ${attrs}><span class="photo-frame">${fill}</span></div>`;
@@ -165,8 +167,10 @@ export function spreadPagesHtml(book, index, { interactive = false, season = nul
 
 // Uploaded photos live in IndexedDB; fill them in after the HTML is on the page.
 export function hydratePhotos(root) {
-  root.querySelectorAll('img[data-photo-key]:not([src])').forEach(async (img) => {
-    const url = await photoUrl(img.dataset.photoKey).catch(() => null);
-    if (url) img.src = url;
+  root.querySelectorAll('img[data-photo-key]:not([src]), video[data-photo-key]:not([src])').forEach(async (el) => {
+    const url = await photoUrl(el.dataset.photoKey).catch(() => null);
+    if (!url) return;
+    el.src = url;
+    if (el.tagName === 'VIDEO' && el.autoplay) el.play?.().catch(() => {});
   });
 }

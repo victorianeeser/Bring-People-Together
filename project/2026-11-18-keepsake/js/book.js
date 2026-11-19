@@ -4,6 +4,8 @@ import { getBook, commit, subscribe, addSpread, isMine } from './state.js';
 import { openJoinBooks } from './join.js';
 import { spreadsOf, spreadPagesHtml, ppLabel, spreadTitle, spreadBg, hydratePhotos, textFontSize } from './pages.js';
 import { PAGE_BACKGROUNDS } from './model.js';
+import { storeMedia, addToRoll, rollOf, tileHtml, MAX_VIDEO_MB } from './media.js';
+const ROLL_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.5-2.5h4L15.5 6"/><circle cx="12" cy="12.5" r="3.4"/></svg>';
 import { setBucketBackground } from './state.js';
 import { ANIMATION, isAnimating, reducedMotion } from './animation.js';
 import { ICONS, esc, announce, isTyping, dialogOpen, toast, inkFor, brandColor } from './ui.js';
@@ -68,6 +70,7 @@ export function mountBook(root, bookId) {
         </div>
         <div class="book-top-right">
           <div class="book-here" aria-label="Who's in this book now"></div>
+          <button type="button" class="icon-btn glass" data-action="camera-roll" aria-label="Camera roll: every photo and video in this book" title="Camera roll" aria-haspopup="dialog">${ROLL_ICON}</button>
           <button type="button" class="icon-btn glass" data-action="overview" aria-label="See all spreads" aria-haspopup="dialog">${ICONS.grid}</button>
         </div>
       </header>
@@ -88,6 +91,7 @@ export function mountBook(root, bookId) {
       </main>
       ${panelHtml()}
       <dialog class="overview" id="overview" aria-labelledby="overview-title"></dialog>
+      <dialog class="overview roll-dialog" id="roll" aria-labelledby="roll-title"></dialog>
     </div>`;
 
   const spreadEl = root.querySelector('#spread');
@@ -230,6 +234,56 @@ export function mountBook(root, bookId) {
     hydratePhotos(overview);
   }
 
+  // Camera roll (11/18 crit): every photo and video in this book in one place. Upload straight to it,
+  // or click one to put it on the page you're on.
+  const rollEl = root.querySelector('#roll');
+  function renderRoll() {
+    const all = rollOf(book);
+    const onPage = Boolean(currentSpread());
+    rollEl.innerHTML = `
+      <div class="overview-head">
+        <h2 id="roll-title">Camera roll</h2>
+        <button type="button" class="icon-btn glass" data-roll="close" aria-label="Close">${ICONS.close}</button>
+      </div>
+      <p class="overview-note">${all.length ? `${all.length} photo${all.length === 1 ? '' : 's'} and videos from everyone in this book. ` : ''}${onPage ? 'Click one to add it to this page.' : 'Go to a page (not the bucket list) to add one to it.'}</p>
+      <div class="roll-actions">
+        <button type="button" class="pill-btn solid" data-roll="upload">Add photos or videos</button>
+        <span class="muted">Videos up to ${MAX_VIDEO_MB} MB</span>
+        <input type="file" accept="image/*,video/*" multiple hidden data-roll-input>
+      </div>
+      ${all.length ? `<div class="roll-grid">${all.map((e) => tileHtml(e, `data-roll="pick" aria-label="${e.video ? 'Video' : 'Photo'}${onPage ? ', add to this page' : ''}"`)).join('')}</div>`
+        : '<p class="roll-empty">Nothing here yet. Photos and videos anyone adds to this book show up here.</p>'}`;
+    hydratePhotos(rollEl);
+    rollEl.querySelector('[data-roll-input]').addEventListener('change', async (event) => {
+      const files = event.target.files;
+      if (!files.length) return;
+      toast('Adding to the camera roll…');
+      const stored = await storeMedia(files);
+      if (!stored.length) return;
+      addToRoll(book, stored);
+      commit();
+      renderRoll();
+      toast(`Added ${stored.length} to the camera roll`);
+    });
+  }
+  function openRoll() {
+    renderRoll();
+    rollEl.showModal();
+  }
+  rollEl.addEventListener('click', (event) => {
+    if (event.target === rollEl) { rollEl.close(); return; }
+    const btn = event.target.closest('[data-roll]');
+    if (!btn) return;
+    if (btn.dataset.roll === 'close') rollEl.close();
+    if (btn.dataset.roll === 'upload') rollEl.querySelector('[data-roll-input]').click();
+    if (btn.dataset.roll === 'pick') {
+      if (!currentSpread()) { toast('Go to a page first, then add it from here'); return; }
+      if (!isSynced()) { toast('Still connecting… try again in a second'); return; }
+      if (!editMode) setEditMode(true);
+      if (editor.addFromRoll(btn.dataset.rollKey)) rollEl.close();
+    }
+  });
+
   // Change the bucket list page's background (from the 11/18 crit).
   function pickBucketBackground() {
     const dialog = document.getElementById('confirm');
@@ -352,6 +406,7 @@ export function mountBook(root, bookId) {
     'back-to-contents': () => turnTo(0),
     'add-idea': () => openAddIdea(book, { rerender: showSpread, findAnchor }),
     'toc-background': () => pickBucketBackground(),
+    'camera-roll': () => openRoll(),
     prev: () => turnTo(index - 1),
     next: () => turnTo(index + 1),
     overview: openOverview,
@@ -417,6 +472,7 @@ export function mountBook(root, bookId) {
   editor = createEditor({
     root, book, spreadEl, currentSpread, rerender: showSpread, isEnabled: () => editMode, onDone: () => setEditMode(false),
     onSelect: (id) => { if (liveReady) { mySel = id; sendCursor(); } },
+    onCameraRoll: () => openRoll(),
     // While you drag, resize or rotate something, its position goes out with your cursor.
     onLive: (found) => {
       if (!liveReady) return;

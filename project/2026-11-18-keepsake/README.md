@@ -64,6 +64,15 @@ The books are saved in Firebase, so nothing is lost when the site is updated.
 
 What's still different from the board: the words don't appear letter by letter while someone types (they show when they finish), and the big moments use Kalam Bold because Figma Hand isn't a web font (the logo itself is the real Figma Hand artwork).
 
+## Editing the page (11/19, from the 11/18 crit)
+
+- **Removing things.** Select anything in Edit mode and click the berry **×** on its corner, or press Delete. On someone else's photo, note or sticker the × is gray and explains that only they (or the book's creator) can remove it, and you can report it instead. That's Leandra's safety rule from [threats.md](../../threats.md).
+- **Videos.** Drag a video onto a page or use **Browse**, like a photo. It goes on the page as a polaroid that plays on a loop with no sound. Videos can be up to 7 MB (a short phone clip), because the database stores up to 10 MB per file.
+- **Recently uploaded.** Under the photo drop zone in the edit panel, the 8 newest photos and videos in the book. Click one to put it on the page you're on.
+- **Camera roll.** The camera button in the book's top right (or **Camera roll** next to Recently uploaded) shows every photo and video in the book, from everyone. **Add photos or videos** uploads straight to it without putting them on a page, and clicking one adds it to the page you're on.
+
+**One step for Leandra so videos are shared:** the database only takes photos until the new rules are published. In the [Firebase console](https://console.firebase.google.com) open **Realtime Database > Rules**, replace everything with [`database.rules.json`](database.rules.json) (it adds a `videos` section), and click **Publish**. Until then, a video shows for the person who added it, and everyone else sees a placeholder.
+
 ## Bucket list editing and backgrounds (11/19, from the 11/18 crit)
 
 - **Edit an idea.** Click an idea on the bucket list, then **Edit this idea**. The form opens filled in: change the name, where, when, season, cost, category or notes and **Save changes**. If the idea already has a spread, its spread title changes with it. Anyone can edit ideas from before credit existed; otherwise it's the person who added it or the book's creator.

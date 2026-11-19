@@ -55,6 +55,16 @@ export async function putPhoto(blob) {
   return key;
 }
 
+// Videos (from the 11/18 crit) are kept as they are, in the same local store, and shared under videos/.
+// Returns whether it reached the shared room, so the page can say if it didn't.
+export async function putVideo(blob) {
+  const key = `video-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+  await run('readwrite', (store) => store.put(blob, key));
+  let shared = !liveEnabled;
+  if (liveEnabled) shared = await uploadPhoto(key, blob).then(() => true).catch((error) => { console.warn('Video upload failed:', error); return false; });
+  return { key, shared };
+}
+
 export const getPhoto = (key) => run('readonly', (store) => store.get(key));
 
 export async function deletePhotos(keys) {

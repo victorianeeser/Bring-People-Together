@@ -213,20 +213,26 @@ const blobToDataUrl = (blob) => new Promise((resolve, reject) => {
   reader.readAsDataURL(blob);
 });
 
+// Photos live under photos/, videos under videos/ (their keys start with "video-").
+const mediaPath = (key) => `${String(key).startsWith('video-') ? 'videos' : 'photos'}/${key}`;
+
 export async function uploadPhoto(key, blob) {
   if (!(await init())) return;
-  await fb.set(roomRef(`photos/${key}`), await blobToDataUrl(blob));
+  await fb.set(roomRef(mediaPath(key)), await blobToDataUrl(blob));
 }
 
 export async function downloadPhoto(key) {
   if (!(await init())) return null;
-  const text = (await fb.get(roomRef(`photos/${key}`))).val();
+  const text = (await fb.get(roomRef(mediaPath(key)))).val();
   return text ? (await fetch(text)).blob() : null;
 }
 
 export async function removeRemotePhotos(keys) {
   if (!keys.length || !(await init())) return;
-  await fb.update(roomRef('photos'), Object.fromEntries(keys.map((k) => [k, null])));
+  const photos = keys.filter((k) => !String(k).startsWith('video-'));
+  const videos = keys.filter((k) => String(k).startsWith('video-'));
+  if (photos.length) await fb.update(roomRef('photos'), Object.fromEntries(photos.map((k) => [k, null])));
+  if (videos.length) await fb.update(roomRef('videos'), Object.fromEntries(videos.map((k) => [k, null]))).catch(() => {});
 }
 
 export async function clearRemotePhotos() {

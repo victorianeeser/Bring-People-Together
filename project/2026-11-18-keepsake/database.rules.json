@@ -41,6 +41,12 @@
             ".validate": "$photo.matches(/^[A-Za-z0-9_-]{1,64}$/) && newData.isString() && newData.val().beginsWith('data:image/') && newData.val().length <= 3000000"
           }
         },
+        "videos": {
+          "$video": {
+            ".write": true,
+            ".validate": "$video.matches(/^[A-Za-z0-9_-]{1,64}$/) && newData.isString() && newData.val().beginsWith('data:video/') && newData.val().length <= 10000000"
+          }
+        },
         "presence": {
           "$person": {
             ".write": true,

@@ -76,3 +76,4 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 
 - **Maya:** fixed joining and deleting books in the [Keepsake prototype](project/2026-11-18-keepsake/) with Claude Code, from the [11/18 crit](notes/crit/2026-11-18/crit-notes.md): an invite code now only gets you into that one book (a link to a book you're not in asks for its code), and deleting a book only removes it from your own books unless you're the last one in it
 - **Maya:** made the bucket list editable in the [Keepsake prototype](project/2026-11-18-keepsake/) with Claude Code (edit or remove ideas), and added backgrounds for the bucket list and every page: paper, graph paper, dots, lined, gingham, rose, butter and sage
+- **Maya:** added more page editing to the [Keepsake prototype](project/2026-11-18-keepsake/) with Claude Code: a × to remove things, videos on the page, a recently uploaded row, and a camera roll for each book with every photo and video in it

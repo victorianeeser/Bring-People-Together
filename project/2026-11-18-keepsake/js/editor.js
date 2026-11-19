@@ -8,6 +8,8 @@ import { ME } from './identity.js';
 import { canChange, canReport, adderOf, allowAdds } from './moderation.js';
 import { openReportDialog, showTakeDownHelp } from './report.js';
 import { createPageItem, uid, FONTS, fontCss, PAGE_BACKGROUNDS, pageBg } from './model.js';
+import { storeMedia, addToRoll, rollOf, tileHtml, mediaFiles, MAX_VIDEO_MB } from './media.js';
+import { hydratePhotos } from './pages.js';
 import { putPhoto, resizeImage } from './storage.js';
 import { STICKERS, STICKER_COLORS, TRAY, ELEMENT_TRAY, stickerSvg, isBrandSticker } from './stickers.js';
 import { itemStyle, textFontSize, itemLabel } from './pages.js';
@@ -56,12 +58,17 @@ export function panelHtml() {
       </section>
 
       <section class="panel-section" aria-labelledby="photos-title">
-        <h3 id="photos-title">Photos <span class="muted" id="photo-count"></span></h3>
+        <h3 id="photos-title">Photos &amp; videos <span class="muted" id="photo-count"></span></h3>
         <div class="dropzone" id="dropzone">
-          <p>Drag photos here</p>
+          <p>Drag photos or videos here</p>
           <button type="button" class="pill-btn" data-edit="photo">Browse</button>
+          <p class="panel-hint">Videos up to ${MAX_VIDEO_MB} MB play on a loop, with no sound.</p>
         </div>
-        <input type="file" id="photo-input" accept="image/*" multiple hidden>
+        <input type="file" id="photo-input" accept="image/*,video/*" multiple hidden>
+        <div class="recent" id="recent" hidden>
+          <div class="recent-head"><h4>Recently uploaded</h4><button type="button" class="link-btn" data-edit="camera-roll">Camera roll</button></div>
+          <div class="recent-row" id="recent-row"></div>
+        </div>
       </section>
 
       <section class="panel-section" aria-labelledby="bg-title">
@@ -95,7 +102,7 @@ export function panelHtml() {
     </aside>`;
 }
 
-export function createEditor({ root, book, spreadEl, currentSpread, rerender, isEnabled = () => true, onDone, onSelect, onLive }) {
+export function createEditor({ root, book, spreadEl, currentSpread, rerender, isEnabled = () => true, onDone, onSelect, onLive, onCameraRoll }) {
   // Editing only works on a regular spread while edit mode is on.
   const editable = () => Boolean(currentSpread()) && isEnabled();
   const panel = root.querySelector('#edit-panel');
@@ -169,6 +176,8 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
         // No whitespace between handles: notes read their text from the element.
         el.insertAdjacentHTML('beforeend', `<span class="handle h-rotate" aria-hidden="true">${ROTATE_ICON}</span><span class="handle h-resize" aria-hidden="true"></span>`);
       }
+      // A × on the corner to remove it (11/18 crit: "can't delete elements"). On other people's things it explains who can.
+      if (editingId !== selectedId) el.insertAdjacentHTML('beforeend', `<span class="handle h-delete${mine(find(selectedId)) ? '' : ' is-locked'}" aria-hidden="true">×</span>`);
     }
     updatePanel();
     onSelect?.(selectedId); // live: others see what you've selected
@@ -203,6 +212,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
       fonts.querySelectorAll('.font-choice').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.font === current)));
     }
     const spread = currentSpread();
+    renderRecent();
     const bgNow = pageBg(spread?.bg);
     panel.querySelectorAll('[data-edit="page-bg"]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.bgChoice === bgNow)));
     const photos = spread ? allItems(spread).filter((i) => i.type === 'photo').length : 0;
@@ -246,31 +256,55 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
 
   async function addPhotos(files, side, point) {
     const spread = currentSpread();
-    const images = [...files].filter((f) => f.type.startsWith('image/'));
+    const media = mediaFiles(files);
     if (!spread) return;
-    if (!images.length) { toast('Only image files can be added as photos'); return; }
-    if (!underLimit(spread, images.length)) return;
-    toast(images.length > 1 ? `Adding ${images.length} photos…` : 'Adding photo…');
+    if (!media.length) { toast('Only photos and videos can be added here'); return; }
+    if (!underLimit(spread, media.length)) return;
+    toast(media.length > 1 ? `Adding ${media.length} photos and videos…` : 'Adding it…');
     const snap = snapshot();
-    let lastId = null;
-    for (const [i, file] of images.entries()) {
-      try {
-        const { blob, width, height } = await resizeImage(file);
-        const photoKey = await putPhoto(blob);
-        const item = createPageItem('photo', { addedBy: ME, width: 42, rotation: Math.round((Math.random() - 0.5) * 8), photoKey, aspect: height / width });
-        placeNew(spread, side || targetSide(spread), item, point ? { x: point.x + i * 4, y: point.y + i * 4 } : null);
-        lastId = item.id;
-      } catch {
-        toast(`Couldn't add ${file.name}`);
-      }
-    }
-    if (!lastId) return;
+    const stored = await storeMedia(media);
+    if (!stored.length) return;
+    addToRoll(book, stored);
     record(snap);
+    const lastId = placeMedia(spread, stored, side, point);
     save();
     track(EVENTS.addedPhoto);
     selectedId = lastId;
     redraw({ focus: true });
-    announce(images.length > 1 ? `${images.length} photos added` : 'Photo added');
+    announce(stored.length > 1 ? `${stored.length} added` : stored[0].video ? 'Video added' : 'Photo added');
+  }
+
+  // Puts photos/videos (already saved) on the page. Returns the last one's id.
+  function placeMedia(spread, entries, side, point) {
+    let lastId = null;
+    entries.forEach((e, i) => {
+      const item = createPageItem('photo', { addedBy: ME, width: 42, rotation: Math.round((Math.random() - 0.5) * 8), photoKey: e.key, aspect: e.aspect || 0.78, ...(e.video ? { video: true } : {}) });
+      placeNew(spread, side || targetSide(spread), item, point ? { x: point.x + i * 4, y: point.y + i * 4 } : null);
+      lastId = item.id;
+    });
+    return lastId;
+  }
+
+  // Adds something from the camera roll (or the recently uploaded row) to the page you're on.
+  function addFromRoll(key) {
+    const spread = currentSpread();
+    const entry = rollOf(book).find((e) => e.key === key);
+    if (!spread || !entry || !underLimit(spread)) return false;
+    record();
+    selectedId = placeMedia(spread, [entry]);
+    save();
+    redraw({ focus: true });
+    announce(entry.video ? 'Video added' : 'Photo added');
+    return true;
+  }
+
+  // The newest 8 photos and videos in this book, under the drop zone.
+  function renderRecent() {
+    const recent = rollOf(book).slice(0, 8);
+    const box = panel.querySelector('#recent');
+    box.hidden = !recent.length;
+    panel.querySelector('#recent-row').innerHTML = recent.map((e) => tileHtml(e, `data-edit="from-roll" aria-label="Add this ${e.video ? 'video' : 'photo'} to the page"`)).join('');
+    hydratePhotos(box);
   }
 
   function addText() {
@@ -541,6 +575,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
     const el = event.target.closest('.page-inner .pi');
     if (el && el.dataset.id === editingId) return; // clicking inside the note you're typing
     if (event.target.closest('button, a')) return; // e.g. "back to contents"
+    if (event.target.closest('.h-delete')) { event.preventDefault(); event.stopPropagation(); removeSelected(); return; }
     const handle = event.target.closest('.handle');
     if (el) {
       const found = find(el.dataset.id);
@@ -646,6 +681,8 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
   const panelActions = {
     done: () => onDone?.(),
     photo: () => fileInput.click(),
+    'from-roll': (btn) => addFromRoll(btn.closest('[data-roll-key]').dataset.rollKey),
+    'camera-roll': () => onCameraRoll?.(),
     text: addText,
     'add-sticker': (btn) => addSticker(btn.dataset.kind),
     color: (btn) => setColor(btn.dataset.color),
@@ -807,6 +844,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
     deselect,
     handleKey,
     isEditingText: () => Boolean(editingId),
+    addFromRoll,
     destroy() {
       document.removeEventListener('pointerdown', onOutside);
     },
