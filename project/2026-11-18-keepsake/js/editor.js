@@ -612,7 +612,6 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
   async function editPhoto(id = selectedId) {
     const found = find(id);
     if (!found || found.item.type !== 'photo') return;
-    if (!found.item.photoKey) { toast("This one's a placeholder from the demo, so there's no photo to edit"); return; }
     if (!canEdit(found)) { explainLocked(found); return; }
     const snap = snapshot();
     await openPhotoEditor(found.item, {
@@ -878,6 +877,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
     deselect,
     handleKey,
     isEditingText: () => Boolean(editingId),
+    editPhoto: (id) => { select(id); editPhoto(id); },
     addFromRoll,
     destroy() {
       document.removeEventListener('pointerdown', onOutside);

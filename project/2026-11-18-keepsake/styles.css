@@ -1126,3 +1126,17 @@ body {
 .crop-stage { width: fit-content; max-width: 100%; margin: 0 auto; }
 .crop-source { width: auto; max-width: 100%; max-height: 46vh; }
 .photo-editor { max-height: calc(100vh - 32px); overflow-y: auto; }
+
+/* "Who added this" tag: floats above the whole spread, so it's never cut off or covered (replaces the old ::after tag) */
+.spread .page-inner .pi[data-by]::after { display: none !important; }
+.by-layer { position: absolute; inset: 0; z-index: 16; pointer-events: none; overflow: visible; }
+.by-tag {
+  position: absolute; left: 0; top: 0; padding: 2px 10px 3px; border-radius: 999px; background: var(--by); color: var(--by-ink, #FFFFFF);
+  font: 400 14px/1.4 var(--hand); text-transform: lowercase; white-space: nowrap; box-shadow: 0 2px 6px rgba(81, 12, 13, .2);
+}
+.by-tag[hidden] { display: none; }
+
+/* Demo photos (a color block) in the photo editor */
+.crop-stage .photo-fill.crop-source { display: block; width: min(100%, 340px); max-height: none; aspect-ratio: var(--ar); }
+.pe-filter-img .photo-fill { display: block; width: 100%; height: 100%; }
+.pe-preview .photo-fill { display: block; width: 100%; aspect-ratio: var(--ar); }

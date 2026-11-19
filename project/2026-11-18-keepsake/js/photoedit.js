@@ -10,7 +10,7 @@ const ratioValue = { square: 1, '4:3': 3 / 4, '3:4': 4 / 3, '16:9': 9 / 16 }; //
 const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
 
 export async function openPhotoEditor(item, { onSave, canShare = false }) {
-  const url = await photoUrl(item.photoKey).catch(() => null);
+  const url = item.photoKey ? await photoUrl(item.photoKey).catch(() => null) : null;
   const src = srcAspectOf(item);
   const state = {
     crop: { ...cropOf(item) },
@@ -21,7 +21,10 @@ export async function openPhotoEditor(item, { onSave, canShare = false }) {
     tab: 'crop',
     openToAll: item.openToAll === true,
   };
-  const mediaTag = (cls = '') => (item.video
+  // Demo photos have no file, just a soft color block; they can still get a frame, cut-out shape or filter.
+  const mediaTag = (cls = '') => (!item.photoKey
+    ? `<span class="${cls} photo-fill" style="--ar:1 / ${srcAspectOf(item)};background:${esc(item.placeholder || '#DDD6CA')}"></span>`
+    : item.video
     ? `<video class="${cls}" src="${url || ''}" muted loop playsinline autoplay></video>`
     : `<img class="${cls}" src="${url || ''}" alt="" draggable="false">`);
 

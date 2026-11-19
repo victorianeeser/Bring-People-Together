@@ -156,7 +156,9 @@ What's still different from the board: the words don't appear letter by letter w
 
 ## Photo editor (11/19, from the 11/18 crit)
 
-In Edit mode, **double-click a photo or video** (or select it and click **Edit photo**) to open the photo editor. The preview on the left shows exactly how it'll look on the page.
+**The "who added this" tag** now floats above the whole spread, so it's never cut off by the page edge or hidden under other photos. Near the bottom of a page it shows above the item instead of below.
+
+**Double-click any photo or video** to open the photo editor (it turns on Edit mode if it's off), or select it and click **Edit photo**. This works on the demo books' color-block photos too. The preview on the left shows exactly how it'll look on the page.
 
 - **Crop.** Drag the box to move it and drag its corner to resize it. Presets: Free, Square, 4:3, 3:4 and 16:9. **Reset** goes back to the whole photo. Resizing the photo on the page still works with the corner handle or the **Size** slider.
 - **Frame & cut-out.** **Polaroid** (white border and tape, the default), **Plain** (just the photo with a soft shadow), or **Cut-out sticker**: the photo in a circle, heart, star, scallop or rounded shape with a white die-cut edge, like the sticker set. Round shapes square up the crop automatically.

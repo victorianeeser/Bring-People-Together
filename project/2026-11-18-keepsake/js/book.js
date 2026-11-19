@@ -83,6 +83,7 @@ export function mountBook(root, bookId) {
             <div class="page right"><div class="page-inner" id="page-right"></div></div>
           </div>
           <div class="live-layer" aria-hidden="true"></div>
+          <div class="by-layer" aria-hidden="true"><span class="by-tag" hidden></span></div>
         </div>
         <div class="turn-controls">
           <button type="button" class="icon-btn glass small" data-action="prev" aria-label="Previous spread">${CHEVRON_LEFT}</button>
@@ -482,6 +483,14 @@ export function mountBook(root, bookId) {
     },
   });
   root.addEventListener('click', onClick);
+  // Double-click any photo or video to edit it, even when Edit is off (it turns Edit on first).
+  spreadEl.addEventListener('dblclick', (event) => {
+    if (editMode) return; // in Edit mode the editor handles it
+    const el = event.target.closest('.page-inner .pi-photo');
+    if (!el || !currentSpread()) return;
+    setEditMode(true);
+    if (editMode) editor.editPhoto(el.dataset.id);
+  });
   document.addEventListener('keydown', onKeydown);
   showSpread();
 
@@ -534,6 +543,34 @@ export function mountBook(root, bookId) {
 
   // ---------- live: other people's cursors and selections on this spread ----------
   const liveLayer = root.querySelector('.live-layer');
+
+  // "Who added this" tag (threats.md: nothing is anonymous). It floats above the whole spread so it's never
+  // cut off by the page edge or hidden under other photos, and flips above the item near the bottom.
+  const byLayer = root.querySelector('.by-layer');
+  const byTag = byLayer.querySelector('.by-tag');
+  let byHover = null;
+  function placeBy(el) {
+    if (!el || !el.isConnected || !el.dataset.by) { byTag.hidden = true; return; }
+    const area = byLayer.getBoundingClientRect();
+    const r = el.getBoundingClientRect();
+    byTag.textContent = el.dataset.by;
+    const cs = getComputedStyle(el);
+    byTag.style.setProperty('--by', cs.getPropertyValue('--by') || '#9B9090');
+    byTag.style.setProperty('--by-ink', cs.getPropertyValue('--by-ink') || '#FFFFFF');
+    byTag.hidden = false;
+    const w = byTag.offsetWidth, h = byTag.offsetHeight;
+    let top = r.bottom - area.top + 6;
+    if (top + h > area.height - 4) top = r.top - area.top - h - 6; // near the bottom: show it above instead
+    const left = Math.min(Math.max(r.left - area.left, 4), area.width - w - 4);
+    byTag.style.transform = `translate(${Math.round(left)}px, ${Math.round(Math.max(4, top))}px)`;
+  }
+  // Show it for what you're hovering, or else for what's selected.
+  const showBy = () => placeBy(byHover || spreadEl.querySelector('.page-inner .pi.selected[data-by]'));
+  spreadEl.addEventListener('pointerover', (event) => { byHover = event.target.closest('.page-inner .pi[data-by]'); showBy(); });
+  spreadEl.addEventListener('pointerleave', () => { byHover = null; showBy(); });
+  spreadEl.addEventListener('pointermove', () => { if (byHover || !byTag.hidden) showBy(); });
+  spreadEl.addEventListener('focusin', (event) => { const el = event.target.closest('.page-inner .pi[data-by]'); if (el) placeBy(el); });
+  new MutationObserver(() => requestAnimationFrame(showBy)).observe(spreadEl, { subtree: true, attributes: true, attributeFilter: ['class'], childList: true });
   const hereEl = root.querySelector('.book-here');
   const stage = root.querySelector('.book-stage');
   const spreadKey = () => currentSpread()?.id || 'contents';
