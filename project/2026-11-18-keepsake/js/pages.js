@@ -1,6 +1,7 @@
 // Rendering pages and spreads to HTML. Used by the open book, the overview, and the open/close animation.
 
 import { CATEGORIES, SEASONS, fontCss, pageBg } from './model.js';
+import { photoLookHtml } from './photolook.js';
 import { stickerSvg, STICKERS } from './stickers.js';
 import { photoUrl } from './storage.js';
 import { esc, inkFor, brandColor } from './ui.js';
@@ -55,11 +56,12 @@ function itemHtml(item, interactive, book) {
     + (interactive ? ` tabindex="0" role="button" aria-pressed="false" aria-label="${esc(itemLabel(item))}${adder ? `, added by ${esc(adder.name)}` : ''}"` : '');
   if (item.type === 'photo') {
     const fill = item.photoKey && item.video
-      ? `<video class="photo-img" data-photo-key="${esc(item.photoKey)}" muted loop playsinline autoplay draggable="false"></video><span class="video-badge" aria-hidden="true"></span>`
+      ? `<video class="photo-img" data-photo-key="${esc(item.photoKey)}" muted loop playsinline autoplay draggable="false"></video>`
       : item.photoKey
       ? `<img class="photo-img" data-photo-key="${esc(item.photoKey)}" alt="" draggable="false">`
       : `<span class="photo-fill" style="--ar:1 / ${item.aspect || 0.78};background:${esc(item.placeholder || '#DDD6CA')}"></span>`;
-    return `<div class="pi pi-photo" ${attrs}><span class="photo-frame">${fill}</span></div>`;
+    const badge = item.video ? '<span class="video-badge" aria-hidden="true"></span>' : '';
+    return `<div class="pi pi-photo frame-is-${esc(item.frame || 'polaroid')}" ${attrs}>${photoLookHtml(item, fill)}${badge}</div>`;
   }
   if (item.type === 'text') {
     return `<div class="pi pi-text" ${attrs} data-placeholder="Write something">${esc(item.content)}</div>`;

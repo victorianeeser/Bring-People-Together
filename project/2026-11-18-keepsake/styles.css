@@ -1077,3 +1077,46 @@ body {
 /* A video that hasn't reached this person yet (or couldn't be shared): a soft placeholder instead of an empty frame */
 .pi-photo video.photo-img:not([src]) { aspect-ratio: 4 / 3; background: var(--k-rose) url(./brand/elements/doodle-sparkle.svg) center / 18% no-repeat; }
 .roll-tile video:not([src]) { background: var(--k-rose); }
+
+/* Photo look (11/18 crit): crop box, frames and cut-out stickers */
+.crop-box { position: relative; display: block; width: 100%; overflow: hidden; }
+.crop-media { position: absolute; display: block; }
+.crop-media .photo-img, .crop-media .photo-fill { display: block; width: 100%; height: auto; }
+.crop-media .photo-fill { aspect-ratio: var(--ar); }
+.pi-photo .crop-media video.photo-img { aspect-ratio: auto; }
+/* Plain: no white border or tape, just a soft shadow */
+.photo-frame.frame-plain { padding: 0; background: none; box-shadow: 0 6px 14px -6px rgba(81, 12, 13, .35); }
+.pi-photo .photo-frame.frame-plain::before, .pi-photo .photo-frame.frame-cutout::before { display: none; }
+/* Cut-out sticker: the shape with a white die-cut edge, like the sticker set */
+.photo-frame.frame-cutout { padding: 0; background: none; box-shadow: none; filter: drop-shadow(0 2px 2px rgba(81, 12, 13, .25)) drop-shadow(0 6px 10px rgba(81, 12, 13, .18)); }
+.cut-edge { display: block; padding: 5%; background: #FFFFFF; -webkit-mask-size: 100% 100%; mask-size: 100% 100%; }
+.cut-inner { display: block; -webkit-mask-size: 100% 100%; mask-size: 100% 100%; }
+.pi-photo.frame-is-cutout .video-badge, .pi-photo.frame-is-plain .video-badge { bottom: 6%; }
+
+/* Photo editor */
+.confirm.photo-editor, .confirm.wide.photo-editor { width: 860px; max-width: calc(100vw - 32px); }
+.pe-body { display: grid; grid-template-columns: 1fr 1.15fr; gap: 22px; margin-top: 14px; }
+.pe-preview { display: grid; place-items: center; min-height: 320px; padding: 24px; border-radius: 16px; background: #FFFDFB; box-shadow: inset 0 0 0 1px #EADBD8; }
+.pe-preview-item { position: relative; width: 78%; }
+.pe-tabs { display: flex; gap: 6px; margin-bottom: 12px; }
+.pe-tabs button { padding: 6px 14px; border: 1.5px solid #E2D2CF; border-radius: 999px; background: #FFFFFF; font-weight: 600; font-size: 13px; }
+.pe-tabs button[aria-selected="true"] { border-color: var(--k-maroon); background: var(--k-maroon); color: var(--k-paper); }
+.pe-panel[hidden] { display: none; }
+.pe-hint { margin: 0 0 8px; color: var(--on-dark-muted); font-size: 13px; }
+.crop-stage { position: relative; overflow: hidden; border-radius: 8px; user-select: none; touch-action: none; }
+.crop-source { display: block; width: 100%; height: auto; pointer-events: none; }
+.crop-rect { position: absolute; border: 2px dashed #FFFFFF; box-shadow: 0 0 0 999px rgba(81, 12, 13, .45); cursor: move; touch-action: none; }
+.crop-corner { position: absolute; right: 2px; bottom: 2px; width: 20px; height: 20px; border: 2px solid var(--k-berry); border-radius: 50%; background: #FFFFFF; cursor: nwse-resize; }
+.pe-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.pe-chip { padding: 5px 12px; border: 1.5px solid #E2D2CF; border-radius: 999px; background: #FFFFFF; font-size: 13px; font-weight: 500; }
+.pe-chip:hover { border-color: var(--k-berry); }
+.pe-chip[aria-pressed="true"] { border-color: var(--k-maroon); background: var(--k-paper); box-shadow: inset 0 0 0 1px var(--k-maroon); }
+.pe-shapes[hidden] { display: none; }
+.pe-shapes { margin-top: 14px; }
+.pe-filters { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.pe-filter { display: grid; gap: 4px; padding: 4px; border: 1.5px solid transparent; border-radius: 10px; background: none; font-size: 12px; font-weight: 500; color: var(--ink); }
+.pe-filter[aria-pressed="true"] { border-color: var(--k-maroon); background: #FFFFFF; }
+.pe-filter-img { display: block; aspect-ratio: 1; overflow: hidden; border-radius: 6px; }
+.pe-filter-img img, .pe-filter-img video { width: 100%; height: 100%; object-fit: cover; }
+@media (max-width: 700px) { .pe-body { grid-template-columns: 1fr; } }
+.photo-editor .pe-body { user-select: none; -webkit-user-select: none; }

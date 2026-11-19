@@ -10,6 +10,7 @@ import { openReportDialog, showTakeDownHelp } from './report.js';
 import { createPageItem, uid, FONTS, fontCss, PAGE_BACKGROUNDS, pageBg } from './model.js';
 import { storeMedia, addToRoll, rollOf, tileHtml, mediaFiles, MAX_VIDEO_MB } from './media.js';
 import { hydratePhotos } from './pages.js';
+import { openPhotoEditor } from './photoedit.js';
 import { putPhoto, resizeImage } from './storage.js';
 import { STICKERS, STICKER_COLORS, TRAY, ELEMENT_TRAY, stickerSvg, isBrandSticker } from './stickers.js';
 import { itemStyle, textFontSize, itemLabel } from './pages.js';
@@ -50,6 +51,7 @@ export function panelHtml() {
         <div class="selected-actions">
           <button type="button" class="pill-btn small" data-edit="forward">Bring forward</button>
           <button type="button" class="pill-btn small" data-edit="backward">Send backward</button>
+          <button type="button" class="pill-btn small" data-edit="edit-photo" id="sel-edit-photo" hidden>Edit photo</button>
           <button type="button" class="pill-btn small" data-edit="duplicate">Duplicate</button>
           <button type="button" class="pill-btn small danger-text" data-edit="delete">Remove</button>
         </div>
@@ -203,6 +205,8 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
       panel.querySelector('#sel-rotate-out').textContent = `${Math.round(item.rotation || 0)}°`;
       sizeInput.value = Math.round(item.width);
       panel.querySelector('#sel-size-out').textContent = `${Math.round(item.width)}%`;
+      panel.querySelector('#sel-edit-photo').hidden = item.type !== 'photo';
+      panel.querySelector('#sel-edit-photo').textContent = item.video ? 'Edit video' : 'Edit photo';
       const colors = panel.querySelector('#sel-colors');
       colors.hidden = item.type !== 'sticker' || String(item.kind).startsWith('washi') || isBrandSticker(item.kind);
       colors.querySelectorAll('.swatch').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.color === item.color)));
@@ -594,6 +598,28 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
   function onDoubleClick(event) {
     const el = event.target.closest('.page-inner .pi-text');
     if (el && editable()) startEditing(el.dataset.id);
+    // Double-click a photo or video to crop it, change its frame, or add a filter (11/18 crit).
+    const photo = event.target.closest('.page-inner .pi-photo');
+    if (photo && editable()) editPhoto(photo.dataset.id);
+  }
+
+  async function editPhoto(id = selectedId) {
+    const found = find(id);
+    if (!found || found.item.type !== 'photo') return;
+    if (!found.item.photoKey) { toast("This one's a placeholder from the demo, so there's no photo to edit"); return; }
+    if (!mine(found)) { explainLocked(found); return; }
+    const snap = snapshot();
+    await openPhotoEditor(found.item, {
+      onSave: (changes) => {
+        record(snap);
+        Object.assign(found.item, changes);
+        if (!changes.crop) delete found.item.crop;
+        save();
+        selectedId = found.item.id;
+        redraw({ focus: true });
+        announce('Photo updated');
+      },
+    });
   }
 
   // Clicking anywhere outside the spread and the panel deselects.
@@ -681,6 +707,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
   const panelActions = {
     done: () => onDone?.(),
     photo: () => fileInput.click(),
+    'edit-photo': () => editPhoto(),
     'from-roll': (btn) => addFromRoll(btn.closest('[data-roll-key]').dataset.rollKey),
     'camera-roll': () => onCameraRoll?.(),
     text: addText,

@@ -32,7 +32,7 @@ Book events carry one label, `book`: either "IxD 415 class book" or "other book"
 
 Two steps. Both need Leandra's logins, so nobody else can do them.
 
-**1. Update the live site (Netlify).** This puts the 11/19 changes online: invite-only book links, delete only removing a book for you, bucket list editing, backgrounds, the × remove button, videos, recently uploaded and the camera roll.
+**1. Update the live site (Netlify).** This puts the 11/19 changes online: invite-only book links, delete only removing a book for you, bucket list editing, backgrounds, the × remove button, videos, recently uploaded, the camera roll and the photo editor.
 
 1. Download **[keepsake-netlify-drop.zip](../keepsake-netlify-drop.zip)** (or `git pull` and use this folder).
 2. In [Netlify](https://app.netlify.com), open the **scrapbook-proto** site and go to **Deploys**.
@@ -153,6 +153,16 @@ The books are saved in Firebase, so nothing is lost when the site is updated.
 - **Cursors.** The live cursor is the rounded triangle from the board's Elements row, in each person's color.
 
 What's still different from the board: the words don't appear letter by letter while someone types (they show when they finish), and the big moments use Kalam Bold because Figma Hand isn't a web font (the logo itself is the real Figma Hand artwork).
+
+## Photo editor (11/19, from the 11/18 crit)
+
+In Edit mode, **double-click a photo or video** (or select it and click **Edit photo**) to open the photo editor. The preview on the left shows exactly how it'll look on the page.
+
+- **Crop.** Drag the box to move it and drag its corner to resize it. Presets: Free, Square, 4:3, 3:4 and 16:9. **Reset** goes back to the whole photo. Resizing the photo on the page still works with the corner handle or the **Size** slider.
+- **Frame & cut-out.** **Polaroid** (white border and tape, the default), **Plain** (just the photo with a soft shadow), or **Cut-out sticker**: the photo in a circle, heart, star, scallop or rounded shape with a white die-cut edge, like the sticker set. Round shapes square up the crop automatically.
+- **Filter.** Original, Warm, Vintage, B&W, Faded, Rosy, Film or Cool.
+
+**Save** applies it for everyone, and Undo takes it back. Only the person who added the photo (or the book's creator) can edit it.
 
 ## Editing the page (11/19, from the 11/18 crit)
 
