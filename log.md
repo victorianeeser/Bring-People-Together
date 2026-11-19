@@ -86,3 +86,4 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 - **Maya:** gave the color choices more room (named chips in a grid) and made the edit panel stay with you while editing: picking a font or color keeps you typing in the note instead of closing it
 - **Maya:** moved the note's font and color options into a dropdown under "+ Add text box", and made a selected photo come to the front so it's easy to resize and delete
 - **Maya:** moved a note's size and angle sliders into the note dropdown so all of a note's options are together
+- **Maya:** evened out the selection ring on page backgrounds and colors, and gave the color choices more room

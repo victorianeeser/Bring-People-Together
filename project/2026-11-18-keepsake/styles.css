@@ -1262,3 +1262,24 @@ body {
 /* Size & angle inside the note dropdown */
 .text-drop #sel-size-group { padding: 0 0 6px; border-top: 0; }
 .text-drop #sel-size-group + * { margin-top: 0; }
+
+/* Selection rings, evened out (11/19 feedback: off-center and cramped).
+   One clean 2px maroon ring with the same space on every side, and colors in 2 roomy columns. */
+#sel-text-colors, #sel-tape-colors { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 10px; }
+.color-chip {
+  box-sizing: border-box; width: 100%; gap: 10px; padding: 8px 12px; border: 2px solid #EFE3E0; border-radius: 12px;
+  font-size: 13px; box-shadow: none;
+}
+.color-chip[aria-pressed="true"] { border-color: var(--k-maroon); box-shadow: none; background: var(--k-paper); font-weight: 700; }
+.swatch-dot { width: 20px; height: 20px; }
+.tape-dot { width: 24px; height: 13px; }
+
+.bg-row { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.bg-mini {
+  box-sizing: border-box; display: grid; justify-items: stretch; gap: 6px; width: 100%; margin: 0; padding: 5px;
+  border: 2px solid transparent; border-radius: 12px; background: none;
+}
+.bg-mini:hover { border-color: #EFE3E0; }
+.bg-mini[aria-pressed="true"] { border-color: var(--k-maroon); background: #FFFFFF; }
+.bg-mini .bg-swatch { width: 100%; margin: 0; border-radius: 7px; }
+.bg-name { display: block; min-height: 2.4em; line-height: 1.2; }
