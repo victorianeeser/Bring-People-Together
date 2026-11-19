@@ -7,7 +7,7 @@ import { track, EVENTS } from './analytics.js';
 import { ME } from './identity.js';
 import { canChange, canReport, adderOf, allowAdds } from './moderation.js';
 import { openReportDialog, showTakeDownHelp } from './report.js';
-import { createPageItem, uid, FONTS, fontCss, PAGE_BACKGROUNDS, pageBg, TEXT_COLORS, TAPE_COLORS } from './model.js';
+import { createPageItem, uid, FONTS, fontCss, fontOf, PAGE_BACKGROUNDS, pageBg, TEXT_COLORS, TAPE_COLORS } from './model.js';
 import { storeMedia, addToRoll, rollOf, tileHtml, mediaFiles, MAX_VIDEO_MB } from './media.js';
 import { hydratePhotos } from './pages.js';
 import { openPhotoEditor } from './photoedit.js';
@@ -54,13 +54,13 @@ export function panelHtml() {
             </div>
             <h4 class="sel-sub">Color</h4>
             <div class="swatch-row" id="sel-text-colors" role="group" aria-label="Note color">
-              ${Object.entries(TEXT_COLORS).map(([name, hex]) => `<button type="button" class="swatch" data-edit="text-color" data-color="${hex}" style="background:${hex}" aria-label="${name}" title="${name}" aria-pressed="false"></button>`).join('')}
+              ${Object.entries(TEXT_COLORS).map(([name, hex]) => `<button type="button" class="color-chip" data-edit="text-color" data-color="${hex}" aria-label="${name}" aria-pressed="false"><span class="swatch-dot" style="background:${hex}"></span>${name}</button>`).join('')}
             </div>
           </div>
           <div class="sel-group" id="sel-tape-group" hidden>
             <h4>Tape color</h4>
             <div class="swatch-row" id="sel-tape-colors" role="group" aria-label="Tape color">
-              ${Object.entries(TAPE_COLORS).map(([name, hex]) => `<button type="button" class="swatch" data-edit="color" data-color="${hex}" style="background:${hex}" aria-label="${name}" title="${name}" aria-pressed="false"></button>`).join('')}
+              ${Object.entries(TAPE_COLORS).map(([name, hex]) => `<button type="button" class="color-chip" data-edit="color" data-color="${hex}" aria-label="${name} tape" aria-pressed="false"><span class="swatch-dot tape-dot" style="background:${hex}"></span>${name}</button>`).join('')}
             </div>
           </div>
           <div class="sel-group" id="sel-color-group" hidden>
@@ -100,7 +100,7 @@ export function panelHtml() {
       <section class="panel-section" aria-labelledby="bg-title">
         <h3 id="bg-title">Page background</h3>
         <div class="bg-row" role="group" aria-label="Page background">
-          ${Object.entries(PAGE_BACKGROUNDS).map(([id, label]) => `<button type="button" class="bg-mini" data-edit="page-bg" data-bg-choice="${id}" aria-label="${label}" title="${label}" aria-pressed="false"><span class="bg-swatch" data-bg="${id}"></span></button>`).join('')}
+          ${Object.entries(PAGE_BACKGROUNDS).map(([id, label]) => `<button type="button" class="bg-mini" data-edit="page-bg" data-bg-choice="${id}" aria-label="${label}" aria-pressed="false"><span class="bg-swatch" data-bg="${id}"></span><span class="bg-name">${label}</span></button>`).join('')}
         </div>
       </section>
 
@@ -240,11 +240,11 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
       panel.querySelector('#sel-color-group').hidden = item.type !== 'sticker' || tape || isBrandSticker(item.kind);
       panel.querySelector('#sel-colors').querySelectorAll('.swatch').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.color === item.color)));
       panel.querySelector('#sel-tape-group').hidden = !tape;
-      panel.querySelector('#sel-tape-colors').querySelectorAll('.swatch').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.color === item.color)));
+      panel.querySelector('#sel-tape-colors').querySelectorAll('.color-chip').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.color === item.color)));
       panel.querySelector('#sel-font-group').hidden = item.type !== 'text';
       const current = FONTS[item.font] ? item.font : 'miniver';
       panel.querySelectorAll('#sel-fonts .font-card').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.font === current)));
-      panel.querySelectorAll('#sel-text-colors .swatch').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.color.toLowerCase() === String(item.color || '').toLowerCase())));
+      panel.querySelectorAll('#sel-text-colors .color-chip').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.color.toLowerCase() === String(item.color || '').toLowerCase())));
     }
     const spread = currentSpread();
     renderRecent();
@@ -480,7 +480,23 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
   function onTextKey(event) {
     if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); finishEditing({ keepFocus: true }); }
   }
-  function onTextBlur() { if (editingId) finishEditing(); }
+  // Using the edit panel (a font, a color, the sliders) doesn't count as clicking off the note: you stay in it.
+  function onTextBlur(event) {
+    if (!editingId) return;
+    if (event?.relatedTarget && panel.contains(event.relatedTarget)) return;
+    finishEditing();
+  }
+  // Put the caret back at the end of the note you're typing in.
+  function resumeTyping() {
+    const el = itemEl(editingId);
+    if (!el) return;
+    el.focus({ preventScroll: true });
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    range.collapse(false);
+    getSelection().removeAllRanges();
+    getSelection().addRange(range);
+  }
   function finishEditing({ keepFocus = false } = {}) {
     const id = editingId;
     const el = itemEl(id);
@@ -689,6 +705,15 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
     record();
     found.item.font = font;
     save();
+    // While you're typing in the note, change it in place so you keep typing (and the panel stays as it is).
+    if (editingId === found.item.id) {
+      const el = itemEl(found.item.id);
+      const f = fontOf(found.item);
+      if (el) { el.style.fontFamily = f.family; el.style.fontWeight = String(f.weight || 400); }
+      updatePanel();
+      resumeTyping();
+      return;
+    }
     redraw();
   }
 
@@ -749,6 +774,13 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
       record();
       found.item.color = btn.dataset.color;
       save();
+      if (editingId === found.item.id) {
+        const el = itemEl(found.item.id);
+        if (el) el.style.color = found.item.color;
+        updatePanel();
+        resumeTyping();
+        return;
+      }
       redraw();
     },
     font: (btn) => setFont(btn.dataset.font),
@@ -772,6 +804,8 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
     // Keep the selection (and note focus) while using panel buttons.
     if (event.target.closest('button[data-edit]')) event.preventDefault();
   });
+  // While you're typing in a note, clicking a button in the panel keeps the cursor in the note (Safari and Chrome).
+  panel.addEventListener('mousedown', (event) => { if (editingId && event.target.closest('button')) event.preventDefault(); });
   panel.addEventListener('click', (event) => {
     const btn = event.target.closest('[data-edit]');
     if (!btn || btn.disabled) return;

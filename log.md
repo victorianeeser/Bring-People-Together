@@ -83,3 +83,4 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 - **Maya:** added zoom and drag to the photo editor so a photo can be fit inside a cut-out sticker shape or frame
 - **Maya:** fixed the × on selected photos getting cut off at the page edge or hidden behind tape
 - **Maya:** added every brand board font (Miniver, Figma Hand, Avenir, Inter) and note colors, redesigned the crowded edit panel with more spacing, added tape colors for tape and photos, and made it so you can follow someone from the who's here list to the pages they're on
+- **Maya:** gave the color choices more room (named chips in a grid) and made the edit panel stay with you while editing: picking a font or color keeps you typing in the note instead of closing it
