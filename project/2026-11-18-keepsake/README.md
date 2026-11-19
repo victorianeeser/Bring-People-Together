@@ -154,6 +154,12 @@ The books are saved in Firebase, so nothing is lost when the site is updated.
 
 What's still different from the board: the words don't appear letter by letter while someone types (they show when they finish), and the big moments use Kalam Bold because Figma Hand isn't a web font (the logo itself is the real Figma Hand artwork).
 
+## Home page polish (11/19)
+
+- **More of the brand kit, kept in the margins:** a polaroid taped on with olive tape, the "together" speech bubble, the little notebook, the drop mark, the berry star, the hand-drawn heart, star and sparkle, and pink tape across the bottom corner. Smaller screens hide the extras so the books have room.
+- **"every page, together"** under the books, and a hand-drawn arrow with "start a new book" pointing at **New book**.
+- **Spacing:** the book title sits closer to the book, the bottom buttons sit on a paper dock, and the grid view is centered with an even ring around the picked book.
+
 ## Fonts, tape colors and following someone (11/19, from the 11/18 crit)
 
 - **Every font on the brand board.** Select a note in Edit mode. The **Font** cards are Miniver (notes), Figma Hand (big moments; Kalam Bold stands in for it on the web), Avenir (headlines, the secondary type) and Inter (body). Under them, **Color** has maroon, berry, taupe, olive, pink and ink.

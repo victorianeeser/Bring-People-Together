@@ -87,3 +87,4 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 - **Maya:** moved the note's font and color options into a dropdown under "+ Add text box", and made a selected photo come to the front so it's easy to resize and delete
 - **Maya:** moved a note's size and angle sliders into the note dropdown so all of a note's options are together
 - **Maya:** evened out the selection ring on page backgrounds and colors, and gave the color choices more room
+- **Maya:** polished the home page: more branding elements (taped polaroid, together bubble, notebook, stars and doodles), the "every page, together" tagline, a "start a new book" arrow, and better spacing

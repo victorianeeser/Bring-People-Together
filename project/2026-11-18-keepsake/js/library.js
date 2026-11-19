@@ -47,6 +47,18 @@ export function mountLibrary(root, { focus = true } = {}) {
           </label>
         </div>
       </header>
+      <div class="lib-deco" aria-hidden="true">
+        <img class="deco deco-tape-tl" src="./brand/elements/tape-olive.svg" alt="">
+        <img class="deco deco-tape-br" src="./brand/elements/tape-pink.svg" alt="">
+        <img class="deco deco-polaroid" src="./brand/stickers/polaroid.svg" alt="">
+        <img class="deco deco-heart" src="./brand/elements/doodle-heart.svg" alt="">
+        <img class="deco deco-star-berry" src="./brand/elements/star-berry.svg" alt="">
+        <img class="deco deco-together" src="./brand/stickers/together.svg" alt="">
+        <img class="deco deco-doodle-star" src="./brand/elements/doodle-star.svg" alt="">
+        <img class="deco deco-notebook" src="./brand/elements/notebook.svg" alt="">
+        <img class="deco deco-sparkle" src="./brand/elements/doodle-sparkle.svg" alt="">
+        <img class="deco deco-mark" src="./brand/mark.svg" alt="">
+      </div>
       <main class="library-main" id="library-main"></main>
       <nav class="library-actions" aria-label="Book actions">
         <div class="menu-wrap">
@@ -63,6 +75,7 @@ export function mountLibrary(root, { focus = true } = {}) {
         <button type="button" class="action" data-action="delete"><span class="circle glass">${ICONS.trash}</span><span class="action-label">Delete</span></button>
         <button type="button" class="action" data-action="join"><span class="circle glass">${ICONS.join}</span><span class="action-label">Join a book</span></button>
         <button type="button" class="action" data-action="new"><span class="circle solid">${ICONS.plus}</span><span class="action-label">New book</span></button>
+        <span class="new-hint" aria-hidden="true"><img src="./brand/elements/doodle-arrow.svg" alt="">start a new book</span>
       </nav>
     </div>`;
 
@@ -102,7 +115,8 @@ export function mountLibrary(root, { focus = true } = {}) {
               </button>
             </li>`).join('')}
         </ul>
-        <p class="hint">Click a book to select it. Click it again to open it.</p>`;
+        <p class="hint">Click a book to select it. Click it again to open it.</p>
+        <p class="lib-tagline">every page, together</p>`;
       main.querySelectorAll('.grid-book').forEach(labelGridBook);
     } else {
       main.innerHTML = `
@@ -114,6 +128,7 @@ export function mountLibrary(root, { focus = true } = {}) {
           <div class="stage" id="stage">
             ${books.map((b, i) => `<button type="button" class="slot" data-index="${i}" data-id="${esc(b.id)}">${bookHtml(b)}</button>`).join('')}
           </div>
+          <p class="lib-tagline">every page, together</p>
         </section>`;
       layoutCarousel(false);
     }
