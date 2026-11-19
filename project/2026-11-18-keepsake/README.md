@@ -8,6 +8,8 @@ Join the class book with the invite code **IXD415**. Change `class` to a new roo
 
 It uses the same Firebase rooms as the 11/13 live version, so the books there show up here in the Keepsake look.
 
+**Analytics:** visits to the live site are counted with [Plausible](https://plausible.io) (Leandra's account). Plausible uses no cookies and doesn't collect personal data. The script is in the `<head>` of [`index.html`](index.html). It only counts visits on scrapbook-proto.netlify.app, not when you run the site on your own computer.
+
 ## Updating the live site
 
 Keepsake replaced the 11/13 version at scrapbook-proto.netlify.app on 11/18. The site was made with Netlify Drop, so it doesn't update itself when this folder changes. To put new changes online:
