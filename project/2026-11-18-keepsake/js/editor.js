@@ -7,7 +7,7 @@ import { track, EVENTS } from './analytics.js';
 import { ME } from './identity.js';
 import { canChange, canReport, adderOf, allowAdds } from './moderation.js';
 import { openReportDialog, showTakeDownHelp } from './report.js';
-import { createPageItem, uid, FONTS, fontCss } from './model.js';
+import { createPageItem, uid, FONTS, fontCss, PAGE_BACKGROUNDS, pageBg } from './model.js';
 import { putPhoto, resizeImage } from './storage.js';
 import { STICKERS, STICKER_COLORS, TRAY, ELEMENT_TRAY, stickerSvg, isBrandSticker } from './stickers.js';
 import { itemStyle, textFontSize, itemLabel } from './pages.js';
@@ -62,6 +62,13 @@ export function panelHtml() {
           <button type="button" class="pill-btn" data-edit="photo">Browse</button>
         </div>
         <input type="file" id="photo-input" accept="image/*" multiple hidden>
+      </section>
+
+      <section class="panel-section" aria-labelledby="bg-title">
+        <h3 id="bg-title">Page background</h3>
+        <div class="bg-row" role="group" aria-label="Page background">
+          ${Object.entries(PAGE_BACKGROUNDS).map(([id, label]) => `<button type="button" class="bg-mini" data-edit="page-bg" data-bg-choice="${id}" aria-label="${label}" title="${label}" aria-pressed="false"><span class="bg-swatch" data-bg="${id}"></span></button>`).join('')}
+        </div>
       </section>
 
       <section class="panel-section" aria-labelledby="text-title">
@@ -196,6 +203,8 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
       fonts.querySelectorAll('.font-choice').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.font === current)));
     }
     const spread = currentSpread();
+    const bgNow = pageBg(spread?.bg);
+    panel.querySelectorAll('[data-edit="page-bg"]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.bgChoice === bgNow)));
     const photos = spread ? allItems(spread).filter((i) => i.type === 'photo').length : 0;
     panel.querySelector('#photo-count').textContent = photos ? `${photos} on this spread` : '';
     panel.querySelector('[data-edit="undo"]').disabled = !history.undo.length;
@@ -641,6 +650,14 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
     'add-sticker': (btn) => addSticker(btn.dataset.kind),
     color: (btn) => setColor(btn.dataset.color),
     font: (btn) => setFont(btn.dataset.font),
+    'page-bg': (btn) => {
+      const spread = currentSpread();
+      if (!spread || pageBg(spread.bg) === btn.dataset.bgChoice) return;
+      record();
+      spread.bg = btn.dataset.bgChoice;
+      save();
+      rerender();
+    },
     delete: removeSelected,
     forward: () => restack(1),
     backward: () => restack(-1),

@@ -2,7 +2,9 @@
 
 import { getBook, commit, subscribe, addSpread, isMine } from './state.js';
 import { openJoinBooks } from './join.js';
-import { spreadsOf, spreadPagesHtml, ppLabel, spreadTitle, hydratePhotos, textFontSize } from './pages.js';
+import { spreadsOf, spreadPagesHtml, ppLabel, spreadTitle, spreadBg, hydratePhotos, textFontSize } from './pages.js';
+import { PAGE_BACKGROUNDS } from './model.js';
+import { setBucketBackground } from './state.js';
 import { ANIMATION, isAnimating, reducedMotion } from './animation.js';
 import { ICONS, esc, announce, isTyping, dialogOpen, toast, inkFor, brandColor } from './ui.js';
 import { createIdeaPopover, openAddIdea } from './toc.js';
@@ -128,6 +130,7 @@ export function mountBook(root, bookId) {
   function showSpread() {
     shownEntry = spreadsOf(book)[index] || null;
     const pages = spreadPagesHtml(book, index, { interactive: true, season: tocSeason });
+    spreadEl.dataset.bg = spreadBg(book, index);
     leftEl.innerHTML = pages.left;
     rightEl.innerHTML = pages.right;
     hydratePhotos(spreadEl);
@@ -209,7 +212,7 @@ export function mountBook(root, bookId) {
           return `
             <li class="thumb" data-index="${i}" ${movable ? 'draggable="true"' : ''}>
               <button type="button" class="thumb-btn" data-action="jump" data-index="${i}" aria-current="${i === index}">
-                <span class="thumb-spread" aria-hidden="true">
+                <span class="thumb-spread" data-bg="${spreadBg(book, i)}" aria-hidden="true">
                   <span class="page left"><span class="page-inner">${pages.left}</span></span>
                   <span class="page right"><span class="page-inner">${pages.right}</span></span>
                 </span>
@@ -225,6 +228,35 @@ export function mountBook(root, bookId) {
         }).join('')}
       </ol>`;
     hydratePhotos(overview);
+  }
+
+  // Change the bucket list page's background (from the 11/18 crit).
+  function pickBucketBackground() {
+    const dialog = document.getElementById('confirm');
+    if (dialog.open) return;
+    const current = spreadBg(book, 0);
+    dialog.innerHTML = `
+      <div class="confirm-box">
+        <h2 id="confirm-title">Bucket list background</h2>
+        <p>Pick a paper for the bucket list. Everyone in the book sees it.</p>
+        <div class="bg-picker" role="group" aria-label="Backgrounds">
+          ${Object.entries(PAGE_BACKGROUNDS).map(([id, label]) => `<button type="button" class="bg-choice" data-bg-choice="${id}" aria-pressed="${id === current}"><span class="bg-swatch" data-bg="${id}"></span>${label}</button>`).join('')}
+        </div>
+        <div class="confirm-actions"><button type="button" class="pill-btn solid" data-close>Done</button></div>
+      </div>`;
+    dialog.setAttribute('aria-labelledby', 'confirm-title');
+    dialog.onclick = (event) => {
+      const choice = event.target.closest('[data-bg-choice]');
+      if (choice) {
+        setBucketBackground(book.id, choice.dataset.bgChoice);
+        dialog.querySelectorAll('[data-bg-choice]').forEach((b) => b.setAttribute('aria-pressed', String(b === choice)));
+        showSpread();
+      }
+      if (event.target.closest('[data-close]')) dialog.close();
+    };
+    dialog.addEventListener('close', () => { dialog.onclick = null; }, { once: true });
+    dialog.showModal();
+    dialog.querySelector('[aria-pressed="true"]')?.focus();
   }
 
   // Who's on which page (multiplayer state 5): faces over each spread in "See all spreads".
@@ -319,6 +351,7 @@ export function mountBook(root, bookId) {
     },
     'back-to-contents': () => turnTo(0),
     'add-idea': () => openAddIdea(book, { rerender: showSpread, findAnchor }),
+    'toc-background': () => pickBucketBackground(),
     prev: () => turnTo(index - 1),
     next: () => turnTo(index + 1),
     overview: openOverview,

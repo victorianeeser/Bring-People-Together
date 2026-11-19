@@ -2,8 +2,9 @@
 
 import { CATEGORIES, COSTS, SEASONS } from './model.js';
 import { ME } from './seed.js';
-import { toggleImIn, markDone, addBucketItem, reportIdea } from './state.js';
-import { canReport } from './moderation.js';
+import { toggleImIn, markDone, addBucketItem, updateBucketItem, removeBucketItem, reportIdea, getBook } from './state.js';
+import { canReport, canChange } from './moderation.js';
+import { confirmDialog } from './ui.js';
 import { openReportDialog } from './report.js';
 import { spreadIndexOf, spreadPageNumbers } from './pages.js';
 import { ICONS, esc, toast, announce, inkFor, brandColor } from './ui.js';
@@ -60,6 +61,7 @@ export function createIdeaPopover(container, { book, turnTo, rerender, findAncho
           ? (page ? `<button type="button" class="pill-btn solid" data-pop="go" data-index="${spreadIndex}">Go to page ${page} →</button>` : '')
           : '<button type="button" class="pill-btn solid" data-pop="did-it">We did it!</button>'}
       </div>
+      ${canChange(book, it) ? '<button type="button" class="pill-btn pop-edit" data-pop="edit">Edit this idea</button>' : ''}
       ${canReport(it) ? '<button type="button" class="link-btn pop-report" data-pop="report">Report this plan</button>' : ''}`;
   }
 
@@ -119,6 +121,10 @@ export function createIdeaPopover(container, { book, turnTo, rerender, findAncho
       close({ refocus: false });
       turnTo(Number(btn.dataset.index));
     }
+    if (action === 'edit') {
+      close({ refocus: false });
+      openAddIdea(book, { rerender, findAnchor, item: it });
+    }
     if (action === 'report') {
       close({ refocus: false });
       openReportDialog('idea').then((result) => {
@@ -133,8 +139,9 @@ export function createIdeaPopover(container, { book, turnTo, rerender, findAncho
   return { open, close, isOpen: () => !pop.hidden };
 }
 
-// The "Add an idea" form.
-export function openAddIdea(book, { rerender, findAnchor }) {
+// The "Add an idea" form. Pass `item` to edit an idea that's already on the list.
+export function openAddIdea(book, { rerender, findAnchor, item: editing = null }) {
+  const v = editing || { title: '', location: '', when: '', season: 'Someday', cost: 'Free', category: 'Adventure', notes: '' };
   const dialog = document.getElementById('confirm');
   const radios = (name, options, checked, dot) => options.map((o) => `
     <label class="choice">
@@ -143,23 +150,24 @@ export function openAddIdea(book, { rerender, findAnchor }) {
     </label>`).join('');
   dialog.innerHTML = `
     <form method="dialog" class="confirm-box" id="idea-form" novalidate>
-      <h2 id="confirm-title">Add an idea</h2>
-      <p>Something your group wants to do together.</p>
+      <h2 id="confirm-title">${editing ? 'Edit this idea' : 'Add an idea'}</h2>
+      <p>${editing ? 'Change anything, then save. Everyone in the book sees the change.' : 'Something your group wants to do together.'}</p>
       <label class="field"><span>What do you want to do?</span>
-        <input name="title" maxlength="70" autocomplete="off" aria-describedby="idea-error" placeholder="Sunrise hike, taco crawl, movie night">
+        <input name="title" maxlength="70" autocomplete="off" aria-describedby="idea-error" placeholder="Sunrise hike, taco crawl, movie night" value="${esc(v.title)}">
       </label>
       <p class="field-error" id="idea-error" hidden></p>
       <div class="field-row">
-        <label class="field"><span>Where <span class="optional">(optional)</span></span><input name="location" maxlength="60" autocomplete="off"></label>
-        <label class="field"><span>When <span class="optional">(optional)</span></span><input name="when" maxlength="40" autocomplete="off" placeholder="Before finals"></label>
+        <label class="field"><span>Where <span class="optional">(optional)</span></span><input name="location" maxlength="60" autocomplete="off" value="${esc(v.location)}"></label>
+        <label class="field"><span>When <span class="optional">(optional)</span></span><input name="when" maxlength="40" autocomplete="off" placeholder="Before finals" value="${esc(v.when)}"></label>
       </div>
-      <fieldset class="field"><legend>Season</legend><div class="choice-row">${radios('season', SEASONS, 'Someday')}</div></fieldset>
-      <fieldset class="field"><legend>Cost</legend><div class="choice-row">${radios('cost', COSTS, 'Free')}</div></fieldset>
-      <fieldset class="field"><legend>Category</legend><div class="choice-row">${radios('category', Object.keys(CATEGORIES), 'Adventure', true)}</div></fieldset>
-      <label class="field"><span>Notes <span class="optional">(optional)</span></span><textarea name="notes" rows="2" maxlength="300"></textarea></label>
+      <fieldset class="field"><legend>Season</legend><div class="choice-row">${radios('season', SEASONS, v.season || 'Someday')}</div></fieldset>
+      <fieldset class="field"><legend>Cost</legend><div class="choice-row">${radios('cost', COSTS, v.cost || 'Free')}</div></fieldset>
+      <fieldset class="field"><legend>Category</legend><div class="choice-row">${radios('category', Object.keys(CATEGORIES), v.category || 'Adventure', true)}</div></fieldset>
+      <label class="field"><span>Notes <span class="optional">(optional)</span></span><textarea name="notes" rows="2" maxlength="300">${esc(v.notes)}</textarea></label>
       <div class="confirm-actions">
+        ${editing ? '<button type="button" class="pill-btn danger-text idea-remove" data-remove>Remove from the list</button>' : ''}
         <button type="button" class="pill-btn" data-close>Cancel</button>
-        <button type="submit" class="pill-btn solid">Add to the list</button>
+        <button type="submit" class="pill-btn solid">${editing ? 'Save changes' : 'Add to the list'}</button>
       </div>
     </form>`;
   dialog.classList.add('wide');
@@ -182,7 +190,7 @@ export function openAddIdea(book, { rerender, findAnchor }) {
       return;
     }
     const data = new FormData(form);
-    const item = addBucketItem(book.id, {
+    const fields = {
       title,
       location: String(data.get('location')).trim(),
       when: String(data.get('when')).trim(),
@@ -190,11 +198,38 @@ export function openAddIdea(book, { rerender, findAnchor }) {
       season: data.get('season'),
       category: data.get('category'),
       notes: String(data.get('notes')).trim(),
-    });
+    };
+    if (editing) {
+      updateBucketItem(book.id, editing.id, fields);
+      addedId = editing.id;
+      // A finished idea's spread is titled after it, so keep the title in step.
+      const spread = getBook(book.id)?.spreads.find((s) => s.linkedItemId === editing.id);
+      if (spread && spread.title === v.title) { spread.title = title; updateBucketItem(book.id, editing.id, {}); }
+      dialog.close();
+      rerender();
+      toast(`Saved "${title}"`);
+      return;
+    }
+    const item = addBucketItem(book.id, fields);
     addedId = item.id;
     dialog.close();
     rerender();
     toast(`Added "${title}" to the bucket list`);
+  });
+  form.querySelector('[data-remove]')?.addEventListener('click', async () => {
+    // Wait for this form to finish closing: its late "close" event would otherwise cancel the next question.
+    await new Promise((resolve) => { dialog.addEventListener('close', () => setTimeout(resolve), { once: true }); dialog.close(); });
+    const ok = await confirmDialog({
+      title: `Remove "${v.title}"?`,
+      body: editing.spreadId ? 'It comes off the bucket list for everyone. Its pages stay in the book.' : 'It comes off the bucket list for everyone.',
+      confirmLabel: 'Remove',
+      danger: true,
+    });
+    if (!ok) return;
+    removeBucketItem(book.id, editing.id);
+    addedId = null;
+    rerender();
+    toast(`Removed "${v.title}" from the bucket list`);
   });
   dialog.addEventListener('close', () => {
     dialog.classList.remove('wide');

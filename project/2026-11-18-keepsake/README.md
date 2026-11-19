@@ -64,6 +64,13 @@ The books are saved in Firebase, so nothing is lost when the site is updated.
 
 What's still different from the board: the words don't appear letter by letter while someone types (they show when they finish), and the big moments use Kalam Bold because Figma Hand isn't a web font (the logo itself is the real Figma Hand artwork).
 
+## Bucket list editing and backgrounds (11/19, from the 11/18 crit)
+
+- **Edit an idea.** Click an idea on the bucket list, then **Edit this idea**. The form opens filled in: change the name, where, when, season, cost, category or notes and **Save changes**. If the idea already has a spread, its spread title changes with it. Anyone can edit ideas from before credit existed; otherwise it's the person who added it or the book's creator.
+- **Remove an idea.** In the edit form, **Remove from the list** takes it off the bucket list for everyone. Its pages stay in the book.
+- **Bucket list background.** **change background** in the top right of the bucket list opens 8 papers: paper, graph paper, dots, lined, gingham, rose, butter and sage. Everyone in the book sees the one you pick.
+- **Page backgrounds.** In Edit mode, **Page background** in the edit panel sets the same papers for the spread you're on. Undo works on it.
+
 ## Invite-only fixes (11/19, from the 11/18 crit)
 
 - **A book link doesn't open a book you're not in.** Opening a link to someone else's book (like `#/book/book-ixd415`) shows "This book is invite only" with **Join with a code**. Once you join with the right code, the book opens. Your library only ever shows the books you've joined.

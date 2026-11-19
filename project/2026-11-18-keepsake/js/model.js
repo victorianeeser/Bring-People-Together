@@ -62,6 +62,19 @@ export const COVER_PRESETS = [
   { id: 'teal-grid', color: '#BCD4C9', pattern: 'grid', ink: '#510C0D', tape: 'pink', doodle: 'elements/doodle-sparkle' },
 ];
 
+// Page backgrounds (bucket list and any spread), in the Keepsake palette.
+export const PAGE_BACKGROUNDS = {
+  paper: 'Paper',
+  grid: 'Graph paper',
+  dots: 'Dots',
+  lined: 'Lined',
+  gingham: 'Gingham',
+  rose: 'Rose',
+  butter: 'Butter',
+  sage: 'Sage',
+};
+export const pageBg = (value) => (PAGE_BACKGROUNDS[value] ? value : 'paper');
+
 export const coverPreset = (id) => COVER_PRESETS.find((p) => p.id === id) || COVER_PRESETS[0];
 
 export const uid = (prefix = 'id') => `${prefix}-${Math.random().toString(36).slice(2, 8)}${Date.now().toString(36).slice(-4)}`;

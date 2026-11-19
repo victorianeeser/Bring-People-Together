@@ -994,3 +994,47 @@ body {
 .book-view.locked h1 { color: var(--ink); font: 700 30px/1.1 var(--big); }
 .book-view.locked p { max-width: 340px; color: var(--on-dark-muted); }
 .locked-actions { display: flex; gap: 10px; margin-top: 8px; }
+
+/* Page backgrounds (bucket list and spreads), from the 11/18 crit. Set with data-bg on the spread. */
+[data-bg="grid"] .page, .bg-swatch[data-bg="grid"] {
+  background-color: #FFFDFB;
+  background-image: linear-gradient(rgba(208, 107, 107, .16) 1px, transparent 1px), linear-gradient(90deg, rgba(208, 107, 107, .16) 1px, transparent 1px);
+  background-size: 4.5cqw 4.5cqw;
+}
+[data-bg="dots"] .page, .bg-swatch[data-bg="dots"] {
+  background-color: #FFFDFB; background-image: radial-gradient(rgba(81, 12, 13, .2) 0.45cqw, transparent 0.5cqw); background-size: 4.5cqw 4.5cqw;
+}
+[data-bg="lined"] .page, .bg-swatch[data-bg="lined"] {
+  background-color: #FFFDFB; background-image: linear-gradient(transparent calc(100% - 1px), rgba(155, 144, 144, .35) 1px); background-size: 100% 6cqw;
+}
+[data-bg="gingham"] .page, .bg-swatch[data-bg="gingham"] {
+  background-color: #FBF5F1;
+  background-image: linear-gradient(90deg, rgba(208, 107, 107, .08) 50%, transparent 50%), linear-gradient(rgba(208, 107, 107, .08) 50%, transparent 50%);
+  background-size: 6cqw 6cqw;
+}
+[data-bg="rose"] .page, .bg-swatch[data-bg="rose"] { background-color: #F3E4E2; }
+[data-bg="butter"] .page, .bg-swatch[data-bg="butter"] { background-color: #FBF0CC; }
+[data-bg="sage"] .page, .bg-swatch[data-bg="sage"] { background-color: #E2EDE7; }
+.bg-swatch[data-bg="paper"] { background-color: #FFFDFB; }
+/* Swatches aren't inside a page, so give them fixed pattern sizes */
+.bg-swatch { display: block; width: 100%; aspect-ratio: 3 / 4; border-radius: 6px; box-shadow: inset 0 0 0 1px rgba(81, 12, 13, .15); }
+.bg-picker .bg-swatch[data-bg="grid"], .bg-row .bg-swatch[data-bg="grid"] { background-size: 8px 8px; }
+.bg-picker .bg-swatch[data-bg="dots"], .bg-row .bg-swatch[data-bg="dots"] { background-image: radial-gradient(rgba(81, 12, 13, .3) 1.2px, transparent 1.6px); background-size: 8px 8px; }
+.bg-picker .bg-swatch[data-bg="lined"], .bg-row .bg-swatch[data-bg="lined"] { background-size: 100% 8px; }
+.bg-picker .bg-swatch[data-bg="gingham"], .bg-row .bg-swatch[data-bg="gingham"] { background-size: 10px 10px; }
+
+.page-bg-btn {
+  position: absolute; z-index: 5; top: 5cqw; right: 6cqw; padding: 0.8cqw 2.2cqw; border: 0.25cqw dashed rgba(81, 12, 13, .3); border-radius: 999px;
+  background: rgba(255, 253, 251, .9); color: var(--k-berry); font: 400 2.8cqw/1.2 var(--hand); cursor: pointer;
+}
+.page-bg-btn:hover { border-style: solid; color: var(--ink); }
+.bg-picker { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 14px; }
+.bg-choice { display: grid; gap: 6px; padding: 6px; border: 1.5px solid transparent; border-radius: 12px; background: none; color: var(--ink); font: 500 12.5px/1.2 var(--ui); }
+.bg-choice:hover { border-color: #E2D2CF; }
+.bg-choice[aria-pressed="true"] { border-color: var(--k-maroon); background: #FFFFFF; }
+.bg-row { display: grid; grid-template-columns: repeat(8, 1fr); gap: 5px; }
+.bg-mini { padding: 3px; border: 1.5px solid transparent; border-radius: 8px; background: none; }
+.bg-mini:hover { border-color: #E2D2CF; }
+.bg-mini[aria-pressed="true"] { border-color: var(--k-maroon); }
+.pop-edit { display: block; width: 100%; margin-top: 10px; }
+.idea-remove { margin-right: auto; }

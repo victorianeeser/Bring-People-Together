@@ -1,6 +1,6 @@
 // Rendering pages and spreads to HTML. Used by the open book, the overview, and the open/close animation.
 
-import { CATEGORIES, SEASONS, fontCss } from './model.js';
+import { CATEGORIES, SEASONS, fontCss, pageBg } from './model.js';
 import { stickerSvg, STICKERS } from './stickers.js';
 import { photoUrl } from './storage.js';
 import { esc, inkFor, brandColor } from './ui.js';
@@ -17,6 +17,13 @@ export const ppLabel = (index) => {
   const [a, b] = spreadPageNumbers(index);
   return `pp. ${a}–${b}`;
 };
+
+// The background a spread's pages use: the bucket list has its own, every other spread has its own.
+export function spreadBg(book, index) {
+  const entry = spreadsOf(book)[index];
+  if (!entry) return 'paper';
+  return pageBg(entry.kind === 'toc' ? book.bucketBg : entry.spread.bg);
+}
 
 export function spreadTitle(book, index) {
   const entry = spreadsOf(book)[index];
@@ -133,7 +140,7 @@ function tocHtml(book, interactive, season = null) {
     : '';
   return {
     left: `<div class="toc"><h2 class="toc-heading">Our bucket list</h2>${book.bucketList.length ? seasonTabsHtml(season, interactive) : ''}${empty}<ul class="toc-list">${left.map((i) => tocEntryHtml(book, i, interactive)).join('')}</ul>${items.length < TOC_LEFT ? add : ''}</div>`,
-    right: `<div class="toc toc-right"><ul class="toc-list">${right.map((i) => tocEntryHtml(book, i, interactive)).join('')}</ul>${items.length >= TOC_LEFT ? add : ''}</div>`,
+    right: `${interactive ? '<button type="button" class="page-bg-btn" data-action="toc-background" aria-haspopup="dialog">change background</button>' : ''}<div class="toc toc-right"><ul class="toc-list">${right.map((i) => tocEntryHtml(book, i, interactive)).join('')}</ul>${items.length >= TOC_LEFT ? add : ''}</div>`,
   };
 }
 

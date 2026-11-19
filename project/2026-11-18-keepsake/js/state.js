@@ -210,6 +210,33 @@ export function addBucketItem(bookId, fields) {
   return item;
 }
 
+// Edit an idea on the bucket list.
+export function updateBucketItem(bookId, itemId, fields) {
+  const item = getBook(bookId)?.bucketList.find((i) => i.id === itemId);
+  if (!item) return null;
+  Object.assign(item, fields);
+  commit();
+  return item;
+}
+
+// Take an idea off the bucket list. Its spread (if it has one) stays in the book.
+export function removeBucketItem(bookId, itemId) {
+  const book = getBook(bookId);
+  if (!book) return false;
+  book.bucketList = book.bucketList.filter((i) => i.id !== itemId);
+  for (const s of book.spreads) if (s.linkedItemId === itemId) s.linkedItemId = null;
+  commit();
+  return true;
+}
+
+// The bucket list page's background.
+export function setBucketBackground(bookId, bg) {
+  const book = getBook(bookId);
+  if (!book) return;
+  book.bucketBg = bg;
+  commit();
+}
+
 // Reports (threats.md): hidden for you right away, for everyone after 2 reports.
 // An intimate photo is removed for everyone on the first report.
 function addReport(thing, { intimate = false } = {}) {
