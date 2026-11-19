@@ -9,7 +9,7 @@ const RATIOS = { free: 'Free', square: 'Square', '4:3': '4:3', '3:4': '3:4', '16
 const ratioValue = { square: 1, '4:3': 3 / 4, '3:4': 4 / 3, '16:9': 9 / 16 }; // height / width on the page
 const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
 
-export async function openPhotoEditor(item, { onSave, canShare = false }) {
+export async function openPhotoEditor(item, { onSave }) {
   const url = item.photoKey ? await photoUrl(item.photoKey).catch(() => null) : null;
   const src = srcAspectOf(item);
   const state = {
@@ -19,7 +19,6 @@ export async function openPhotoEditor(item, { onSave, canShare = false }) {
     filter: FILTERS[item.filter] ? item.filter : 'none',
     ratio: 'free',
     tab: 'crop',
-    openToAll: item.openToAll === true,
   };
   // Demo photos have no file, just a soft color block; they can still get a frame, cut-out shape or filter.
   const mediaTag = (cls = '') => (!item.photoKey
@@ -60,11 +59,6 @@ export async function openPhotoEditor(item, { onSave, canShare = false }) {
           </div>
         </div>
       </div>
-      ${canShare ? `<label class="switch-row pe-share">
-        <input type="checkbox" data-share ${state.openToAll ? 'checked' : ''}>
-        <span class="switch" aria-hidden="true"></span>
-        <span>Let others in the book edit this ${item.video ? 'video' : 'photo'} <span class="optional">(only you can remove it)</span></span>
-      </label>` : ''}
       <div class="confirm-actions">
         <button type="button" class="pill-btn" data-cancel>Cancel</button>
         <button type="button" class="pill-btn solid" data-save>Save</button>
@@ -151,7 +145,6 @@ export async function openPhotoEditor(item, { onSave, canShare = false }) {
         const crop = state.crop;
         const full = crop.x === 0 && crop.y === 0 && crop.w === 1 && crop.h === 1;
         const changes = { crop: full ? null : crop, srcAspect: src, aspect: shownAspect(src, crop), frame: state.frame, shape: state.shape, filter: state.filter };
-        if (canShare) changes.openToAll = Boolean(dialog.querySelector('[data-share]')?.checked);
         onSave(changes);
         finish(changes);
         return;

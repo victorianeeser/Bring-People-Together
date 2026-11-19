@@ -166,11 +166,11 @@ What's still different from the board: the words don't appear letter by letter w
 
 **Save** applies it for everyone, and Undo takes it back.
 
-**Who can edit a photo.** Only the person who added it (or the book's creator), unless they turn on **Let others in the book edit this photo** at the bottom of the photo editor. Then anyone in the book can crop, filter, reframe, move and resize it, and the panel says so. Removing it still stays with the person who added it (and the book's creator), so nobody can delete someone else's photo. The switch only shows for the person who added it.
+**Who can edit a photo.** Anyone in the book can edit any photo or video: crop, frame, filter, move and resize, with no permission messages. Removing one stays with the person who added it (and the book's creator), so nobody can delete someone else's photos. The side panel says "Anyone can edit it. Only Tori can remove it." Stickers and notes still follow the original rule: only the person who added them (or the book's creator) can change them.
 
 ## Editing the page (11/19, from the 11/18 crit)
 
-- **Removing things.** Select anything in Edit mode and click the berry **×** on its corner, or press Delete. On someone else's photo, note or sticker the × is gray and explains that only they (or the book's creator) can remove it, and you can report it instead. That's Leandra's safety rule from [threats.md](../../threats.md).
+- **Removing things.** Select anything in Edit mode and click the berry **×** on its corner, or press Delete. On someone else's photo, note or sticker the × is gray and explains that only they (or the book's creator) can remove it, and you can report it instead. (Anyone can still edit other people's photos; see the photo editor below.) That's Leandra's safety rule from [threats.md](../../threats.md).
 - **Videos.** Drag a video onto a page or use **Browse**, like a photo. It goes on the page as a polaroid that plays on a loop with no sound. Videos can be up to 7 MB (a short phone clip), because the database stores up to 10 MB per file.
 - **Recently uploaded.** Under the photo drop zone in the edit panel, the 8 newest photos and videos in the book. Click one to put it on the page you're on.
 - **Camera roll.** The camera button in the book's top right (or **Camera roll** next to Recently uploaded) shows every photo and video in the book, from everyone. **Add photos or videos** uploads straight to it without putting them on a page, and clicking one adds it to the page you're on.

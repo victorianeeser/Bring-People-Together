@@ -147,13 +147,13 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
   const save = () => commit();
   // Only your own things (or anything, if you made the book) can be moved, changed or removed.
   const mine = (found) => Boolean(found) && canChange(book, found.item);
-  // The person who added a photo can let everyone in the book edit it (crop, frame, filter, move, resize).
-  // Removing it still stays with them (and the book's creator).
-  const canEdit = (found) => mine(found) || (Boolean(found) && found.item.type === 'photo' && found.item.openToAll === true);
+  // Photos and videos are a group thing: anyone in the book can edit them (crop, frame, filter, move, resize).
+  // Removing one still stays with the person who added it (and the book's creator).
+  const canEdit = (found) => mine(found) || (Boolean(found) && found.item.type === 'photo');
   function explainLocked(found) {
     const adder = adderOf(book, found.item);
     const who = adder?.name || 'the person who added it';
-    toast(found.item.openToAll ? `Anyone can edit this, but only ${who} can remove it.` : `Only ${who} can change this. You can report it if it's not OK.`);
+    toast(found.item.type === 'photo' ? `Only ${who} can remove this. You can report it if it's not OK.` : `Only ${who} can change this. You can report it if it's not OK.`);
   }
   // A cap on how fast one person can add things to a spread (threats.md: "Piling on").
   function underLimit(spread, count = 1) {
@@ -201,8 +201,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
       credit.hidden = !adder;
       if (adder) {
         credit.innerHTML = `Added by <span class="credit-name" style="--by:${esc(brandColor(adder.color))}">${adder.id === ME ? 'you' : esc(adder.name)}</span>`
-          + (mine(found) ? (item.openToAll ? '. Everyone in the book can edit it.' : '')
-            : item.openToAll ? `. ${esc(adder.name)} lets everyone edit it, but only they can remove it.` : `. Only ${esc(adder.name)} can change it.`);
+          + (mine(found) ? '' : item.type === 'photo' ? `. Anyone can edit it. Only ${esc(adder.name)} can remove it.` : `. Only ${esc(adder.name)} can change it.`);
       }
       panel.querySelector('#sel-edit-tools').hidden = !canEdit(found);
       panel.querySelector('[data-edit="delete"]').hidden = !mine(found);
@@ -615,7 +614,6 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
     if (!canEdit(found)) { explainLocked(found); return; }
     const snap = snapshot();
     await openPhotoEditor(found.item, {
-      canShare: mine(found), // only the person who added it (or the book's creator) can open it up to others
       onSave: (changes) => {
         record(snap);
         Object.assign(found.item, changes);
