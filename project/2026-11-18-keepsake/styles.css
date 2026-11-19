@@ -1385,3 +1385,10 @@ body { background-image: url(./brand/textures/grain.svg), radial-gradient(rgba(8
 .cover::after { opacity: .55; }
 .page::after { opacity: .35; }
 body { background-size: 300px 300px, 22px 22px, auto; }
+/* Dots background: smaller, softer dots so it reads as dotted paper, not polka dots */
+[data-bg="dots"] .page { background-image: radial-gradient(rgba(81, 12, 13, .16) 0.28cqw, transparent 0.32cqw); background-size: 3.6cqw 3.6cqw; }
+/* (The page can't size its own background from itself, so use fixed sizes for the patterned papers.) */
+[data-bg="dots"] .page { background-image: radial-gradient(rgba(81, 12, 13, .18) 1.6px, transparent 2px); background-size: 20px 20px; }
+[data-bg="grid"] .page { background-size: 22px 22px; }
+[data-bg="lined"] .page { background-size: 100% 28px; }
+[data-bg="gingham"] .page { background-size: 28px 28px; }

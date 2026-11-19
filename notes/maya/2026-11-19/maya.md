@@ -20,15 +20,16 @@ Fixed every item from the [11/18 crit notes](../../crit/2026-11-18/crit-notes.md
 - Edit panel: roomier colors, even selection rings, and everything for a note in one place
 - Texture: washi tape, the notebook, covers and pages look like real paper (also updated in Figma)
 
+![A scrapbook spread with tape, a heart cut-out photo, stickers and paper texture](keepsake-scrapbook-spread-with-textures.jpg)
+
 <p>
   <img src="keepsake-home-page-with-branding.jpg" width="200">
-  <img src="keepsake-invite-only-book.jpg" width="200">
-  <img src="keepsake-bucket-list-background.jpg" width="200">
-  <img src="keepsake-edit-bucket-list-idea.jpg" width="200">
-</p>
-<p>
-  <img src="keepsake-note-options-dropdown.jpg" width="200">
   <img src="keepsake-photo-editor-heart-cutout.jpg" width="200">
   <img src="keepsake-photo-editor-filters.jpg" width="200">
-  <img src="keepsake-camera-roll.jpg" width="200">
+  <img src="keepsake-note-font-and-color-dropdown.jpg" width="200">
+</p>
+<p>
+  <img src="keepsake-bucket-list-graph-paper.jpg" width="200">
+  <img src="keepsake-edit-bucket-list-idea.jpg" width="200">
+  <img src="keepsake-invite-only-book.jpg" width="200">
 </p>
