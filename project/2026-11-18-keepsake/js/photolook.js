@@ -62,5 +62,8 @@ export function photoLookHtml(item, mediaHtml) {
     const m = maskUrl(item.shape);
     return `<span class="photo-frame frame-cutout"><span class="cut-edge" style="-webkit-mask-image:${m};mask-image:${m}"><span class="cut-inner" style="-webkit-mask-image:${m};mask-image:${m}">${media}</span></span></span>`;
   }
-  return `<span class="photo-frame frame-${frame}">${media}</span>`;
+  // Polaroid tape color (11/18 crit). "none" takes the tape off; unset keeps the olive/pink default.
+  const tape = item.tape === 'none' ? ' no-tape' : '';
+  const tapeStyle = /^#[0-9a-f]{6}$/i.test(item.tape || '') ? ` style="--tape:${item.tape}"` : '';
+  return `<span class="photo-frame frame-${frame}${tape}"${tapeStyle}>${media}</span>`;
 }

@@ -4,6 +4,7 @@
 import { photoUrl } from './storage.js';
 import { esc } from './ui.js';
 import { FILTERS, FRAMES, SHAPES, cropOf, srcAspectOf, shownAspect, photoLookHtml } from './photolook.js';
+import { TAPE_COLORS } from './model.js';
 
 const RATIOS = { free: 'Free', square: 'Square', '4:3': '4:3', '3:4': '3:4', '16:9': '16:9' };
 const ratioValue = { square: 1, '4:3': 3 / 4, '3:4': 4 / 3, '16:9': 9 / 16 }; // height / width on the page
@@ -17,6 +18,7 @@ export async function openPhotoEditor(item, { onSave }) {
     frame: FRAMES[item.frame] ? item.frame : 'polaroid',
     shape: SHAPES[item.shape] ? item.shape : 'circle',
     filter: FILTERS[item.filter] ? item.filter : 'none',
+    tape: item.tape || '',
     ratio: 'free',
     tab: 'crop',
   };
@@ -53,6 +55,14 @@ export async function openPhotoEditor(item, { onSave }) {
           </div>
           <div class="pe-panel" data-panel="frame">
             <div class="pe-chips">${Object.entries(FRAMES).map(([id, label]) => `<button type="button" class="pe-chip" data-frame="${id}">${label}</button>`).join('')}</div>
+            <div class="pe-tape">
+              <p class="pe-hint">Tape on the polaroid:</p>
+              <div class="pe-chips pe-tape-row">
+                <button type="button" class="pe-chip" data-tape="">Default</button>
+                ${Object.entries(TAPE_COLORS).map(([name, hex]) => `<button type="button" class="pe-tape-swatch" data-tape="${hex}" style="background:${hex}" aria-label="${name} tape" title="${name}"></button>`).join('')}
+                <button type="button" class="pe-chip" data-tape="none">No tape</button>
+              </div>
+            </div>
             <div class="pe-shapes">
               <p class="pe-hint">Cut-out shape (a white sticker edge, like the sticker set):</p>
               <div class="pe-chips">${Object.entries(SHAPES).map(([id, label]) => `<button type="button" class="pe-chip" data-shape="${id}">${label}</button>`).join('')}</div>
@@ -73,7 +83,7 @@ export async function openPhotoEditor(item, { onSave }) {
   const stage = dialog.querySelector('.crop-stage');
   const rect = dialog.querySelector('.crop-rect');
 
-  const look = () => ({ ...item, crop: state.crop, srcAspect: src, frame: state.frame, shape: state.shape, filter: state.filter });
+  const look = () => ({ ...item, crop: state.crop, srcAspect: src, frame: state.frame, shape: state.shape, filter: state.filter, tape: state.tape });
   // The biggest crop at the current shape (so zoom 1 = the whole photo fits), and how zoomed in we are.
   function maxCrop() {
     const a = shownAspect(src, state.crop); // keep the frame's shape while zooming and moving
@@ -104,6 +114,8 @@ export async function openPhotoEditor(item, { onSave }) {
     dialog.querySelectorAll('[data-shape]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.shape === state.shape)));
     dialog.querySelectorAll('[data-filter]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === state.filter)));
     dialog.querySelector('.pe-shapes').hidden = state.frame !== 'cutout';
+    dialog.querySelector('.pe-tape').hidden = state.frame !== 'polaroid';
+    dialog.querySelectorAll('[data-tape]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.tape === state.tape)));
   }
 
   // Keep the crop's shape at the chosen ratio (or free), as big as it fits around its center.
@@ -186,11 +198,12 @@ export async function openPhotoEditor(item, { onSave }) {
         if (t.dataset.shape !== 'rounded' && Math.abs(shownAspect(src, state.crop) - 1) > 0.05) applyRatio('square');
       }
       if (t.dataset.filter) state.filter = t.dataset.filter;
+      if ('tape' in t.dataset) state.tape = t.dataset.tape;
       if (t.hasAttribute('data-cancel')) { finish(null); return; }
       if (t.hasAttribute('data-save')) {
         const crop = state.crop;
         const full = crop.x === 0 && crop.y === 0 && crop.w === 1 && crop.h === 1;
-        const changes = { crop: full ? null : crop, srcAspect: src, aspect: shownAspect(src, crop), frame: state.frame, shape: state.shape, filter: state.filter };
+        const changes = { crop: full ? null : crop, srcAspect: src, aspect: shownAspect(src, crop), frame: state.frame, shape: state.shape, filter: state.filter, tape: state.tape || null };
         onSave(changes);
         finish(changes);
         return;

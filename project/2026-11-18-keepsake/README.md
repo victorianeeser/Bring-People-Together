@@ -154,6 +154,13 @@ The books are saved in Firebase, so nothing is lost when the site is updated.
 
 What's still different from the board: the words don't appear letter by letter while someone types (they show when they finish), and the big moments use Kalam Bold because Figma Hand isn't a web font (the logo itself is the real Figma Hand artwork).
 
+## Fonts, tape colors and following someone (11/19, from the 11/18 crit)
+
+- **Every font on the brand board.** Select a note in Edit mode. The **Font** cards are Miniver (notes), Figma Hand (big moments; Kalam Bold stands in for it on the web), Avenir (headlines, the secondary type) and Inter (body). Under them, **Color** has maroon, berry, taupe, olive, pink and ink.
+- **A cleaner Selected panel.** It's in groups with room between them: **Size & angle**, **Font** and **Color** (notes), **Tape color** (tape), and **Arrange** (Edit photo, Bring forward, Send backward, Duplicate), with **Remove** on its own line.
+- **Tape color.** Select an olive or pink tape sticker for **Tape color**: olive, pink, berry, rose, butter, sage, taupe or maroon. Photos' polaroid tape has the same colors (plus **No tape**) in the photo editor's **Frame & cut-out** tab.
+- **Follow someone.** Open the who's here list in the bottom left and click a person. You go to their book and their pages, and your book turns whenever theirs does. A **Following tori · stop** pill shows while you're following. Turning a page yourself, or clicking them again, stops it. If they're in a book you're not in, it says so instead.
+
 ## Photo editor (11/19, from the 11/18 crit)
 
 **The "who added this" tag** now floats above the whole spread, so it's never cut off by the page edge or hidden under other photos. Near the bottom of a page it shows above the item instead of below.

@@ -82,3 +82,4 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 - **Maya:** fixed the "who added this" tag getting cut off when you hover over a photo, and made every photo open the photo editor with a double-click, even when Edit is off
 - **Maya:** added zoom and drag to the photo editor so a photo can be fit inside a cut-out sticker shape or frame
 - **Maya:** fixed the × on selected photos getting cut off at the page edge or hidden behind tape
+- **Maya:** added every brand board font (Miniver, Figma Hand, Avenir, Inter) and note colors, redesigned the crowded edit panel with more spacing, added tape colors for tape and photos, and made it so you can follow someone from the who's here list to the pages they're on

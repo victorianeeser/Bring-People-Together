@@ -13,6 +13,7 @@ import { createIdeaPopover, openAddIdea } from './toc.js';
 import { panelHtml, createEditor } from './editor.js';
 import { ME, ME_NAME, MY_COLOR } from './identity.js';
 import { inviteText } from './join.js';
+import { getFollow, stopFollow, onFollow } from './follow.js';
 import { setPresence, setCursor, onCursors, onPresence, isSynced } from './sync.js';
 import { track, EVENTS } from './analytics.js';
 
@@ -408,8 +409,8 @@ export function mountBook(root, bookId) {
     'add-idea': () => openAddIdea(book, { rerender: showSpread, findAnchor }),
     'toc-background': () => pickBucketBackground(),
     'camera-roll': () => openRoll(),
-    prev: () => turnTo(index - 1),
-    next: () => turnTo(index + 1),
+    prev: () => { stopFollow(); turnTo(index - 1); },
+    next: () => { stopFollow(); turnTo(index + 1); },
     overview: openOverview,
     'close-overview': () => overview.close(),
     jump: (btn) => {
@@ -465,8 +466,8 @@ export function mountBook(root, bookId) {
     }
     if (editor.handleKey(event)) return;
     if (isTyping(event.target)) return;
-    if (event.key === 'ArrowRight' || event.key === 'PageDown') { event.preventDefault(); turnTo(index + 1); }
-    if (event.key === 'ArrowLeft' || event.key === 'PageUp') { event.preventDefault(); turnTo(index - 1); }
+    if (event.key === 'ArrowRight' || event.key === 'PageDown') { event.preventDefault(); stopFollow(); turnTo(index + 1); }
+    if (event.key === 'ArrowLeft' || event.key === 'PageUp') { event.preventDefault(); stopFollow(); turnTo(index - 1); }
     if (event.key === 'Escape') { event.preventDefault(); actions.back(); }
   }
 
@@ -719,7 +720,16 @@ export function mountBook(root, bookId) {
   }
 
   const offCursors = onCursors((next) => { others = next; paintLive(); });
-  const offPeople = onPresence((next) => { people = next; paintLive(); paintHere(); });
+  const offPeople = onPresence((next) => { people = next; paintLive(); paintHere(); followTurn(); });
+  // Following someone: turn to the pages they're on whenever they turn.
+  function followTurn() {
+    const f = getFollow();
+    const p = f && people[f.id];
+    if (!p || p.book !== bookId || turning || isAnimating()) return;
+    const target = p.spread === 'contents' ? 0 : spreadsOf(book).findIndex((e) => e.kind === 'spread' && e.spread.id === p.spread);
+    if (target >= 0 && target !== index) turnTo(target);
+  }
+  const offFollow = onFollow(() => followTurn());
 
   // Top right: everyone in this book right now. Click someone to go to the pages they're on.
   function paintHere() {
@@ -755,6 +765,7 @@ export function mountBook(root, bookId) {
       clearInterval(retry);
       offCursors();
       offPeople();
+      offFollow();
       window.removeEventListener('resize', onResizeLive);
       setCursor(null);
       popover.close({ refocus: false });

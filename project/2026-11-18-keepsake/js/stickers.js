@@ -127,9 +127,16 @@ export const TRAY = Object.keys(BRAND_STICKERS);
 // Tape and doodles get their own row in the edit panel.
 export const ELEMENT_TRAY = Object.keys(BRAND_ELEMENTS);
 
+// Tape can be recolored (11/18 crit): it's drawn inline with the same zigzag shape as the board's tape.
+const TAPE_PATH = 'M6.6 0H202.4L209 6.6L202.4 13.2L209 19.8L202.4 25.3L209 31.9L202.4 38.5L209 44L202.4 50.6H6.6L0 44L6.6 38.5L0 31.9L6.6 25.3L0 19.8L6.6 13.2L0 6.6L6.6 0Z';
+const TAPE_DEFAULT = { 'e-tape-olive': '#D0C96B', 'e-tape-pink': '#FF9797' };
+export const isTape = (kind) => Boolean(TAPE_DEFAULT[OLD_TO_BRAND[kind] || kind]);
+const tapeSvg = (color) => `<svg class="tape-svg" viewBox="0 0 209 50.6" aria-hidden="true" focusable="false"><path d="${TAPE_PATH}" fill="${color}" fill-opacity=".9"/><path d="M20 6v38M52 6v38M84 6v38M116 6v38M148 6v38M180 6v38" stroke="#FFFFFF" stroke-width="6" opacity=".18"/></svg>`;
+
 export const isBrandSticker = (kind) => Boolean(STICKERS[OLD_TO_BRAND[kind] || kind]?.brand);
 export const stickerSvg = (kind, color) => {
   const k = OLD_TO_BRAND[kind] || kind;
+  if (TAPE_DEFAULT[k]) return tapeSvg(color && /^#[0-9a-f]{6}$/i.test(color) ? color : TAPE_DEFAULT[k]);
   const s = STICKERS[k] || STICKERS['k-star'];
   return s.brand ? s.svg() : s.svg(color || undefined);
 };

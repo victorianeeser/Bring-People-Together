@@ -10,6 +10,7 @@ import { startLive, ensureMe, getBook, subscribe, setMyColor, isMine } from './s
 import { ME, ME_NAME, MY_COLOR, LIVE_COLORS, hasName, setMyName } from './identity.js';
 import { ROOM, liveEnabled, onStatus, onPresence, startPresence, setPresenceBook, onSaveError } from './sync.js';
 import { esc, inkFor, brandColor, toast } from './ui.js';
+import { getFollow, setFollow, stopFollow, onFollow } from './follow.js';
 import { track, EVENTS } from './analytics.js';
 
 // A change the shared database wouldn't take: say so, instead of it quietly vanishing.
@@ -186,10 +187,12 @@ function mountPresenceBar() {
   bar.className = 'presence-bar';
   bar.innerHTML = `
     <button type="button" class="presence-toggle" aria-expanded="false" aria-controls="presence-list"></button>
-    <div class="presence-list" id="presence-list" role="region" aria-label="Who's here" hidden></div>`;
+    <div class="presence-list" id="presence-list" role="region" aria-label="Who's here" hidden></div>
+    <div class="follow-pill" role="status" hidden></div>`;
   document.body.append(bar);
   const toggle = bar.querySelector('.presence-toggle');
   const list = bar.querySelector('.presence-list');
+  const followPill = bar.querySelector('.follow-pill');
   let status = 'off';
   let people = {};
 
@@ -209,15 +212,23 @@ function mountPresenceBar() {
     list.innerHTML = `
       <h2>Here now <span>${here.length}</span></h2>
       <ul>
-        ${here.map((p) => `
-          <li>
-            ${face(p)}
+        ${here.map((p) => {
+          const who = `${face(p)}
             <span class="presence-who">
               <strong>${esc(p.name || 'Someone')}${p.id === ME ? ' <em>(you)</em>' : ''}</strong>
               <span>${esc(whereText(p))}</span>
-            </span>
-          </li>`).join('')}
-      </ul>`;
+            </span>`;
+          if (p.id === ME) return `<li>${who}</li>`;
+          const on = getFollow()?.id === p.id;
+          return `<li><button type="button" class="presence-person${on ? ' is-following' : ''}" data-follow="${esc(p.id)}" aria-pressed="${on}"
+            aria-label="${esc(`${on ? 'Stop following' : 'Follow'} ${p.name || 'them'}. ${whereText(p)}`)}">${who}<span class="follow-chip">${on ? 'following' : 'follow'}</span></button></li>`;
+        }).join('')}
+      </ul>
+      <p class="presence-tip">Click someone to follow them to the pages they're on.</p>`;
+    const f = getFollow();
+    bar.classList.toggle('is-following', Boolean(f));
+    followPill.hidden = !f;
+    if (f) followPill.innerHTML = `Following <strong>${esc(String(f.name).toLowerCase())}</strong><button type="button" data-stop-follow aria-label="Stop following">stop</button>`;
     if (!live) setOpen(false);
   }
 
@@ -229,7 +240,30 @@ function mountPresenceBar() {
 
   bar.addEventListener('click', (event) => {
     if (event.target.closest('.presence-toggle')) setOpen(list.hidden);
+    if (event.target.closest('[data-stop-follow]')) { stopFollow(); return; }
+    const person = event.target.closest('[data-follow]');
+    if (person) {
+      const id = person.dataset.follow;
+      if (getFollow()?.id === id) { stopFollow(); return; }
+      setFollow({ id, name: people[id]?.name });
+      setOpen(false);
+      goToFollowed();
+    }
   });
+
+  // Go to the book the person you're following is in. (The book view turns to their pages.)
+  function goToFollowed() {
+    const f = getFollow();
+    if (!f) return;
+    const p = people[f.id];
+    if (!p) { toast(`${f.name} left`); stopFollow(); return; }
+    const book = p.book ? getBook(p.book) : null;
+    if (p.book && (!book || !isMine(book))) { toast(`${p.name || f.name} is in a book you're not in`); stopFollow(); return; }
+    const want = book ? `#/book/${encodeURIComponent(book.id)}` : '#/';
+    const there = book ? current?.type === 'book' && current.id === book.id : current?.type === 'library';
+    if (!there && !isAnimating()) location.hash = want;
+  }
+  onFollow(() => render());
   document.addEventListener('pointerdown', (event) => { if (!bar.contains(event.target)) setOpen(false); });
   bar.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && !list.hidden) { event.stopPropagation(); setOpen(false); toggle.focus(); }
@@ -238,6 +272,7 @@ function mountPresenceBar() {
   onPresence((next) => {
     people = next;
     render();
+    goToFollowed();
     // Your circle in each book uses your live color, so you look the same everywhere.
     if (next[ME]?.color) setMyColor(next[ME].color);
   });

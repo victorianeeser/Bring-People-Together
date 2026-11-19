@@ -7,12 +7,12 @@ import { track, EVENTS } from './analytics.js';
 import { ME } from './identity.js';
 import { canChange, canReport, adderOf, allowAdds } from './moderation.js';
 import { openReportDialog, showTakeDownHelp } from './report.js';
-import { createPageItem, uid, FONTS, fontCss, PAGE_BACKGROUNDS, pageBg } from './model.js';
+import { createPageItem, uid, FONTS, fontCss, PAGE_BACKGROUNDS, pageBg, TEXT_COLORS, TAPE_COLORS } from './model.js';
 import { storeMedia, addToRoll, rollOf, tileHtml, mediaFiles, MAX_VIDEO_MB } from './media.js';
 import { hydratePhotos } from './pages.js';
 import { openPhotoEditor } from './photoedit.js';
 import { putPhoto, resizeImage } from './storage.js';
-import { STICKERS, STICKER_COLORS, TRAY, ELEMENT_TRAY, stickerSvg, isBrandSticker } from './stickers.js';
+import { STICKERS, STICKER_COLORS, TRAY, ELEMENT_TRAY, stickerSvg, isBrandSticker, isTape } from './stickers.js';
 import { itemStyle, textFontSize, itemLabel } from './pages.js';
 import { esc, toast, announce, brandColor } from './ui.js';
 
@@ -40,21 +40,45 @@ export function panelHtml() {
         <h3 id="selected-title">Selected</h3>
         <p class="sel-credit" id="sel-credit" hidden></p>
         <div id="sel-edit-tools">
-        <label class="slider-row"><span>Rotate</span><input type="range" id="sel-rotate" min="-180" max="180" step="1"><output id="sel-rotate-out"></output></label>
-        <label class="slider-row"><span>Size</span><input type="range" id="sel-size" min="5" max="100" step="1"><output id="sel-size-out"></output></label>
-        <div class="swatch-row" id="sel-colors" role="group" aria-label="Sticker color">
-          ${Object.entries(STICKER_COLORS).map(([name, hex]) => `<button type="button" class="swatch" data-edit="color" data-color="${hex}" style="background:${hex}" aria-label="${name}" aria-pressed="false"></button>`).join('')}
-        </div>
-        <div class="font-row" id="sel-fonts" role="group" aria-label="Note font" hidden>
-          ${Object.entries(FONTS).map(([id, f]) => `<button type="button" class="font-choice" data-edit="font" data-font="${id}" aria-pressed="false" style="font-family:${f.family};font-weight:${f.weight || 400}">${f.label === 'Notes' ? 'best night ever' : 'our first trip'}<span>${f.label === 'Notes' ? 'Notes' : 'Big moment'}</span></button>`).join('')}
-        </div>
-        <div class="selected-actions">
-          <button type="button" class="pill-btn small" data-edit="forward">Bring forward</button>
-          <button type="button" class="pill-btn small" data-edit="backward">Send backward</button>
-          <button type="button" class="pill-btn small" data-edit="edit-photo" id="sel-edit-photo" hidden>Edit photo</button>
-          <button type="button" class="pill-btn small" data-edit="duplicate">Duplicate</button>
-          <button type="button" class="pill-btn small danger-text" data-edit="delete">Remove</button>
-        </div>
+          <div class="sel-group">
+            <h4>Size &amp; angle</h4>
+            <label class="slider-row"><span>Size</span><input type="range" id="sel-size" min="5" max="100" step="1"><output id="sel-size-out"></output></label>
+            <label class="slider-row"><span>Rotate</span><input type="range" id="sel-rotate" min="-180" max="180" step="1"><output id="sel-rotate-out"></output></label>
+          </div>
+          <div class="sel-group" id="sel-font-group" hidden>
+            <h4>Font</h4>
+            <div class="font-grid" id="sel-fonts" role="group" aria-label="Note font">
+              ${Object.entries(FONTS).map(([id, f]) => `<button type="button" class="font-card" data-edit="font" data-font="${id}" aria-pressed="false">
+                <span class="font-sample" style="font-family:${f.family};font-weight:${f.weight || 400};font-size:${Math.round(30 * (f.size || 1))}px">Aa</span>
+                <span class="font-name">${f.label}</span><span class="font-role">${f.role}</span></button>`).join('')}
+            </div>
+            <h4 class="sel-sub">Color</h4>
+            <div class="swatch-row" id="sel-text-colors" role="group" aria-label="Note color">
+              ${Object.entries(TEXT_COLORS).map(([name, hex]) => `<button type="button" class="swatch" data-edit="text-color" data-color="${hex}" style="background:${hex}" aria-label="${name}" title="${name}" aria-pressed="false"></button>`).join('')}
+            </div>
+          </div>
+          <div class="sel-group" id="sel-tape-group" hidden>
+            <h4>Tape color</h4>
+            <div class="swatch-row" id="sel-tape-colors" role="group" aria-label="Tape color">
+              ${Object.entries(TAPE_COLORS).map(([name, hex]) => `<button type="button" class="swatch" data-edit="color" data-color="${hex}" style="background:${hex}" aria-label="${name}" title="${name}" aria-pressed="false"></button>`).join('')}
+            </div>
+          </div>
+          <div class="sel-group" id="sel-color-group" hidden>
+            <h4>Color</h4>
+            <div class="swatch-row" id="sel-colors" role="group" aria-label="Sticker color">
+              ${Object.entries(STICKER_COLORS).map(([name, hex]) => `<button type="button" class="swatch" data-edit="color" data-color="${hex}" style="background:${hex}" aria-label="${name}" aria-pressed="false"></button>`).join('')}
+            </div>
+          </div>
+          <div class="sel-group">
+            <h4>Arrange</h4>
+            <div class="selected-actions">
+              <button type="button" class="pill-btn small" data-edit="edit-photo" id="sel-edit-photo" hidden>Edit photo</button>
+              <button type="button" class="pill-btn small" data-edit="forward">Bring forward</button>
+              <button type="button" class="pill-btn small" data-edit="backward">Send backward</button>
+              <button type="button" class="pill-btn small" data-edit="duplicate">Duplicate</button>
+            </div>
+            <button type="button" class="pill-btn small danger-text sel-remove" data-edit="delete">Remove</button>
+          </div>
         </div>
         <button type="button" class="link-btn report-btn" data-edit="report" hidden>Report</button>
       </section>
@@ -212,13 +236,15 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
       panel.querySelector('#sel-size-out').textContent = `${Math.round(item.width)}%`;
       panel.querySelector('#sel-edit-photo').hidden = item.type !== 'photo';
       panel.querySelector('#sel-edit-photo').textContent = item.video ? 'Edit video' : 'Edit photo';
-      const colors = panel.querySelector('#sel-colors');
-      colors.hidden = item.type !== 'sticker' || String(item.kind).startsWith('washi') || isBrandSticker(item.kind);
-      colors.querySelectorAll('.swatch').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.color === item.color)));
-      const fonts = panel.querySelector('#sel-fonts');
-      fonts.hidden = item.type !== 'text';
+      const tape = item.type === 'sticker' && isTape(item.kind);
+      panel.querySelector('#sel-color-group').hidden = item.type !== 'sticker' || tape || isBrandSticker(item.kind);
+      panel.querySelector('#sel-colors').querySelectorAll('.swatch').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.color === item.color)));
+      panel.querySelector('#sel-tape-group').hidden = !tape;
+      panel.querySelector('#sel-tape-colors').querySelectorAll('.swatch').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.color === item.color)));
+      panel.querySelector('#sel-font-group').hidden = item.type !== 'text';
       const current = FONTS[item.font] ? item.font : 'miniver';
-      fonts.querySelectorAll('.font-choice').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.font === current)));
+      panel.querySelectorAll('#sel-fonts .font-card').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.font === current)));
+      panel.querySelectorAll('#sel-text-colors .swatch').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.color.toLowerCase() === String(item.color || '').toLowerCase())));
     }
     const spread = currentSpread();
     renderRecent();
@@ -717,6 +743,14 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
     text: addText,
     'add-sticker': (btn) => addSticker(btn.dataset.kind),
     color: (btn) => setColor(btn.dataset.color),
+    'text-color': (btn) => {
+      const found = find(selectedId);
+      if (!found || found.item.type !== 'text' || !mine(found)) return;
+      record();
+      found.item.color = btn.dataset.color;
+      save();
+      redraw();
+    },
     font: (btn) => setFont(btn.dataset.font),
     'page-bg': (btn) => {
       const spread = currentSpread();

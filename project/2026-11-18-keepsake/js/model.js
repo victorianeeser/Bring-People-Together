@@ -42,10 +42,17 @@ export const isEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
 // Keepsake note fonts: Miniver for everyday notes, Kalam Bold (standing in for Figma Hand) for big moments,
 // like "our first trip" on the brand board. Notes saved with the old fonts show in Miniver.
+// Every font on the Keepsake brand board, for notes (11/18 crit: add the secondary type, Avenir).
+// Figma Hand isn't a web font, so Kalam Bold stands in for it, like everywhere else in the app.
 export const FONTS = {
-  miniver: { label: 'Notes', family: 'var(--hand)' },
-  kalam: { label: 'Big moment', family: 'var(--big)', weight: 700 },
+  miniver: { label: 'Miniver', role: 'Notes', family: 'var(--hand)', size: 1 },
+  kalam: { label: 'Figma Hand', role: 'Big moments', family: 'var(--big)', weight: 700, size: 1 },
+  avenir: { label: 'Avenir', role: 'Headlines', family: 'var(--display)', weight: 500, size: 0.82 },
+  inter: { label: 'Inter', role: 'Body', family: 'var(--ui)', size: 0.78 },
 };
+// Note colors and tape colors, from the brand palette.
+export const TEXT_COLORS = { Maroon: '#510C0D', Berry: '#D06B6B', Taupe: '#7D6463', Olive: '#8E8A2E', Pink: '#FF9797', Ink: '#2B2B2B' };
+export const TAPE_COLORS = { Olive: '#D0C96B', Pink: '#FF9797', Berry: '#D06B6B', Rose: '#E1CFCD', Butter: '#F2CF72', Sage: '#BCD4C9', Taupe: '#9B9090', Maroon: '#510C0D' };
 export const fontOf = (item) => FONTS[item?.font] || FONTS.miniver;
 export const fontCss = (item) => `font-family:${fontOf(item).family};font-weight:${fontOf(item).weight || 400}`;
 

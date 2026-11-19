@@ -1157,3 +1157,68 @@ body {
 .sel-x:hover { background: #B8504F; }
 .sel-x.is-locked { background: var(--k-taupe); }
 .sel-x[hidden] { display: none; }
+
+/* Selected panel, redesigned (11/18 crit: the font tab was crowded). Clear groups with room to breathe. */
+.selected-tools { gap: 0; padding: 16px 16px 14px; border-color: #E2D2CF; border-radius: 16px; }
+.selected-tools h3 { font-family: var(--big); font-weight: 700; font-size: 18px; }
+.selected-tools .sel-credit { margin: 4px 0 6px; }
+.sel-group { padding: 14px 0 4px; border-top: 1px dashed #E2D2CF; }
+.sel-group:first-child { border-top: 0; padding-top: 6px; }
+.sel-group[hidden] { display: none; }
+.sel-group h4 { margin: 0 0 10px; color: var(--on-dark-muted); font: 600 11px/1.2 var(--ui); letter-spacing: .08em; text-transform: uppercase; }
+.sel-group h4.sel-sub { margin-top: 14px; }
+.sel-group .slider-row { margin-bottom: 8px; grid-template-columns: 50px 1fr 42px; }
+.font-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.font-card {
+  display: grid; justify-items: start; gap: 2px; padding: 10px 12px 9px; border: 1.5px solid #EADBD8; border-radius: 12px;
+  background: #FFFFFF; color: var(--ink); text-align: left; cursor: pointer;
+}
+.font-card:hover { border-color: var(--k-berry); }
+.font-card[aria-pressed="true"] { border-color: var(--k-maroon); background: var(--k-paper); box-shadow: inset 0 0 0 1px var(--k-maroon); }
+.font-sample { line-height: 1.05; height: 34px; display: flex; align-items: flex-end; }
+.font-name { font: 600 12.5px/1.2 var(--ui); }
+.font-role { color: var(--on-dark-muted); font: 400 11.5px/1.2 var(--ui); }
+.sel-group .swatch-row { flex-wrap: wrap; gap: 8px; }
+.sel-group .swatch { width: 26px; height: 26px; border: 2px solid #FFFFFF; box-shadow: 0 0 0 1px rgba(81, 12, 13, .2); }
+.sel-group .swatch[aria-pressed="true"] { outline: 2px solid var(--k-maroon); outline-offset: 2px; }
+.sel-group .selected-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.sel-group .selected-actions .pill-btn { width: 100%; }
+.selected-actions [hidden], .sel-group [hidden] { display: none !important; }
+.sel-remove { width: 100%; margin-top: 8px; }
+.tape-svg { display: block; width: 100%; height: auto; }
+
+/* Photo tape takes any tape color: the tape shape is a mask, filled with --tape (olive, or pink on every other photo) */
+.pi-photo .photo-frame::before {
+  background: var(--tape, #D0C96B); opacity: .92;
+  -webkit-mask: url(./brand/elements/tape-olive.svg) center / contain no-repeat; mask: url(./brand/elements/tape-olive.svg) center / contain no-repeat;
+}
+.pi-photo:nth-child(even) .photo-frame::before { background: var(--tape, #FF9797); }
+.pi-photo .photo-frame.no-tape::before { display: none; }
+.pe-tape[hidden] { display: none; }
+.pe-tape { margin-top: 14px; }
+.pe-tape-row { align-items: center; }
+.pe-tape-swatch { width: 26px; height: 26px; padding: 0; border: 2px solid #FFFFFF; border-radius: 50%; box-shadow: 0 0 0 1px rgba(81, 12, 13, .2); cursor: pointer; }
+.pe-tape-swatch[aria-pressed="true"] { outline: 2px solid var(--k-maroon); outline-offset: 2px; }
+
+/* Follow someone from the who's here list (11/18 crit) */
+.presence-list li { padding: 0; }
+.presence-person {
+  display: flex; align-items: center; gap: 10px; width: 100%; padding: 8px 10px; border: 0; border-radius: 12px;
+  background: none; color: inherit; font: inherit; text-align: left; cursor: pointer;
+}
+.presence-person:hover { background: rgba(81, 12, 13, .05); }
+.presence-person .presence-who { flex: 1; }
+.presence-list li > .presence-face { margin: 8px 0 8px 10px; }
+.presence-list li:not(:has(button)) { display: flex; align-items: center; gap: 10px; padding-right: 10px; }
+.follow-chip { flex: none; padding: 2px 10px 3px; border: 1.5px solid #E2D2CF; border-radius: 999px; color: var(--k-berry); font: 400 14px/1.2 var(--hand); }
+.presence-person:hover .follow-chip { border-color: var(--k-berry); }
+.presence-person.is-following .follow-chip { border-color: var(--k-berry); background: var(--k-berry); color: #FFFFFF; }
+.presence-tip { margin: 6px 10px 2px; color: var(--on-dark-muted); font: 400 15px/1.3 var(--hand); }
+.follow-pill {
+  display: flex; align-items: center; gap: 8px; padding: 4px 6px 4px 12px; border-radius: 999px; background: var(--k-berry); color: #FFFFFF;
+  font: 400 15px/1.2 var(--hand); white-space: nowrap;
+}
+.follow-pill[hidden] { display: none; }
+.follow-pill strong { font-weight: 400; text-decoration: underline; text-underline-offset: 3px; }
+.follow-pill button { padding: 2px 10px 3px; border: 0; border-radius: 999px; background: rgba(255, 255, 255, .25); color: #FFFFFF; font: 700 13px/1.2 var(--big); cursor: pointer; }
+.follow-pill button:hover { background: rgba(255, 255, 255, .4); }
