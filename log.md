@@ -80,3 +80,4 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 - **Maya:** added a photo editor to the [Keepsake prototype](project/2026-11-18-keepsake/) with Claude Code: double-click a photo or video to crop it, turn it into a cut-out sticker (circle, heart, star, scallop or rounded), change its frame, or add a filter. Also put the steps for Leandra (update Netlify and publish the video rules) at the top of the README
 - **Maya:** made every photo editable by anyone in the book with no permission messages (only the person who added a photo can still remove it)
 - **Maya:** fixed the "who added this" tag getting cut off when you hover over a photo, and made every photo open the photo editor with a double-click, even when Edit is off
+- **Maya:** added zoom and drag to the photo editor so a photo can be fit inside a cut-out sticker shape or frame

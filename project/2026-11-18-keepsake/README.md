@@ -163,6 +163,7 @@ What's still different from the board: the words don't appear letter by letter w
 - **Crop.** Drag the box to move it and drag its corner to resize it. Presets: Free, Square, 4:3, 3:4 and 16:9. **Reset** goes back to the whole photo. Resizing the photo on the page still works with the corner handle or the **Size** slider.
 - **Frame & cut-out.** **Polaroid** (white border and tape, the default), **Plain** (just the photo with a soft shadow), or **Cut-out sticker**: the photo in a circle, heart, star, scallop or rounded shape with a white die-cut edge, like the sticker set. Round shapes square up the crop automatically.
 - **Filter.** Original, Warm, Vintage, B&W, Faded, Rosy, Film or Cool.
+- **Fit it in the frame.** Under the preview, **Zoom** makes the photo bigger or smaller inside its frame or sticker shape, and dragging the photo in the preview moves it, so the part you want shows in the heart, star or circle. The frame keeps its shape while you do it.
 
 **Save** applies it for everyone, and Undo takes it back.
 

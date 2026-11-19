@@ -35,7 +35,11 @@ export async function openPhotoEditor(item, { onSave }) {
     <div class="confirm-box">
       <h2 id="pe-title">Edit ${item.video ? 'video' : 'photo'}</h2>
       <div class="pe-body">
-        <div class="pe-preview" aria-hidden="true"><div class="pe-preview-item"></div></div>
+        <div class="pe-left">
+          <div class="pe-preview" title="Drag to move the photo inside its frame"><div class="pe-preview-item"></div></div>
+          <label class="pe-zoom"><span>Zoom</span><input type="range" min="1" max="4" step="0.01" value="1" data-zoom aria-label="Zoom the photo inside its frame"></label>
+          <p class="pe-hint pe-fit-hint">Drag the photo above to move it, and zoom to fit it in the frame or sticker shape.</p>
+        </div>
         <div class="pe-controls">
           <div class="pe-tabs" role="tablist">
             <button type="button" role="tab" data-tab="crop">Crop</button>
@@ -70,7 +74,25 @@ export async function openPhotoEditor(item, { onSave }) {
   const rect = dialog.querySelector('.crop-rect');
 
   const look = () => ({ ...item, crop: state.crop, srcAspect: src, frame: state.frame, shape: state.shape, filter: state.filter });
+  // The biggest crop at the current shape (so zoom 1 = the whole photo fits), and how zoomed in we are.
+  function maxCrop() {
+    const a = shownAspect(src, state.crop); // keep the frame's shape while zooming and moving
+    let w = 1, h = a / src;
+    if (h > 1) { h = 1; w = src / a; }
+    return { w, h };
+  }
+  const zoomOf = () => maxCrop().w / state.crop.w;
+  function setZoom(z) {
+    const m = maxCrop();
+    const c = state.crop;
+    const cx = c.x + c.w / 2, cy = c.y + c.h / 2;
+    const w = m.w / z, h = m.h / z;
+    state.crop = { w, h, x: clamp(cx - w / 2, 0, 1 - w), y: clamp(cy - h / 2, 0, 1 - h) };
+  }
+
   function paint() {
+    const zoomInput = dialog.querySelector('[data-zoom]');
+    if (document.activeElement !== zoomInput) zoomInput.value = String(Math.min(4, Math.max(1, zoomOf())).toFixed(2));
     previewEl.innerHTML = photoLookHtml(look(), mediaTag('photo-img'));
     previewEl.className = `pe-preview-item pi-photo frame-is-${state.frame}`;
     const c = state.crop;
@@ -96,6 +118,30 @@ export async function openPhotoEditor(item, { onSave }) {
     if (w > 1) { w = 1; h = (r * w) / src; }
     state.crop = { w, h, x: clamp(cx - w / 2, 0, 1 - w), y: clamp(cy - h / 2, 0, 1 - h) };
   }
+
+  // Zoom slider, and dragging the photo inside the preview's frame to move it.
+  dialog.querySelector('[data-zoom]').addEventListener('input', (event) => { setZoom(Number(event.target.value)); paint(); });
+  const previewBox = dialog.querySelector('.pe-preview');
+  previewBox.addEventListener('pointerdown', (event) => {
+    const target = previewBox.querySelector('.crop-box');
+    if (!target) return;
+    event.preventDefault();
+    const box = target.getBoundingClientRect();
+    const start = { x: event.clientX, y: event.clientY, crop: { ...state.crop } };
+    previewBox.setPointerCapture(event.pointerId);
+    previewBox.classList.add('is-dragging');
+    const move = (e) => {
+      // Dragging the photo right shows more of its left side, like moving a photo behind a window.
+      const c = { ...start.crop };
+      c.x = clamp(c.x - ((e.clientX - start.x) / box.width) * c.w, 0, 1 - c.w);
+      c.y = clamp(c.y - ((e.clientY - start.y) / box.height) * c.h, 0, 1 - c.h);
+      state.crop = c;
+      paint();
+    };
+    const up = () => { previewBox.classList.remove('is-dragging'); previewBox.removeEventListener('pointermove', move); previewBox.removeEventListener('pointerup', up); };
+    previewBox.addEventListener('pointermove', move);
+    previewBox.addEventListener('pointerup', up);
+  });
 
   // Dragging the crop box (move) or its corner (resize).
   rect.addEventListener('pointerdown', (event) => {
