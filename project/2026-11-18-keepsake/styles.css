@@ -1147,3 +1147,13 @@ body {
 .pe-zoom { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; }
 .pe-zoom input { width: 100%; accent-color: var(--k-berry); }
 .pe-fit-hint { margin: 0; }
+
+/* The × to remove what's selected: in the layer above the spread, so it's never under tape or cut off */
+.sel-x {
+  position: absolute; left: 0; top: 0; z-index: 2; display: grid; place-items: center; width: 26px; height: 26px; padding: 0;
+  border: 2px solid #FFFFFF; border-radius: 50%; background: var(--k-berry); color: #FFFFFF; font: 700 16px/1 var(--ui);
+  box-shadow: 0 2px 6px rgba(81, 12, 13, .35); cursor: pointer; pointer-events: auto;
+}
+.sel-x:hover { background: #B8504F; }
+.sel-x.is-locked { background: var(--k-taupe); }
+.sel-x[hidden] { display: none; }

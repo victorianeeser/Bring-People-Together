@@ -81,3 +81,4 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 - **Maya:** made every photo editable by anyone in the book with no permission messages (only the person who added a photo can still remove it)
 - **Maya:** fixed the "who added this" tag getting cut off when you hover over a photo, and made every photo open the photo editor with a double-click, even when Edit is off
 - **Maya:** added zoom and drag to the photo editor so a photo can be fit inside a cut-out sticker shape or frame
+- **Maya:** fixed the × on selected photos getting cut off at the page edge or hidden behind tape

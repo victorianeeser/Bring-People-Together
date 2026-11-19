@@ -183,7 +183,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
         el.insertAdjacentHTML('beforeend', `<span class="handle h-rotate" aria-hidden="true">${ROTATE_ICON}</span><span class="handle h-resize" aria-hidden="true"></span>`);
       }
       // A × on the corner to remove it (11/18 crit: "can't delete elements"). On other people's things it explains who can.
-      if (editingId !== selectedId) el.insertAdjacentHTML('beforeend', `<span class="handle h-delete${mine(find(selectedId)) ? '' : ' is-locked'}" aria-hidden="true">×</span>`);
+      // The × to remove it is drawn by the book view in a layer above the spread (so tape or the page edge can't hide it).
     }
     updatePanel();
     onSelect?.(selectedId); // live: others see what you've selected
@@ -876,6 +876,9 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
     handleKey,
     isEditingText: () => Boolean(editingId),
     editPhoto: (id) => { select(id); editPhoto(id); },
+    removeSelected,
+    // For the floating ×: what's selected, and whether you can remove it.
+    selection: () => (selectedId && editingId !== selectedId ? { id: selectedId, canRemove: mine(find(selectedId)) } : null),
     addFromRoll,
     destroy() {
       document.removeEventListener('pointerdown', onOutside);

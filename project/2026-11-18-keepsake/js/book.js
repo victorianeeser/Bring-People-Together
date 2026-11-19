@@ -83,7 +83,7 @@ export function mountBook(root, bookId) {
             <div class="page right"><div class="page-inner" id="page-right"></div></div>
           </div>
           <div class="live-layer" aria-hidden="true"></div>
-          <div class="by-layer" aria-hidden="true"><span class="by-tag" hidden></span></div>
+          <div class="by-layer"><span class="by-tag" aria-hidden="true" hidden></span><button type="button" class="sel-x" hidden aria-label="Remove">×</button></div>
         </div>
         <div class="turn-controls">
           <button type="button" class="icon-btn glass small" data-action="prev" aria-label="Previous spread">${CHEVRON_LEFT}</button>
@@ -564,13 +564,32 @@ export function mountBook(root, bookId) {
     const left = Math.min(Math.max(r.left - area.left, 4), area.width - w - 4);
     byTag.style.transform = `translate(${Math.round(left)}px, ${Math.round(Math.max(4, top))}px)`;
   }
-  // Show it for what you're hovering, or else for what's selected.
-  const showBy = () => placeBy(byHover || spreadEl.querySelector('.page-inner .pi.selected[data-by]'));
+  // The × to remove what's selected. It sits on the item's top-left corner, above everything, and is kept
+  // inside the book so it's never cut off by the page edge or hidden under tape.
+  const selX = byLayer.querySelector('.sel-x');
+  function placeX() {
+    const sel = editMode ? editor.selection() : null;
+    const el = sel && spreadEl.querySelector(`.page-inner .pi[data-id="${CSS.escape(sel.id)}"]`);
+    if (!el) { selX.hidden = true; return; }
+    const area = byLayer.getBoundingClientRect();
+    const r = el.getBoundingClientRect();
+    selX.hidden = false;
+    selX.classList.toggle('is-locked', !sel.canRemove);
+    selX.title = sel.canRemove ? 'Remove' : "Only the person who added it can remove it";
+    const size = selX.offsetWidth || 26;
+    const left = Math.min(Math.max(r.left - area.left - size / 2, 2), area.width - size - 2);
+    const top = Math.min(Math.max(r.top - area.top - size / 2, 2), area.height - size - 2);
+    selX.style.transform = `translate(${Math.round(left)}px, ${Math.round(top)}px)`;
+  }
+  selX.addEventListener('pointerdown', (event) => event.stopPropagation());
+  selX.addEventListener('click', (event) => { event.stopPropagation(); editor.removeSelected(); requestAnimationFrame(placeX); });
+  // Show the tag for what you're hovering, or else for what's selected.
+  const showBy = () => { placeBy(byHover || spreadEl.querySelector('.page-inner .pi.selected[data-by]')); placeX(); };
   spreadEl.addEventListener('pointerover', (event) => { byHover = event.target.closest('.page-inner .pi[data-by]'); showBy(); });
   spreadEl.addEventListener('pointerleave', () => { byHover = null; showBy(); });
   spreadEl.addEventListener('pointermove', () => { if (byHover || !byTag.hidden) showBy(); });
   spreadEl.addEventListener('focusin', (event) => { const el = event.target.closest('.page-inner .pi[data-by]'); if (el) placeBy(el); });
-  new MutationObserver(() => requestAnimationFrame(showBy)).observe(spreadEl, { subtree: true, attributes: true, attributeFilter: ['class'], childList: true });
+  new MutationObserver(() => requestAnimationFrame(showBy)).observe(spreadEl, { subtree: true, attributes: true, attributeFilter: ['class', 'style'], childList: true }); // style: follow items while they're dragged
   const hereEl = root.querySelector('.book-here');
   const stage = root.querySelector('.book-stage');
   const spreadKey = () => currentSpread()?.id || 'contents';
@@ -721,7 +740,7 @@ export function mountBook(root, bookId) {
       }).join('')}
       <span class="here-pill is-live"><span class="here-dot" aria-hidden="true"></span>${inBook.length + 1} here now</span>`;
   }
-  const onResizeLive = () => paintLive();
+  const onResizeLive = () => { paintLive(); showBy(); };
   window.addEventListener('resize', onResizeLive);
   liveReady = true;
   sharePlace();
