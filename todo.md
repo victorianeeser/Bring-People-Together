@@ -3,7 +3,8 @@
 Due by Monday, November 23
 
 - **Leandra:** get some kind of analytics running on our project (the minimum metric is the # of users), and user test with 10–15 people
-- **Maya:** user test with 10–15 people, and add more branding elements and stickers to the scrapbook, making them look more like real scrapbook pieces, and fix anything that breaks in the prototype
+- **Maya:** user test with 10–15 people
+- **Maya:** polish the prototype: add more stickers and branding elements that look like real scrapbook pieces, and fix any bugs
 - **Victoria:** user test with 10–15 people, and edit a TikTok that promotes our project
 
 Due by Wednesday, November 18
