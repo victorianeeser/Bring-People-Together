@@ -1,5 +1,11 @@
 # To do
 
+Due by Monday, November 23
+
+- **Leandra:** get some kind of analytics running on our project (the minimum metric is the # of users), and user test with 10–15 people
+- **Maya:** user test with 10–15 people
+- **Victoria:** user test with 10–15 people
+
 Due by Wednesday, November 18
 
 - **Maya:** edit the logo to make it more handwritten and make two different brand boards, with a more crafty, handmade feel (look at Tori's ideas in Figma) ✅ **Done**
