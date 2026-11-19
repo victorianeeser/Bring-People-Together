@@ -69,3 +69,4 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 
 - **Maya:** branded the scrapbook prototype as Keepsake with Claude Code: new logo, colors, fonts (secondary font changed to Avenir), stickers, tape and doodles, notebook covers, and all 9 multiplayer states. Tested it and fixed changes not saving. [Notes and images](notes/maya/2026-11-18/maya.md), [prototype](project/2026-11-18-keepsake/)
 - **Maya:** made the [to do list](todo.md) for Monday, November 23
+- **Leandra:** put the [Keepsake version](project/2026-11-18-keepsake/) online at the [live link](https://scrapbook-proto.netlify.app/?room=class) with Claude Code, replacing the 11/13 version. Added [Plausible](https://plausible.io) analytics to count visits (no cookies, no personal data), plus events for key actions like joining, opening or making a book, adding ideas, pages, photos, notes and stickers, and reporting something
