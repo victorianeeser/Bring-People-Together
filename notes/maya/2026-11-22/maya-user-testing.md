@@ -6,13 +6,30 @@ Tested the [live Keepsake site](https://keepsake2.netlify.app/), joining the cla
 
 ## Screen recordings
 
+- [Maya Zech (33 sec)](maya-zech-keepsake-test-recording.mp4)
 - [Audrey (2.5 min)](audrey-keepsake-test-recording.mp4)
 - [Mason (1 min)](mason-keepsake-test-recording.mp4)
 - [Chris (1.3 min)](chris-keepsake-test-recording.mp4)
 - [Max (1.5 min)](max-keepsake-test-recording.mp4)
-- [Maya Zech (33 sec)](maya-zech-keepsake-test-recording.mp4)
 
 Audrey's camera roll is blurred for the few seconds her phone's photo picker is open.
+
+## Maya Zech
+
+**What she said:** It was very fun and easy to use, and it made sense right away that her task was to add to the scrapbook.
+
+**From the recording (33 sec, Snapchat's in-app browser):**
+- The recording starts with her already in the class book, so joining isn't shown.
+- Flipped through the full photo collage spread, Audrey's dog photo (still uncropped), a face cut-out sticker, and the empty pages that say "nothing here yet" with **Add pages** at the end.
+- Flipped back to the bucket list, went back to the shelf, opened the grid view, then reopened the book on the bucket list.
+- Near the end the live bar changed from "1 here" to "2 here" as someone else joined the book.
+- She didn't zoom in on anything, unlike Mason and Chris.
+- She said her task was to add to the scrapbook, but adding isn't in this clip. It may have happened before or after the recording.
+
+<p>
+  <img src="maya-zech-full-photo-collage-spread.jpg" alt="A spread full of photos, stickers and doodles" width="200">
+  <img src="maya-zech-face-sticker-page.jpg" alt="A page with a face cut-out sticker" width="200">
+</p>
 
 ## Audrey
 
@@ -78,25 +95,6 @@ Audrey's camera roll is blurred for the few seconds her phone's photo picker is 
 <p>
   <img src="max-wrong-invite-code-message.jpg" alt="The Join a book screen saying there is no book with that code" width="200">
   <img src="max-edit-spread-panel-open.jpg" alt="The Edit spread panel open on pages 5 and 6" width="200">
-</p>
-
-## Maya Zech
-
-(A tester, not Maya Walsh.)
-
-**What she said:** It was very fun and easy to use, and it made sense right away that her task was to add to the scrapbook.
-
-**From the recording (33 sec, Snapchat's in-app browser):**
-- The recording starts with her already in the class book, so joining isn't shown.
-- Flipped through the full photo collage spread, Audrey's dog photo (still uncropped), a face cut-out sticker, and the empty pages that say "nothing here yet" with **Add pages** at the end.
-- Flipped back to the bucket list, went back to the shelf, opened the grid view, then reopened the book on the bucket list.
-- Near the end the live bar changed from "1 here" to "2 here" as someone else joined the book.
-- She didn't zoom in on anything, unlike Mason and Chris.
-- She said her task was to add to the scrapbook, but adding isn't in this clip. It may have happened before or after the recording.
-
-<p>
-  <img src="maya-zech-full-photo-collage-spread.jpg" alt="A spread full of photos, stickers and doodles" width="200">
-  <img src="maya-zech-face-sticker-page.jpg" alt="A page with a face cut-out sticker" width="200">
 </p>
 
 ## Patterns so far
