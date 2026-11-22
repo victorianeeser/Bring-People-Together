@@ -49,7 +49,7 @@ Audrey's camera roll is blurred for the few seconds her phone's photo picker is 
 
 ## Chris
 
-**What he said:** His comments are coming soon.
+**What he said:** It makes sense, and it was easy to use and update. He really liked the overall look and feel, and the idea.
 
 **From the recording (1.3 min, Snapchat's in-app browser):**
 - Typed his full name. Snapchat then popped up its own "Save info for next time?" sheet over the page.
