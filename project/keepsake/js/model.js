@@ -42,14 +42,18 @@ export const isEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
 // Note fonts: notes are Avenir only. Figma Hand is kept for the logo, the bucket list heading and book titles,
 // so notes saved in Figma Hand (Kalam), Miniver, Inter or older fonts all show in Avenir.
+// 11/22: three note fonts. Figma Hand (shown as Kalam) is always lowercase, like everywhere else.
 export const FONTS = {
-  avenir: { label: 'Avenir', role: 'Notes', family: 'var(--display)', weight: 500, size: 0.82 },
+  avenir: { label: 'Avenir', role: 'Clean', family: 'var(--display)', weight: 500, size: 0.82 },
+  kalam: { label: 'Figma Hand', role: 'Big moments', family: 'var(--big)', weight: 700, size: 1, lowercase: true },
+  script: { label: 'Script', role: 'Handwritten', family: 'var(--script)', weight: 400, size: 1.05 },
 };
 // Note colors and tape colors, from the brand palette.
 export const TEXT_COLORS = { Maroon: '#510C0D', Berry: '#D06B6B', Taupe: '#7D6463', Olive: '#7E9A4E', Pink: '#FF9797', Ink: '#2B2B2B' };
 export const TAPE_COLORS = { Olive: '#B9D18C', Pink: '#FF9797', Berry: '#D06B6B', Rose: '#E1CFCD', Butter: '#F2CF72', Sage: '#BCD4C9', Taupe: '#9B9090', Maroon: '#510C0D' };
-export const fontOf = (item) => FONTS[item?.font] || FONTS.avenir;
-export const fontCss = (item) => `font-family:${fontOf(item).family};font-weight:${fontOf(item).weight || 400}`;
+// Notes saved in Miniver (before 11/21) show in Script, which is Miniver again.
+export const fontOf = (item) => FONTS[item?.font] || (item?.font === 'miniver' ? FONTS.script : FONTS.avenir);
+export const fontCss = (item) => `font-family:${fontOf(item).family};font-weight:${fontOf(item).weight || 400};text-transform:${fontOf(item).lowercase ? 'lowercase' : 'none'}`;
 
 // Preset covers. `ink` is the title color that reads well on `color`.
 export const COVER_PRESETS = [

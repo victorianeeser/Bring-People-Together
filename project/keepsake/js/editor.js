@@ -386,7 +386,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
       panel.querySelector('#sel-tape-group').hidden = !tape;
       panel.querySelector('#sel-tape-colors').querySelectorAll('.color-chip').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.color === item.color)));
 
-      const current = FONTS[item.font] ? item.font : 'avenir';
+      const current = FONTS[item.font] ? item.font : item.font === 'miniver' ? 'script' : 'avenir';
       panel.querySelectorAll('#sel-fonts .font-card').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.font === current)));
       panel.querySelectorAll('#sel-align .align-btn').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.align === (item.align || 'left'))));
       panel.querySelectorAll('#sel-label .label-chip').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.label === (item.label || 'none'))));
@@ -1089,7 +1089,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
     if (editingId === found.item.id) {
       const el = itemEl(found.item.id);
       const f = fontOf(found.item);
-      if (el) { el.style.fontFamily = f.family; el.style.fontWeight = String(f.weight || 400); }
+      if (el) { el.style.fontFamily = f.family; el.style.fontWeight = String(f.weight || 400); el.style.textTransform = f.lowercase ? 'lowercase' : 'none'; }
       updatePanel();
       resumeTyping();
       return;

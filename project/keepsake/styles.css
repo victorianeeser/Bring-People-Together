@@ -2172,3 +2172,11 @@ body { background-image: radial-gradient(ellipse 70% 60% at 50% 46%, var(--bg-ce
   body:has(.book-view.editing) .presence-bar { display: none; }
   .book-view.editing .edit-panel .bg-row, .ce-panel .bg-row { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
+
+/* Note fonts (11/22): Avenir, Figma Hand and Script */
+:root { --script: Miniver, cursive; }
+.font-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.font-card { display: grid; justify-items: center; gap: 2px; padding: 8px 4px; text-align: center; }
+.font-card .font-name { font-size: var(--t-tiny); }
+.font-card .font-role { font-size: 10px; }
+.font-card[data-font="kalam"] .font-sample { text-transform: lowercase; }
