@@ -1843,3 +1843,44 @@ body { background-image: radial-gradient(ellipse 70% 60% at 50% 46%, var(--bg-ce
 .remove-pages-link { display: block; margin: 22px 0 4px; padding-top: 14px; border-top: 1px dashed #E2D2CF; width: 100%; text-align: left; color: var(--danger); }
 .remove-pages-link:hover { color: #8E1C16; }
 #next-btn.is-add { display: inline-flex; align-items: center; height: 30px; white-space: nowrap; }
+
+/* ------------------------------------------------------------------
+   Everything a little bigger (11/21, later): one step up on text, buttons and circles.
+   ------------------------------------------------------------------ */
+:root { --t-tiny: 11px; --t-ui: 13px; --t-body: 14px; --t-section: 15px; --t-panel: 17px; --t-dialog: 21px; }
+.brand-logo { height: 44px; }
+.sel-title { font-size: 25px; }
+.book-heading h1 { font-size: 22px; }
+.grid-title { font-size: 17px; }
+.avatar, .presence-face, .here-face { font-size: 12px; }
+.sel-members .avatar { width: 24px; height: 24px; font-size: 11px; }
+.add-person { width: 24px; height: 24px; }
+.invite-code { min-height: 24px; font-size: 12px; }
+
+/* Buttons */
+.icon-btn { width: 38px; height: 38px; }
+.icon-btn svg { width: 19px; height: 19px; }
+.icon-btn.small { width: 32px; height: 32px; }
+.pill-btn { min-height: 36px; padding: 6px 17px; }
+.pill-btn.small, .confirm .pill-btn.small { min-height: 30px; padding: 4px 13px; }
+.edit-pill, .panel-done { min-height: 28px; padding: 4px 13px; }
+#next-btn.is-add { height: 32px; }
+.library-actions { grid-auto-columns: 64px; }
+.library-actions .action { width: 64px; }
+.library-actions .action .circle { width: 35px; height: 35px; }
+.library-actions .action .circle svg { width: 15px; height: 15px; }
+.library-actions .action-label { font-size: 12.5px; }
+
+/* Edit panel */
+.panel-tab { min-height: 30px; font-size: 12px; }
+.panel-head-tools .pill-btn.icon-only { width: 30px; min-height: 30px; }
+.tabs-mode .sel-done { min-height: 26px; }
+
+/* Live bar */
+.presence-toggle { min-height: 26px; }
+.presence-text { font-size: 12px; }
+.presence-faces .presence-face { width: 22px; height: 22px; font-size: 10px; }
+.by-tag { font-size: 11px; }
+/* Room for the slightly bigger header and buttons */
+:root { --page-h: min(calc(100vh - 164px), calc((100vw - 120px) / 1.5)); }
+.book-view.editing { --page-h: min(calc(100vh - 164px), calc((100vw - var(--panel-w) - 80px) / 1.5)); }
