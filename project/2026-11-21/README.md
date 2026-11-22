@@ -6,8 +6,9 @@ Victoria's 11/21 version of the [Keepsake scrapbook](../2026-11-18-keepsake/) (M
 
 Originally: a copy of the [live scrapbook](../2026-11-13-live/) (with Leandra's safety features), branded as **Keepsake** using Maya's handmade brand boards in Figma (Branding page: the Keepsake board, the sticker set and the multiplayer states).
 
-**Live link: [https://scrapbook-proto.netlify.app/?room=class**
+**Live link: [Keepsake
 ](https://keepsake2.netlify.app/#/)
+
 Join the class book with the invite code **IXD415**. Change `class` to a new room name for each test session (for example `?room=test1`) so every group starts with fresh books.
 
 It uses the same Firebase rooms as the 11/13 live version, so the books there show up here in the Keepsake look.
