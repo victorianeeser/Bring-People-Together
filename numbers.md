@@ -8,13 +8,13 @@ Running tally of people each of us interviewed or tested. Update every week.
 |---|---|---|---|---|
 | 2026-11-02 | 3 | 3 | 3 | 9 |
 | 2026-11-09 | 10 | 10 | 10 | 30 |
-| 2026-11-16 | | | | |
+| 2026-11-16 | | 4 | | 4 |
 | 2026-11-23 | | | | |
 | 2026-11-30 | | | | |
 | 2026-12-07 | | | | |
-| **Subtotal** | | | | **39** |
+| **Subtotal** | | | | **43** |
 
-**Progress:** 39 of 100 (39%)
+**Progress:** 43 of 100 (43%)
 
 ## What counts
 
