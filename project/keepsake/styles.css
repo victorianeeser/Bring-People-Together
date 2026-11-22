@@ -2099,3 +2099,76 @@ body { background-image: radial-gradient(ellipse 70% 60% at 50% 46%, var(--bg-ce
 .label-sample.ce-lbl-stamp { padding: .3em .6em; background: #FBF5F1; box-shadow: inset 0 0 0 2px #FBF5F1, inset 0 0 0 3px rgba(81, 12, 13, .45); }
 .label-sample.ce-lbl-tag { padding: .3em .6em .3em 1em; background: #F4E2B4; clip-path: polygon(.5em 0, 100% 0, 100% 100%, .5em 100%, 0 50%); }
 .label-sample.ce-lbl-band { padding: .3em .7em; background: #510C0D; color: #FBF5F1; }
+
+/* ==================================================================
+   Phones (11/22): everything fits a phone screen (about 360–430px wide).
+   ================================================================== */
+@media (max-width: 700px) {
+  /* ---- Home ---- */
+  .topbar { flex-wrap: wrap; gap: 10px; padding: 14px 16px 6px; }
+  .brand-logo { height: 34px; }
+  .top-actions { width: 100%; gap: 8px; }
+  .top-actions .search { flex: 1; width: auto; min-width: 0; height: 38px; }
+  .library-main { padding: 0; }
+  :root { --book-h: clamp(180px, min(46vh, calc((100vw - 150px) / 0.75)), 420px); }
+  .sel-title { font-size: 22px; }
+  .member-row { flex-wrap: wrap; justify-content: center; row-gap: 6px; }
+  .people-pop { width: min(300px, calc(100vw - 32px)); }
+  .library-actions { grid-auto-columns: minmax(0, 62px); margin: 0 auto 72px; padding: 0 8px; }
+  .library-actions .action { width: 62px; }
+  .library-actions .action-label { font-size: 12px; }
+  .book-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 14px; padding: 16px; }
+  .empty { padding: 48px 20px; }
+
+  /* ---- Open book: header on two rows, and the spread as wide as the screen ---- */
+  .book-top { grid-template-columns: auto 1fr; grid-template-areas: "back right" "head head"; row-gap: 6px; padding: 12px 14px 4px; }
+  .book-top > .icon-btn { grid-area: back; }
+  .book-top-right { grid-area: right; gap: 8px; }
+  .book-heading { grid-area: head; }
+  .book-heading h1 { font-size: 21px; }
+  .book-here-label, .here-pill { display: none; }
+  :root { --page-w: calc((100vw - 28px) / 2); --page-h: calc(var(--page-w) / 0.75); }
+  .book-stage { align-content: start; padding: 14px 0 90px; }
+  .spread-area { margin: 0 auto; }
+  .edges { display: none; }
+  .turn-controls { margin-top: 6px; }
+
+  /* ---- Editing: the Edit panel becomes a sheet at the bottom of the screen ---- */
+  .edit-panel, .edit-panel.tabs-mode, .edit-panel { --panel-w: 100vw; }
+  .book-view.editing { --panel-w: 0px; --page-w: calc((100vw - 28px) / 2); --page-h: calc(var(--page-w) / 0.75); }
+  .book-view.editing .book-stage { padding-right: 0; padding-bottom: 58vh; }
+  .book-view.editing .edit-panel {
+    top: auto; left: 0; right: 0; bottom: 0; width: 100%; height: 52vh; padding: 14px 16px 20px;
+    border-left: 0; border-top: 1px solid #EADBD8; border-radius: 20px 20px 0 0; box-shadow: 0 -12px 30px -14px rgba(81, 12, 13, .35);
+  }
+  .tabs-mode .panel-head { top: -14px; margin: -14px -16px 0; padding: 12px 16px 8px; }
+  .panel-tabs { top: 40px; }
+  .panel-tab { font-size: 12px; }
+  .panel-head-tools .panel-done { padding-inline: 12px; }
+  .book-view.editing .turn-controls { display: none; }
+
+  /* ---- Edit cover: the cover on top, the panel as a sheet below ---- */
+  .ce-stage { inset: 0 0 52vh 0; padding: 56px 16px 8px; gap: 6px; }
+  .ce-stage .ce-preview .book { width: min(220px, 32vh); height: min(293px, 42.7vh); }
+  .ce-stage .ce-hint { display: none; }
+  .ce-back { top: 12px; left: 14px; }
+  .ce-panel.edit-panel { top: auto; left: 0; right: 0; bottom: 0; width: 100%; height: 52vh; padding: 14px 16px 20px;
+    border-left: 0; border-top: 1px solid #EADBD8; border-radius: 20px 20px 0 0; box-shadow: 0 -12px 30px -14px rgba(81, 12, 13, .35); }
+
+  /* ---- Dialogs and the Live bar ---- */
+  .confirm, .confirm.wide, .confirm.wide:has(.book-form) { width: calc(100vw - 24px); max-width: calc(100vw - 24px); }
+  .confirm-box, .book-form { padding: 20px 18px; }
+  .cover-picker { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .overview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 12px; padding: 12px 14px 20px; }
+  .presence-bar { left: 10px; bottom: 10px; }
+  .presence-list { width: min(300px, calc(100vw - 24px)); }
+  .idea-pop { width: calc(100vw - 24px) !important; left: 12px !important; }
+}
+@media (max-width: 700px) {
+  .book-stage { align-content: center; padding: 8px 0 70px; }
+  .book-view.editing .book-stage { align-content: start; padding: 10px 0 58vh; }
+}
+@media (max-width: 700px) {
+  body:has(.book-view.editing) .presence-bar { display: none; }
+  .book-view.editing .edit-panel .bg-row, .ce-panel .bg-row { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
