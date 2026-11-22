@@ -85,7 +85,8 @@ Audrey's camera roll is blurred for the few seconds her phone's photo picker is 
 2. **Save in the photo editor gets lost on phones.** Cancel and Save are at the very bottom and are easy to lose under Safari's toolbar, so cropping can't be saved.
 3. **No next step after joining.** Mason and Chris never found **Edit**. Max found it but opened it 4 times without adding anything, which fits him not understanding it at first.
 4. **Things are small on a phone.** Mason and Chris pinched to zoom in to read pages and the bucket list.
-5. **The guys were less into it than Audrey.** Audrey jumped into editing and tried every photo option, while Mason, Chris and Max mostly looked around. Keepsake will probably appeal more to girls, but testing with guys still showed where the app doesn't explain itself.
+5. **Everyone liked the idea and the look.** All 4 said it was easy to use or a cool concept, and Chris and Mason called out the look and the page flip.
+6. **The guys looked around more than they made things.** Audrey jumped into editing and tried every photo option, while Mason, Chris and Max mostly looked around. Keepsake will probably appeal more to girls, but testing with guys still showed where the app doesn't explain itself.
 
 ## Ideas to fix
 
