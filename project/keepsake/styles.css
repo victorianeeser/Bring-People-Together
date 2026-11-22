@@ -2023,3 +2023,26 @@ body { background-image: radial-gradient(ellipse 70% 60% at 50% 46%, var(--bg-ce
 .cover.lbl-band .cover-label { left: 0; right: 0; padding: 7% 10%; border-radius: 0; background: #510C0D; transform: none; box-shadow: 0 -2px 0 rgba(255, 255, 255, .25); }
 .cover.lbl-band .cover-title { color: #FBF5F1; }
 .cover.lbl-band.at-bottom .cover-label { bottom: 12%; }
+
+/* ------------------------------------------------------------------
+   Edit cover = the real Edit panel (11/22): full screen, the cover in the middle,
+   and the same side panel on the right (header, tabs, tiles).
+   ------------------------------------------------------------------ */
+.cover-editor-dialog {
+  position: fixed; inset: 0; width: 100vw; height: 100vh; max-width: none; max-height: none; margin: 0; padding: 0;
+  border: 0; border-radius: 0; background: var(--bg-book, #EFE4E1); color: var(--ink); overflow: hidden;
+}
+.cover-editor-dialog::backdrop { background: transparent; }
+.cover-editor.ce-full { display: block; height: 100%; max-height: none; padding: 0; overflow: visible; }
+.ce-stage {
+  position: absolute; inset: 0 360px 0 0; display: grid; place-content: center; justify-items: center; gap: 10px; padding: 24px;
+  background-image: radial-gradient(ellipse 70% 60% at 50% 46%, var(--bg-center, #F6EEEC) 0%, var(--bg, #EFE4E1) 72%);
+}
+.ce-stage .ce-preview { width: auto; padding: 0; background: none; box-shadow: none; border-radius: 0; }
+.ce-stage .ce-preview .book { width: min(320px, 40vh); height: min(427px, 53.3vh); }
+.ce-stage .ce-hint { color: var(--on-dark-muted); font-size: var(--t-ui); }
+.ce-panel.edit-panel { position: absolute; top: 0; right: 0; bottom: 0; display: grid; align-content: start; }
+.ce-panel .panel-head h2 { font: 700 var(--t-panel)/1.2 var(--display); }
+.ce-panel .ce-controls { display: grid; gap: 16px; min-width: 0; }
+.ce-panel .ce-tabs { position: sticky; top: 42px; margin: 0; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.ce-panel .ce-tab-body .bg-row { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }

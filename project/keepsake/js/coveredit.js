@@ -24,7 +24,8 @@ export function openCoverEditor({ cover, title = 'Your title', seed = 'cover', o
 
   // Its own dialog, so it can sit on top of the book form.
   const dialog = document.createElement('dialog');
-  dialog.className = 'confirm wide cover-editor-dialog';
+  // Full screen: the cover in the middle and the same side panel as Edit spread on the right (11/22).
+  dialog.className = 'cover-editor-dialog';
   dialog.setAttribute('aria-labelledby', 'ce-title');
   document.body.append(dialog);
 
@@ -43,7 +44,7 @@ export function openCoverEditor({ cover, title = 'Your title', seed = 'cover', o
     const img = (src) => swatch('background:#FFFFFF', `<img src="${src}" alt="">`);
     const none = swatch('', '<span class="ce-none-line"></span>');
     const tabs = `<div class="panel-tabs ce-tabs" role="tablist" aria-label="Cover parts">${TABS.map(([id, name]) =>
-      `<button type="button" class="panel-tab" role="tab" data-ce-tab="${id}" aria-selected="${tab === id}">${name}</button>`).join('')}</div>`;
+      `<button type="button" class="panel-tab" role="tab" data-ce-tab="${id}" aria-selected="${tab === id}" tabindex="${tab === id ? 0 : -1}">${name}</button>`).join('')}</div>`;
     const panels = {
       cover: `
         <h4 class="bg-group">Color</h4>
@@ -62,26 +63,26 @@ export function openCoverEditor({ cover, title = 'Your title', seed = 'cover', o
       sticker: `<div class="bg-row">${Object.entries(COVER_DOODLES).map(([id, name]) => tile('doodle', id, name,
         id === 'none' ? none : img(`./brand/${id}.svg`), draft.doodle === id)).join('')}</div>`,
     };
-    return `${tabs}<div class="ce-tab-body" role="tabpanel">${panels[tab]}</div>`;
+    return `${tabs}<section class="panel-section tab-panel ce-tab-body" role="tabpanel">${panels[tab]}</section>`;
   }
 
   dialog.innerHTML = `
-    <form method="dialog" class="cover-editor" novalidate>
-      <div class="panel-head ce-head">
-        <h2 id="ce-title">Edit cover</h2>
-        <div class="panel-head-tools">
-          <button type="button" class="pill-btn small" data-close>Cancel</button>
-          <button type="submit" class="pill-btn panel-done">Done</button>
-        </div>
+    <form method="dialog" class="cover-editor ce-full" novalidate>
+      <div class="ce-stage">
+        <div class="ce-preview"><span class="book"></span></div>
+        <p class="ce-hint">Drag the tape and the sticker to move them.</p>
+        <button type="button" class="link-btn ce-reset" data-set="reset">Put them back</button>
       </div>
-      <div class="ce-layout">
-        <div class="ce-left">
-          <div class="ce-preview"><span class="book"></span></div>
-          <p class="ce-hint">Drag the tape and the sticker to move them.</p>
-          <button type="button" class="link-btn ce-reset" data-set="reset">Put them back</button>
+      <aside class="edit-panel tabs-mode ce-panel" aria-labelledby="ce-title">
+        <div class="panel-head">
+          <h2 id="ce-title">Edit cover</h2>
+          <div class="panel-head-tools">
+            <button type="button" class="pill-btn small" data-close>Cancel</button>
+            <button type="submit" class="pill-btn panel-done">Done</button>
+          </div>
         </div>
-        <div class="ce-controls edit-panel-look"></div>
-      </div>
+        <div class="ce-controls"></div>
+      </aside>
       <input type="file" accept="image/*" hidden>
     </form>`;
   const form = dialog.querySelector('form');
@@ -95,7 +96,8 @@ export function openCoverEditor({ cover, title = 'Your title', seed = 'cover', o
     hydrateCovers(preview);
     preview.querySelector('.cover-tape')?.setAttribute('data-piece', 'tapePos');
     preview.querySelector('.cover-doodle')?.setAttribute('data-piece', 'doodlePos');
-    resetBtn.hidden = !draft.tapePos && !draft.doodlePos;
+    // Only once you've moved something; it puts them back where this cover started.
+    resetBtn.hidden = JSON.stringify([draft.tapePos || null, draft.doodlePos || null]) === JSON.stringify([startPlace.tapePos || null, startPlace.doodlePos || null]);
   }
 
   function render({ keepFocus } = {}) {
@@ -162,7 +164,7 @@ export function openCoverEditor({ cover, title = 'Your title', seed = 'cover', o
     if (!btn) return;
     const { set, value } = btn.dataset;
     if (set === 'upload') { fileInput.click(); return; }
-    if (set === 'reset') { draft = { ...draft, tapePos: null, doodlePos: null }; renderPreview(); return; }
+    if (set === 'reset') { draft = { ...draft, tapePos: startPlace.tapePos || null, doodlePos: startPlace.doodlePos || null }; renderPreview(); return; }
     if (set === 'kind') {
       if (value === 'photo') {
         if (draft.type === 'photo') return;
