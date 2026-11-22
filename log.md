@@ -76,3 +76,8 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 
 - **Maya:** fixed the [11/18 crit](notes/crit/2026-11-18/crit-notes.md) items in the [Keepsake prototype](project/2026-11-18-keepsake/) with Claude Code: invite-only books, delete only for you, editable bucket list, page backgrounds, videos, camera roll, photo editor (crop, cut-out stickers, filters), tape colors, all brand fonts, and following someone's pages
 - **Maya:** cleaned up the edit panel and home page, added more branding elements and paper textures (also in Figma). [Notes and images](notes/maya/2026-11-19/maya.md), [zip for Leandra to put online](project/2026-11-19/keepsake-netlify-drop.zip)
+
+## Nov 22
+
+- **Victoria:** updated the [Keepsake prototype](project/keepsake/) for class ([live link](https://keepsake2.netlify.app/))
+- **Victoria:** made two [TikTok videos](notes/tiktok-videos/) (due Nov 23)
