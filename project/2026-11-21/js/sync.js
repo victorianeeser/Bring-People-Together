@@ -1,0 +1,330 @@
+// Live sync through Firebase Realtime Database.
+//
+// Everyone who opens the same ?room= link shares one set of books. The data is stored in small
+// pieces (one per book's details, member, bucket list idea and spread), so two people editing
+// different spreads or ideas at the same time don't overwrite each other. Two people editing the
+// SAME spread at the same moment: the last save wins.
+//
+//   rooms/<room>/books/<bookId>/info              book details (title, cover, ...)
+//   rooms/<room>/books/<bookId>/members/<id>      one per person
+//   rooms/<room>/books/<bookId>/bucket/<id>       one per bucket list idea
+//   rooms/<room>/books/<bookId>/spreads/<id>      one per spread
+//   rooms/<room>/photos/<photoKey>                photo as a data URL
+//   rooms/<room>/presence/<personId>              who has the page open right now
+//   rooms/<room>/seeded                           true once the room has its starting books
+//
+// Each piece is saved as a JSON string with sorted keys, so every browser writes the exact same
+// text for the same content and nobody re-saves something that didn't change.
+
+import { FIREBASE_CONFIG } from './firebase-config.js';
+
+const SDK = 'https://www.gstatic.com/firebasejs/10.12.2';
+
+export const ROOM = ((new URLSearchParams(location.search).get('room') || 'class')
+  .toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40)) || 'class';
+
+export const liveEnabled = Boolean(FIREBASE_CONFIG?.apiKey && FIREBASE_CONFIG?.databaseURL);
+
+let fb = null; // Firebase functions plus the database, once loaded
+let loading = null;
+
+function init() {
+  if (!liveEnabled) return Promise.resolve(null);
+  if (!loading) {
+    loading = Promise.all([import(`${SDK}/firebase-app.js`), import(`${SDK}/firebase-database.js`)])
+      .then(([appSdk, dbSdk]) => {
+        const app = appSdk.initializeApp(FIREBASE_CONFIG);
+        fb = { ...dbSdk, db: dbSdk.getDatabase(app) };
+        return fb;
+      })
+      .catch((error) => {
+        console.warn('Live sync could not start:', error);
+        return null;
+      });
+  }
+  return loading;
+}
+
+const roomRef = (path = '') => fb.ref(fb.db, `rooms/${ROOM}${path ? `/${path}` : ''}`);
+
+// ---------- status ----------
+let status = liveEnabled ? 'connecting' : 'off';
+const statusListeners = new Set();
+function setStatus(next) {
+  status = next;
+  statusListeners.forEach((fn) => fn(status));
+}
+export const getStatus = () => status;
+export function onStatus(fn) {
+  statusListeners.add(fn);
+  fn(status);
+  return () => statusListeners.delete(fn);
+}
+
+// ---------- turning books into pieces and back ----------
+function stable(value) {
+  if (Array.isArray(value)) return `[${value.map(stable).join(',')}]`;
+  if (value && typeof value === 'object') {
+    return `{${Object.keys(value).filter((k) => value[k] !== undefined).sort()
+      .map((k) => `${JSON.stringify(k)}:${stable(value[k])}`).join(',')}}`;
+  }
+  return JSON.stringify(value ?? null);
+}
+
+function flatten(data) {
+  const out = {};
+  data.books.forEach((book, i) => {
+    const { bucketList, spreads, members, ...info } = book;
+    out[`${book.id}/info`] = stable({ ...info, _i: i });
+    (members || []).forEach((m, j) => { out[`${book.id}/members/${m.id}`] = stable({ ...m, _i: j }); });
+    (bucketList || []).forEach((it, j) => { out[`${book.id}/bucket/${it.id}`] = stable({ ...it, _i: j }); });
+    (spreads || []).forEach((s, j) => { out[`${book.id}/spreads/${s.id}`] = stable({ ...s, _i: j }); });
+  });
+  return out;
+}
+
+// The raw tree from Firebase as the same flat path -> text map.
+function flattenTree(tree) {
+  const out = {};
+  for (const [bookId, node] of Object.entries(tree || {})) {
+    if (typeof node?.info === 'string') out[`${bookId}/info`] = node.info;
+    for (const group of ['members', 'bucket', 'spreads']) {
+      for (const [id, text] of Object.entries(node?.[group] || {})) out[`${bookId}/${group}/${id}`] = text;
+    }
+  }
+  return out;
+}
+
+const parse = (text) => { try { return JSON.parse(text); } catch { return null; } };
+const byOrder = (a, b) => (a._i - b._i) || String(a.id).localeCompare(String(b.id));
+const list = (obj) => Object.values(obj || {}).map(parse).filter(Boolean).sort(byOrder).map(({ _i, ...rest }) => rest);
+
+function unflatten(tree) {
+  const books = [];
+  for (const [bookId, node] of Object.entries(tree || {})) {
+    const info = parse(node?.info);
+    if (!info) continue;
+    const { _i, ...rest } = info;
+    books.push({ _i, id: bookId, book: { ...rest, id: bookId, members: list(node.members), bucketList: list(node.bucket), spreads: list(node.spreads) } });
+  }
+  books.sort(byOrder);
+  return { version: 1, books: books.map((b) => b.book) };
+}
+
+// ---------- syncing ----------
+let remoteFlat = null; // what Firebase has right now, as a flat map; null until the first answer
+
+export async function startSync({ getData, applyRemote }) {
+  const api = await init();
+  if (!api) { setStatus(liveEnabled ? 'error' : 'off'); return; }
+
+  api.onValue(api.ref(api.db, '.info/connected'), (snap) => {
+    if (remoteFlat !== null) setStatus(snap.val() ? 'live' : 'connecting');
+  });
+
+  api.onValue(roomRef('books'), async (snap) => {
+    const tree = snap.val();
+    if (!tree) {
+      // An empty room: give it the starting books, unless it was set up before and someone deleted everything.
+      const seeded = (await api.get(roomRef('seeded'))).val();
+      remoteFlat = {};
+      if (!seeded) {
+        await api.set(roomRef('seeded'), true);
+        push(getData());
+        setStatus('live');
+        return;
+      }
+    } else {
+      remoteFlat = flattenTree(tree);
+    }
+    applyRemote(unflatten(tree));
+    setStatus('live');
+  }, (error) => {
+    console.warn('Live sync stopped:', error);
+    setStatus('error');
+  });
+}
+
+// Sends only the pieces that differ from what Firebase has.
+export function push(data) {
+  if (!fb || remoteFlat === null) return;
+  const local = flatten(data);
+  const changes = {};
+  for (const [path, text] of Object.entries(local)) if (remoteFlat[path] !== text) changes[`books/${path}`] = text;
+  for (const path of Object.keys(remoteFlat)) if (!(path in local)) changes[`books/${path}`] = null;
+  if (!Object.keys(changes).length) return;
+  fb.update(roomRef(), changes).catch(async (error) => {
+    // One update saves everything at once, so a single piece the database won't take used to throw away the
+    // whole change without a word. Retry each piece on its own so the rest still saves, and say what didn't.
+    console.warn('Could not save to the shared book, retrying piece by piece:', error);
+    const failed = [];
+    for (const [path, value] of Object.entries(changes)) {
+      try { await fb.update(roomRef(), { [path]: value }); } catch (e) { failed.push(path); console.warn('Not saved:', path, e); }
+    }
+    if (failed.length) {
+      setStatus('error');
+      saveErrorListeners.forEach((fn) => fn(failed));
+    }
+  });
+}
+
+// Lets the page tell you when a change didn't save, instead of it quietly disappearing.
+const saveErrorListeners = new Set();
+export function onSaveError(fn) {
+  saveErrorListeners.add(fn);
+  return () => saveErrorListeners.delete(fn);
+}
+
+// True once the shared books have loaded. Before that, changes can't be sent (they'd be replaced
+// by the shared books when they arrive), so editing waits for this.
+export const isSynced = () => !liveEnabled || remoteFlat !== null;
+
+// Keeps the same objects (so open views keep working) and copies the new values into them.
+// Arrays of things with ids are matched up by id.
+const isObj = (v) => v && typeof v === 'object' && !Array.isArray(v);
+export function reconcile(target, source) {
+  if (Array.isArray(target) && Array.isArray(source)) {
+    const byId = new Map(target.filter((x) => isObj(x) && x.id != null).map((x) => [x.id, x]));
+    const next = source.map((s) => {
+      const match = isObj(s) && s.id != null ? byId.get(s.id) : null;
+      return match ? reconcile(match, s) : s;
+    });
+    target.length = 0;
+    target.push(...next);
+    return target;
+  }
+  if (isObj(target) && isObj(source)) {
+    for (const key of Object.keys(target)) if (!(key in source)) delete target[key];
+    for (const [key, value] of Object.entries(source)) {
+      const current = target[key];
+      if ((Array.isArray(current) && Array.isArray(value)) || (isObj(current) && isObj(value))) reconcile(current, value);
+      else target[key] = value;
+    }
+    return target;
+  }
+  return source;
+}
+
+// ---------- photos ----------
+const blobToDataUrl = (blob) => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.onload = () => resolve(reader.result);
+  reader.onerror = () => reject(reader.error);
+  reader.readAsDataURL(blob);
+});
+
+// Photos live under photos/, videos under videos/ (their keys start with "video-").
+const mediaPath = (key) => `${String(key).startsWith('video-') ? 'videos' : 'photos'}/${key}`;
+
+export async function uploadPhoto(key, blob) {
+  if (!(await init())) return;
+  await fb.set(roomRef(mediaPath(key)), await blobToDataUrl(blob));
+}
+
+export async function downloadPhoto(key) {
+  if (!(await init())) return null;
+  const text = (await fb.get(roomRef(mediaPath(key)))).val();
+  return text ? (await fetch(text)).blob() : null;
+}
+
+export async function removeRemotePhotos(keys) {
+  if (!keys.length || !(await init())) return;
+  const photos = keys.filter((k) => !String(k).startsWith('video-'));
+  const videos = keys.filter((k) => String(k).startsWith('video-'));
+  if (photos.length) await fb.update(roomRef('photos'), Object.fromEntries(photos.map((k) => [k, null])));
+  if (videos.length) await fb.update(roomRef('videos'), Object.fromEntries(videos.map((k) => [k, null]))).catch(() => {});
+}
+
+export async function clearRemotePhotos() {
+  if (!(await init())) return;
+  await fb.remove(roomRef('photos'));
+}
+
+// ---------- presence: who has the page open, and where ----------
+// presence/<id> = { name, color, book, spread, page, editing }  (changes now and then)
+// cursors/<id>  = { book, spread, x, y, sel }                    (changes many times a second)
+// Both are removed when the person closes the tab.
+let presence = {};
+let myPresence = null;
+let myPlace = { book: '', spread: '', page: '', editing: false }; // kept even before presence starts
+const presenceListeners = new Set();
+
+export function onPresence(fn) {
+  presenceListeners.add(fn);
+  fn(presence);
+  return () => presenceListeners.delete(fn);
+}
+
+export async function startPresence(me) {
+  const api = await init();
+  if (!api) return;
+  myPresence = {
+    ref: roomRef(`presence/${me.id}`),
+    cursorRef: roomRef(`cursors/${me.id}`),
+  };
+  myPlace = { ...myPlace, name: me.name, color: me.color };
+  api.onValue(api.ref(api.db, '.info/connected'), (snap) => {
+    if (!snap.val()) return;
+    api.onDisconnect(myPresence.ref).remove();
+    api.onDisconnect(myPresence.cursorRef).remove();
+    api.set(myPresence.ref, { ...myPlace, at: api.serverTimestamp() });
+  });
+  api.onValue(roomRef('presence'), (snap) => {
+    presence = snap.val() || {};
+    // If someone else here has your color, one of you (the later id) switches to a color nobody is using.
+    const others = Object.entries(presence).filter(([id]) => id !== me.id);
+    const taken = new Set(others.map(([, p]) => p.color));
+    const clash = others.some(([id, p]) => p.color === myPlace.color && id < me.id);
+    if (presence[me.id] && clash && me.palette) {
+      const free = me.palette.find((c) => !taken.has(c));
+      if (free) setPresence({ color: free });
+    }
+    presenceListeners.forEach((fn) => fn(presence));
+  });
+  api.onValue(roomRef('cursors'), (snap) => {
+    cursors = snap.val() || {};
+    cursorListeners.forEach((fn) => fn(cursors));
+  });
+}
+
+export const getMyColor = () => myPlace.color || null;
+
+// Where you are: { book, spread, page, editing }. Only the fields you pass change.
+export function setPresence(fields) {
+  const next = { ...myPlace, ...fields };
+  if (stable(next) === stable(myPlace)) return;
+  myPlace = next;
+  if (fb && myPresence) fb.update(myPresence.ref, fields).catch(() => {});
+}
+
+export const setPresenceBook = (bookId) => setPresence({ book: bookId || '', ...(bookId ? {} : { spread: '', page: '', editing: false }) });
+
+// ---------- live cursors and selections ----------
+let cursors = {};
+const cursorListeners = new Set();
+
+export function onCursors(fn) {
+  cursorListeners.add(fn);
+  fn(cursors);
+  return () => cursorListeners.delete(fn);
+}
+
+// Sends your cursor at most every 50ms (the last position always gets through).
+let cursorValue = null;
+let cursorTimer = null;
+let cursorSentAt = 0;
+function flushCursor() {
+  cursorTimer = null;
+  cursorSentAt = Date.now();
+  if (!fb || !myPresence) return;
+  (cursorValue ? fb.set(myPresence.cursorRef, cursorValue) : fb.remove(myPresence.cursorRef)).catch(() => {});
+}
+
+// value = { book, spread, x, y, sel } with x and y as fractions of the open spread, or null to hide.
+export function setCursor(value) {
+  if (stable(value) === stable(cursorValue)) return;
+  cursorValue = value;
+  if (cursorTimer) return;
+  const wait = Math.max(0, 50 - (Date.now() - cursorSentAt));
+  cursorTimer = setTimeout(flushCursor, wait);
+}
