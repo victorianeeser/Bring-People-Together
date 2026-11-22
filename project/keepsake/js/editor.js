@@ -19,8 +19,8 @@ import { esc, toast, announce, brandColor } from './ui.js';
 
 const svg = (body) => `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">${body}</svg>`;
 const ROTATE_ICON = svg('<path d="M19 12a7 7 0 1 1-2.1-5M19 4v4.5h-4.5"/>');
-const STICKER_WIDTH = { yay: 26, bestday: 34, omg: 22, us: 18, 'washi-pink': 40, 'washi-blue': 40, 'washi-mint': 40 };
-const STICKER_ASPECT = { yay: 0.5, bestday: 0.36, omg: 0.6, us: 0.7, 'washi-pink': 0.24, 'washi-blue': 0.24, 'washi-mint': 0.24 };
+export const STICKER_WIDTH = { yay: 26, bestday: 34, omg: 22, us: 18, 'washi-pink': 40, 'washi-blue': 40, 'washi-mint': 40 };
+export const STICKER_ASPECT = { yay: 0.5, bestday: 0.36, omg: 0.6, us: 0.7, 'washi-pink': 0.24, 'washi-blue': 0.24, 'washi-mint': 0.24 };
 // Keepsake stickers: a little bigger by default, and the wide ones (labels, tape) wider still.
 Object.assign(STICKER_WIDTH, { 'e-tape-olive': 36, 'e-tape-pink': 36, 'e-star': 14, 'e-star-small': 9, 'e-mark': 14, 'e-notebook': 16, 'e-heart': 16, 'e-loop': 30, 'e-doodle-star': 14, 'e-sparkle': 10, 'e-arrow': 34, 'e-underline': 50, 'k-heart': 24, 'k-star': 22, 'k-smiley': 22, 'k-sun': 24, 'k-flower': 24, 'k-polaroid': 26, 'k-we-did-it': 30, 'k-best-day': 36, 'k-done': 20, 'k-together': 34, 'k-leaf-star': 20, 'k-tape': 38, 'k-bff': 24, 'k-you': 26 });
 Object.assign(STICKER_ASPECT, { 'e-tape-olive': 0.24, 'e-tape-pink': 0.24, 'e-star': 1.15, 'e-star-small': 1.14, 'e-mark': 0.95, 'e-notebook': 1.29, 'e-heart': 0.93, 'e-loop': 0.66, 'e-doodle-star': 0.93, 'e-sparkle': 1, 'e-arrow': 0.33, 'e-underline': 0.1, 'k-heart': 0.97, 'k-star': 1, 'k-smiley': 1.04, 'k-sun': 1, 'k-flower': 1.02, 'k-polaroid': 1.11, 'k-we-did-it': 0.89, 'k-best-day': 0.49, 'k-done': 1.02, 'k-together': 0.76, 'k-leaf-star': 1.09, 'k-tape': 0.53, 'k-bff': 1.06, 'k-you': 0.95 });

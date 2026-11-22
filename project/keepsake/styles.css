@@ -2046,3 +2046,20 @@ body { background-image: radial-gradient(ellipse 70% 60% at 50% 46%, var(--bg-ce
 .ce-panel .ce-controls { display: grid; gap: 16px; min-width: 0; }
 .ce-panel .ce-tabs { position: sticky; top: 42px; margin: 0; grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .ce-panel .ce-tab-body .bg-row { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+
+/* Photos, notes and stickers on a cover (11/22) */
+.cover-items { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+.cover-items .pi { position: absolute; }
+.cover-items .pi-text { width: fit-content !important; max-width: var(--w); line-height: 1.2; white-space: pre-wrap; overflow-wrap: anywhere; }
+/* In Edit cover they can be picked up and moved */
+.ce-preview .cover-items { pointer-events: auto; }
+.ce-preview .cover-items .pi { cursor: grab; touch-action: none; }
+.ce-preview .cover-items .pi.selected { outline: 2px solid var(--k-berry); outline-offset: 3px; }
+.ce-preview .cover-items .pi.is-dragging { cursor: grabbing; filter: drop-shadow(0 8px 12px rgba(81, 12, 13, .3)); }
+
+/* Edit cover: back arrow top left (back to the library), like an open book */
+.ce-back { position: absolute; top: 18px; left: 28px; z-index: 2; }
+.ce-panel .ce-drop { display: grid; justify-items: center; gap: 10px; text-align: center; }
+.ce-text-input { width: 100%; min-height: 54px; padding: 8px 10px; border: 1px solid #E2D2CF; border-radius: 10px; background: #FFFFFF; color: var(--ink); font: 500 var(--t-body)/1.4 var(--display); resize: vertical; }
+.ce-text-input:focus { outline: 2px solid var(--k-maroon); outline-offset: 1px; }
+.ce-panel .selected-tools .swatch-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }

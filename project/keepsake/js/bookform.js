@@ -165,12 +165,14 @@ export function openBookForm({ book = null, onSaved } = {}) {
         cover: state.cover,
         title: titleInput.value.trim() || 'Your title',
         seed: book?.id || 'new-book',
-        onDone: (cover, newKey) => {
+        onDone: (cover, newKeys = []) => {
           state.cover = cover;
-          if (newKey) uploaded.push(newKey);
+          uploaded.push(...newKeys); // cleaned up again if the form is cancelled
           renderCovers();
           btn.focus();
         },
+        // The back arrow: leave the form too and go back to the library (nothing is saved).
+        onBack: () => dialog.close(),
       });
     }
     if (btn.dataset.form === 'remove-person') {
@@ -215,8 +217,9 @@ export function openBookForm({ book = null, onSaved } = {}) {
   dialog.addEventListener('close', () => {
     dialog.classList.remove('wide');
     // Drop photos uploaded here that didn't end up on the cover.
-    const keep = saved && state.cover.type === 'photo' ? state.cover.photoKey : null;
-    const unused = uploaded.filter((key) => key !== keep);
+    // Keep every photo the saved cover uses (a photo cover and photos placed on it).
+    const keep = new Set(saved ? [state.cover.type === 'photo' ? state.cover.photoKey : null, ...(state.cover.items || []).map((i) => i.photoKey)].filter(Boolean) : []);
+    const unused = uploaded.filter((key) => !keep.has(key));
     if (unused.length) deletePhotos(unused).catch(() => {});
   }, { once: true });
 
