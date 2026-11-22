@@ -1,6 +1,6 @@
 # 11/22 | Keepsake user testing (round 1)
 
-4 of 10–15 testers so far · on their phones · screen recordings
+5 of 10–15 testers so far · on their phones · screen recordings
 
 Tested the [live Keepsake site](https://keepsake2.netlify.app/), joining the class book with the code **IXD415**.
 
@@ -10,6 +10,7 @@ Tested the [live Keepsake site](https://keepsake2.netlify.app/), joining the cla
 - [Mason (1 min)](mason-keepsake-test-recording.mp4)
 - [Chris (1.3 min)](chris-keepsake-test-recording.mp4)
 - [Max (1.5 min)](max-keepsake-test-recording.mp4)
+- [Maya Zech (33 sec)](maya-zech-keepsake-test-recording.mp4)
 
 Audrey's camera roll is blurred for the few seconds her phone's photo picker is open.
 
@@ -79,14 +80,33 @@ Audrey's camera roll is blurred for the few seconds her phone's photo picker is 
   <img src="max-edit-spread-panel-open.jpg" alt="The Edit spread panel open on pages 5 and 6" width="200">
 </p>
 
+## Maya Zech
+
+(A tester, not Maya Walsh.)
+
+**What she said:** It was very fun and easy to use, and it made sense right away that her task was to add to the scrapbook.
+
+**From the recording (33 sec, Snapchat's in-app browser):**
+- The recording starts with her already in the class book, so joining isn't shown.
+- Flipped through the full photo collage spread, Audrey's dog photo (still uncropped), a face cut-out sticker, and the empty pages that say "nothing here yet" with **Add pages** at the end.
+- Flipped back to the bucket list, went back to the shelf, opened the grid view, then reopened the book on the bucket list.
+- Near the end the live bar changed from "1 here" to "2 here" as someone else joined the book.
+- She didn't zoom in on anything, unlike Mason and Chris.
+- She said her task was to add to the scrapbook, but adding isn't in this clip. It may have happened before or after the recording.
+
+<p>
+  <img src="maya-zech-full-photo-collage-spread.jpg" alt="A spread full of photos, stickers and doodles" width="200">
+  <img src="maya-zech-face-sticker-page.jpg" alt="A page with a face cut-out sticker" width="200">
+</p>
+
 ## Patterns so far
 
-1. **Flipping through the book works.** All 4 joined with the code and flipped pages with no help. Mason called out the page flip.
+1. **Flipping through the book works.** All 5 got into the class book and flipped pages with no help. Mason called out the page flip.
 2. **Save in the photo editor gets lost on phones.** Cancel and Save are at the very bottom and are easy to lose under Safari's toolbar, so cropping can't be saved.
 3. **No next step after joining.** Mason and Chris never found **Edit**. Max found it but opened it 4 times without adding anything, which fits him not understanding it at first.
 4. **Things are small on a phone.** Mason and Chris pinched to zoom in to read pages and the bucket list.
-5. **Everyone liked the idea and the look.** All 4 said it was easy to use or a cool concept, and Chris and Mason called out the look and the page flip.
-6. **The guys looked around more than they made things.** Audrey jumped into editing and tried every photo option, while Mason, Chris and Max mostly looked around. Keepsake will probably appeal more to girls, but testing with guys still showed where the app doesn't explain itself.
+5. **Everyone liked the idea and the look.** All 5 said it was easy to use, fun, or a cool concept, and Chris and Mason called out the look and the page flip.
+6. **The guys looked around more than they made things.** Audrey jumped into editing and tried every photo option, and Maya Zech knew right away that the point was to add to the book, while Mason, Chris and Max mostly looked around. Keepsake will probably appeal more to girls, but testing with guys still showed where the app doesn't explain itself.
 
 ## Ideas to fix
 
