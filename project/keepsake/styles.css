@@ -1962,3 +1962,64 @@ body { background-image: radial-gradient(ellipse 70% 60% at 50% 46%, var(--bg-ce
 :root { --page-h: min(calc(100vh - 196px), calc((100vw - 120px) / 1.5)); }
 .book-view.editing { --page-h: min(calc(100vh - 196px), calc((100vw - var(--panel-w) - 80px) / 1.5)); }
 :root { --book-h: clamp(200px, min(60vh, calc(100vh - 318px)), 520px); }
+
+/* Page and layout tiles: keep the swatch and its name inside the tile, even when it's selected (bold) */
+.bg-mini, .layout-btn { grid-template-columns: minmax(0, 1fr); min-width: 0; overflow: hidden; }
+.bg-mini > *, .layout-btn > * { min-width: 0; }
+.bg-mini .bg-swatch { width: 100%; max-width: 100%; }
+.bg-mini .bg-name, .layout-btn .bg-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Edit cover, in the Edit panel's style (11/21): header with Cancel / Done, tabs, and paper-style tiles */
+.cover-editor-dialog.confirm.wide { width: 820px; max-width: calc(100vw - 32px); padding: 0; background: var(--k-paper, #FBF5F1); }
+.cover-editor { display: grid; gap: 14px; max-height: calc(100vh - 48px); overflow-y: auto; padding: 18px 22px 22px; }
+.ce-head { position: static; margin: 0; padding: 0; background: none; }
+.ce-head h2 { margin: 0; font: 700 var(--t-panel)/1.2 var(--display); color: var(--ink); }
+.cover-editor .ce-layout { grid-template-columns: 240px minmax(0, 1fr); gap: 24px; margin-top: 0; }
+.cover-editor .ce-preview { padding: 22px 12px 28px; border-radius: 16px; background: #FFFFFF; box-shadow: inset 0 0 0 1px #EADBD8; }
+.cover-editor .ce-preview .book { width: 192px; height: 256px; }
+.ce-controls.edit-panel-look { display: block; min-width: 0; }
+.ce-tabs { position: static; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-bottom: 14px; }
+.ce-tab-body .bg-group:first-child { margin-top: 0; }
+.ce-tab-body .bg-row { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.ce-tile .ce-sw { position: relative; display: grid; place-items: center; overflow: hidden; aspect-ratio: 4 / 3; }
+.ce-tile .ce-sw svg.cover-pattern { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ce-tile .ce-sw img { max-width: 70%; max-height: 70%; }
+.ce-tile .ce-upload { color: var(--k-maroon); }
+.ce-tile .ce-upload svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ce-none-line { position: absolute; inset: 0; background: linear-gradient(135deg, transparent calc(50% - 1px), rgba(81, 12, 13, .3) 50%, transparent calc(50% + 1px)); }
+.ce-tile .ce-sw:has(.ce-none-line) { background: #FFFFFF; }
+.ce-link { margin-top: 10px; }
+.ce-tab-body .panel-hint { margin: 4px 0 0; }
+@media (max-width: 680px) { .cover-editor .ce-layout { grid-template-columns: 1fr; } }
+/* Same width as the Edit panel, so the tiles are the same size */
+.cover-editor-dialog.confirm.wide { width: 690px; }
+.cover-editor .ce-layout { grid-template-columns: 240px 360px; justify-content: space-between; }
+
+/* ------------------------------------------------------------------
+   Cover looks (11/21): every preset is its own notebook.
+   ------------------------------------------------------------------ */
+/* Spine */
+.cover.spine-cloth .cover-spine { width: 11%; background: linear-gradient(90deg, rgba(81, 12, 13, .42), rgba(81, 12, 13, .28)); box-shadow: inset -2px 0 0 rgba(255, 255, 255, .18), 1px 0 0 rgba(81, 12, 13, .15); }
+.cover.spine-cloth .cover-spine::after { content: ""; position: absolute; top: 0; bottom: 0; right: 22%; border-right: 1px dashed rgba(255, 255, 255, .45); }
+/* Labels sit inside the spine area's edge on spined covers, and nearer the edge without one */
+.cover.spine-none .cover-label { left: 9%; }
+
+/* Where the label sits */
+.cover.at-top .cover-label { top: 10%; bottom: auto; }
+.cover.at-center .cover-label { top: 50%; bottom: auto; translate: 0 -50%; }
+
+/* Label styles */
+.cover.lbl-pill .cover-label { left: 16%; right: 10%; padding: 5% 8%; border-radius: 999px; background: #FBF5F1; transform: rotate(0deg); text-align: center; }
+.cover.spine-none.lbl-pill .cover-label { left: 10%; }
+.cover.lbl-pill .cover-label::after, .cover.lbl-stamp .cover-label::after, .cover.lbl-tag .cover-label::after, .cover.lbl-band .cover-label::after { display: none; }
+.cover.lbl-pill .cover-title, .cover.lbl-stamp .cover-title { text-align: center; }
+
+.cover.lbl-stamp .cover-label { left: 20%; right: 12%; padding: 8% 7%; border-radius: 4px; background: #FBF5F1; transform: rotate(3deg);
+  box-shadow: inset 0 0 0 3px #FBF5F1, inset 0 0 0 4.5px rgba(81, 12, 13, .45), 0 6px 14px -8px rgba(0, 0, 0, .6); }
+
+.cover.lbl-tag .cover-label { left: 20%; right: 8%; padding: 6% 7% 6% 16%; border-radius: 0; background: radial-gradient(circle at 9% 50%, rgba(81, 12, 13, .35) 0 2.5%, transparent 2.8%), #F4E2B4;
+  clip-path: polygon(7% 0, 100% 0, 100% 100%, 7% 100%, 0 50%); transform: rotate(-4deg); box-shadow: none; filter: drop-shadow(0 3px 4px rgba(81, 12, 13, .25)); }
+
+.cover.lbl-band .cover-label { left: 0; right: 0; padding: 7% 10%; border-radius: 0; background: #510C0D; transform: none; box-shadow: 0 -2px 0 rgba(255, 255, 255, .25); }
+.cover.lbl-band .cover-title { color: #FBF5F1; }
+.cover.lbl-band.at-bottom .cover-label { bottom: 12%; }

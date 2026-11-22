@@ -92,25 +92,29 @@ const coverBits = (style) => `
   ${style.tape === 'none' ? '' : `<img class="cover-tape" src="./brand/elements/tape-${style.tape || 'olive'}.svg" alt="" draggable="false"${placed(style.tapePos, -7)}>`}
   ${style.doodle === 'none' ? '' : `<img class="cover-doodle" src="./brand/${style.doodle || 'elements/doodle-star'}.svg" alt="" draggable="false"${placed(style.doodlePos, 8)}>`}`;
 
+// Each preset is its own notebook: spiral rings, a cloth spine, or no spine; and a label style and spot.
+const lookClasses = (style) => `spine-${style.spine || 'rings'} lbl-${style.label || 'paper'} at-${style.place || 'bottom'}`;
+const spineHtml = (style) => (style.spine === 'none' ? '' : `<span class="cover-spine" aria-hidden="true">${style.spine === 'cloth' ? '' : RINGS}</span>`);
+
 // Just the cover art (pattern or photo, spiral spine, tape, and the handwritten title label).
 export function coverHtml(book) {
   const cover = book.cover || {};
   const style = coverStyle(cover, book.id || book.title || 'cover');
   if (cover.type === 'photo') {
     return `
-      <span class="cover photo-cover" data-photo-key="${esc(cover.photoKey)}" style="--cover-bg:#510C0D;--cover-ink:#510C0D">
+      <span class="cover photo-cover ${lookClasses(style)}" data-photo-key="${esc(cover.photoKey)}" style="--cover-bg:#510C0D;--cover-ink:#510C0D">
         <img class="cover-photo" alt="" hidden>
         ${coverBits(style)}
         <span class="cover-label"><span class="cover-title">${esc(book.title)}</span></span>
-        <span class="cover-spine" aria-hidden="true">${RINGS}</span>
+        ${spineHtml(style)}
       </span>`;
   }
   return `
-    <span class="cover" style="--cover-bg:${style.color};--cover-ink:${style.ink}">
+    <span class="cover ${lookClasses(style)}" style="--cover-bg:${style.color};--cover-ink:${style.ink}">
       ${patternSvg(style)}
       ${coverBits(style)}
       <span class="cover-label"><span class="cover-title">${esc(book.title)}</span></span>
-      <span class="cover-spine" aria-hidden="true">${RINGS}</span>
+      ${spineHtml(style)}
     </span>`;
 }
 

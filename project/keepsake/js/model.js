@@ -54,14 +54,24 @@ export const fontCss = (item) => `font-family:${fontOf(item).family};font-weight
 // Preset covers. `ink` is the title color that reads well on `color`.
 export const COVER_PRESETS = [
   // Same ids as before (so saved books keep their cover), now in the Keepsake palette.
-  { id: 'terracotta-dots', color: '#D06B6B', pattern: 'dots', ink: '#510C0D', tape: 'olive', doodle: 'elements/doodle-heart' },
-  { id: 'sun-arch', color: '#F2CF72', pattern: 'arch', ink: '#510C0D', tape: 'pink', doodle: 'elements/doodle-sparkle' },
-  { id: 'night-stars', color: '#510C0D', pattern: 'stars', ink: '#510C0D', tape: 'olive', doodle: 'elements/star-small' },
-  { id: 'sage-stripes', color: '#B9D18C', pattern: 'stripes', ink: '#510C0D', tape: 'pink', doodle: 'elements/doodle-star' },
-  { id: 'lilac-waves', color: '#9B9090', pattern: 'waves', ink: '#510C0D', tape: 'olive', doodle: 'elements/doodle-loop' },
-  { id: 'cream-checker', color: '#E1CFCD', pattern: 'checker', ink: '#510C0D', tape: 'olive', doodle: 'mark' },
-  { id: 'blush-confetti', color: '#FF9797', pattern: 'confetti', ink: '#510C0D', tape: 'olive', doodle: 'elements/doodle-heart' },
-  { id: 'teal-grid', color: '#BCD4C9', pattern: 'grid', ink: '#510C0D', tape: 'pink', doodle: 'elements/doodle-sparkle' },
+  // 11/21: each one its own notebook. spine: rings / cloth / none. label: paper / pill / stamp / tag / band.
+  // place: where the title label sits (top / center / bottom). tapePos / doodlePos: their usual spots.
+  { id: 'terracotta-dots', color: '#D06B6B', pattern: 'dots', ink: '#510C0D', tape: 'olive', doodle: 'elements/doodle-heart',
+    spine: 'rings', label: 'paper', place: 'bottom' },
+  { id: 'sun-arch', color: '#F2CF72', pattern: 'arch', ink: '#510C0D', tape: 'none', doodle: 'elements/doodle-sparkle',
+    spine: 'none', label: 'pill', place: 'top', doodlePos: { x: 18, y: 36 } },
+  { id: 'night-stars', color: '#510C0D', pattern: 'stars', ink: '#510C0D', tape: 'pink', doodle: 'elements/star-small',
+    spine: 'cloth', label: 'stamp', place: 'center', tapePos: { x: 30, y: 7 }, doodlePos: { x: 80, y: 66 } },
+  { id: 'sage-stripes', color: '#B9D18C', pattern: 'stripes', ink: '#510C0D', tape: 'pink', doodle: 'elements/doodle-star',
+    spine: 'rings', label: 'tag', place: 'top', tapePos: { x: 66, y: 90 }, doodlePos: { x: 82, y: 40 } },
+  { id: 'lilac-waves', color: '#9B9090', pattern: 'waves', ink: '#510C0D', tape: 'none', doodle: 'elements/doodle-loop',
+    spine: 'none', label: 'band', place: 'bottom', doodlePos: { x: 30, y: 20 } },
+  { id: 'cream-checker', color: '#E1CFCD', pattern: 'checker', ink: '#510C0D', tape: 'olive', doodle: 'mark',
+    spine: 'cloth', label: 'paper', place: 'center', tapePos: { x: 62, y: 34 }, doodlePos: { x: 80, y: 80 } },
+  { id: 'blush-confetti', color: '#FF9797', pattern: 'confetti', ink: '#510C0D', tape: 'olive', doodle: 'elements/doodle-heart',
+    spine: 'none', label: 'paper', place: 'top', tapePos: { x: 50, y: 10 }, doodlePos: { x: 78, y: 82 } },
+  { id: 'teal-grid', color: '#BCD4C9', pattern: 'grid', ink: '#510C0D', tape: 'pink', doodle: 'elements/doodle-sparkle',
+    spine: 'rings', label: 'pill', place: 'bottom', tapePos: { x: 70, y: 9 }, doodlePos: { x: 30, y: 30 } },
 ];
 
 // Page backgrounds (bucket list and any spread), in the Keepsake palette.
@@ -98,13 +108,16 @@ export const COVER_DOODLES = {
 export function coverStyle(cover, seed = 'cover') {
   // tapePos / doodlePos: where you dragged them, as the center point in % of the cover (unset = the usual spot).
   const place = { tapePos: cover?.tapePos || null, doodlePos: cover?.doodlePos || null };
+  // The notebook's look (spine, label style, label spot); edited covers keep the look they started from.
+  const look = { spine: cover?.spine || 'rings', label: cover?.label || 'paper', place: cover?.place || 'bottom' };
   if (cover?.type === 'custom') {
-    return { id: seed, color: cover.color || COVER_COLORS.Berry, pattern: cover.pattern || 'none', ink: '#510C0D', tape: cover.tape || 'olive', doodle: cover.doodle || 'none', ...place };
+    return { id: seed, color: cover.color || COVER_COLORS.Berry, pattern: cover.pattern || 'none', ink: '#510C0D', tape: cover.tape || 'olive', doodle: cover.doodle || 'none', ...look, ...place };
   }
   if (cover?.type === 'photo') {
-    return { id: seed, color: '#510C0D', pattern: 'none', ink: '#510C0D', tape: cover.tape || 'pink', doodle: cover.doodle || 'elements/doodle-heart', ...place };
+    return { id: seed, color: '#510C0D', pattern: 'none', ink: '#510C0D', tape: cover.tape || 'pink', doodle: cover.doodle || 'elements/doodle-heart', ...look, ...place };
   }
-  return { ...coverPreset(cover?.presetId), ...place };
+  const preset = coverPreset(cover?.presetId);
+  return { ...preset, tapePos: place.tapePos || preset.tapePos || null, doodlePos: place.doodlePos || preset.doodlePos || null };
 }
 
 export const uid = (prefix = 'id') => `${prefix}-${Math.random().toString(36).slice(2, 8)}${Date.now().toString(36).slice(-4)}`;

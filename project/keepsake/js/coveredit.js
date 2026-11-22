@@ -16,8 +16,8 @@ export function openCoverEditor({ cover, title = 'Your title', seed = 'cover', o
   const now = coverStyle(cover, seed);
   const startPlace = { tapePos: now.tapePos, doodlePos: now.doodlePos };
   let draft = cover?.type === 'photo'
-    ? { type: 'photo', photoKey: cover.photoKey, tape: now.tape, doodle: now.doodle, ...startPlace }
-    : { type: 'custom', color: now.color, pattern: now.pattern, tape: now.tape, doodle: now.doodle, ...startPlace };
+    ? { type: 'photo', photoKey: cover.photoKey, tape: now.tape, doodle: now.doodle, spine: now.spine, label: now.label, place: now.place, ...startPlace }
+    : { type: 'custom', color: now.color, pattern: now.pattern, tape: now.tape, doodle: now.doodle, spine: now.spine, label: now.label, place: now.place, ...startPlace };
   let lastColors = { color: now.color, pattern: cover?.type === 'photo' ? 'dots' : now.pattern };
   const uploaded = []; // photos uploaded here, removed again if they don't end up on the cover
   let done = false;
@@ -28,63 +28,61 @@ export function openCoverEditor({ cover, title = 'Your title', seed = 'cover', o
   dialog.setAttribute('aria-labelledby', 'ce-title');
   document.body.append(dialog);
 
-  const chip = (group, value, label, inner, on) => `
-    <button type="button" class="ce-chip ${group}-chip" data-set="${group}" data-value="${esc(value)}" aria-pressed="${on}" title="${esc(label)}">
-      ${inner}<span class="ce-chip-label">${esc(label)}</span>
+  // Same look as the Edit panel (11/21): tabs, then paper-style tiles three to a row, with the name under each.
+  const tile = (group, value, label, swatchHtml, on) => `
+    <button type="button" class="bg-mini ce-tile" data-set="${group}" data-value="${esc(value)}" aria-pressed="${on}" aria-label="${esc(label)}">
+      ${swatchHtml}<span class="bg-name">${esc(label)}</span>
     </button>`;
+  const TABS = [['cover', 'Cover'], ['pattern', 'Pattern'], ['tape', 'Tape'], ['sticker', 'Sticker']];
+  let tab = 'cover';
 
   function controlsHtml() {
     const photo = draft.type === 'photo';
-    const swatch = (hex) => `<span class="ce-swatch" style="background:${hex}"></span>`;
     const base = photo ? lastColors.color : draft.color;
-    const patternTile = (id) => `<span class="ce-swatch ce-pattern" style="background:${esc(base)}">${patternSvg({ id: seed, pattern: id, ink: '#510C0D' })}</span>`;
-    const img = (src) => `<span class="ce-swatch ce-img"><img src="${src}" alt=""></span>`;
-    return `
-      <div class="ce-section">
-        <h3>Cover</h3>
-        <div class="ce-row">
-          ${chip('kind', 'custom', 'Color & pattern', `<span class="ce-swatch" style="background:${esc(base)}"></span>`, !photo)}
-          ${chip('kind', 'photo', draft.photoKey ? 'Photo' : 'Upload photo', `<span class="ce-swatch ce-upload">${UPLOAD_ICON}</span>`, photo)}
+    const swatch = (style, inner = '') => `<span class="bg-swatch ce-sw" style="${style}">${inner}</span>`;
+    const img = (src) => swatch('background:#FFFFFF', `<img src="${src}" alt="">`);
+    const none = swatch('', '<span class="ce-none-line"></span>');
+    const tabs = `<div class="panel-tabs ce-tabs" role="tablist" aria-label="Cover parts">${TABS.map(([id, name]) =>
+      `<button type="button" class="panel-tab" role="tab" data-ce-tab="${id}" aria-selected="${tab === id}">${name}</button>`).join('')}</div>`;
+    const panels = {
+      cover: `
+        <h4 class="bg-group">Color</h4>
+        <div class="bg-row">${Object.entries(COVER_COLORS).map(([name, hex]) => tile('color', hex, name, swatch(`background:${hex}`), !photo && draft.color === hex)).join('')}</div>
+        <h4 class="bg-group">Photo</h4>
+        <div class="bg-row">
+          ${tile('kind', 'photo', draft.photoKey ? 'Your photo' : 'Upload photo', swatch('background:#FFFFFF', `<span class="ce-upload">${UPLOAD_ICON}</span>`), photo)}
         </div>
-      </div>
-      ${photo ? `
-        <div class="ce-section"><button type="button" class="pill-btn small" data-set="upload">Choose a different photo</button></div>` : `
-        <div class="ce-section">
-          <h3>Color</h3>
-          <div class="ce-row">${Object.entries(COVER_COLORS).map(([name, hex]) => chip('color', hex, name, swatch(hex), draft.color === hex)).join('')}</div>
-        </div>
-        <div class="ce-section">
-          <h3>Pattern</h3>
-          <div class="ce-row">${Object.entries(COVER_PATTERNS).map(([id, name]) => chip('pattern', id, name, patternTile(id), draft.pattern === id)).join('')}</div>
-        </div>`}
-      <div class="ce-section">
-        <h3>Tape</h3>
-        <div class="ce-row">${Object.entries(COVER_TAPES).map(([id, name]) => chip('tape', id, name,
-          id === 'none' ? '<span class="ce-swatch ce-none"></span>' : img(`./brand/elements/tape-${id}.svg`), draft.tape === id)).join('')}</div>
-      </div>
-      <div class="ce-section">
-        <h3>Sticker</h3>
-        <div class="ce-row">${Object.entries(COVER_DOODLES).map(([id, name]) => chip('doodle', id, name,
-          id === 'none' ? '<span class="ce-swatch ce-none"></span>' : img(`./brand/${id}.svg`), draft.doodle === id)).join('')}</div>
-      </div>`;
+        ${photo ? '<button type="button" class="link-btn ce-link" data-set="upload">Choose a different photo</button>' : ''}`,
+      pattern: photo
+        ? '<p class="panel-hint">Photo covers don\'t have a pattern. Pick a color on the Cover tab to use one.</p>'
+        : `<div class="bg-row">${Object.entries(COVER_PATTERNS).map(([id, name]) => tile('pattern', id, name,
+            swatch(`background:${esc(base)}`, patternSvg({ id: seed, pattern: id, ink: '#510C0D' })), draft.pattern === id)).join('')}</div>`,
+      tape: `<div class="bg-row">${Object.entries(COVER_TAPES).map(([id, name]) => tile('tape', id, name,
+        id === 'none' ? none : img(`./brand/elements/tape-${id}.svg`), draft.tape === id)).join('')}</div>`,
+      sticker: `<div class="bg-row">${Object.entries(COVER_DOODLES).map(([id, name]) => tile('doodle', id, name,
+        id === 'none' ? none : img(`./brand/${id}.svg`), draft.doodle === id)).join('')}</div>`,
+    };
+    return `${tabs}<div class="ce-tab-body" role="tabpanel">${panels[tab]}</div>`;
   }
 
   dialog.innerHTML = `
-    <form method="dialog" class="confirm-box cover-editor" novalidate>
-      <h2 id="ce-title">Edit cover</h2>
+    <form method="dialog" class="cover-editor" novalidate>
+      <div class="panel-head ce-head">
+        <h2 id="ce-title">Edit cover</h2>
+        <div class="panel-head-tools">
+          <button type="button" class="pill-btn small" data-close>Cancel</button>
+          <button type="submit" class="pill-btn panel-done">Done</button>
+        </div>
+      </div>
       <div class="ce-layout">
         <div class="ce-left">
           <div class="ce-preview"><span class="book"></span></div>
           <p class="ce-hint">Drag the tape and the sticker to move them.</p>
           <button type="button" class="link-btn ce-reset" data-set="reset">Put them back</button>
         </div>
-        <div class="ce-controls"></div>
+        <div class="ce-controls edit-panel-look"></div>
       </div>
       <input type="file" accept="image/*" hidden>
-      <div class="confirm-actions">
-        <button type="button" class="pill-btn" data-close>Cancel</button>
-        <button type="submit" class="pill-btn solid">Done</button>
-      </div>
     </form>`;
   const form = dialog.querySelector('form');
   const preview = form.querySelector('.ce-preview .book');
@@ -153,6 +151,13 @@ export function openCoverEditor({ cover, title = 'Your title', seed = 'cover', o
   }
 
   form.addEventListener('click', (event) => {
+    const tabBtn = event.target.closest('[data-ce-tab]');
+    if (tabBtn) {
+      tab = tabBtn.dataset.ceTab;
+      controls.innerHTML = controlsHtml();
+      controls.querySelector(`[data-ce-tab="${tab}"]`)?.focus();
+      return;
+    }
     const btn = event.target.closest('[data-set]');
     if (!btn) return;
     const { set, value } = btn.dataset;
@@ -165,10 +170,13 @@ export function openCoverEditor({ cover, title = 'Your title', seed = 'cover', o
         // Reuse a photo picked earlier, otherwise ask for one.
         const key = uploaded.at(-1) || (cover?.type === 'photo' ? cover.photoKey : null);
         if (!key) { fileInput.click(); return; }
-        draft = { type: 'photo', photoKey: key, tape: draft.tape, doodle: draft.doodle, tapePos: draft.tapePos, doodlePos: draft.doodlePos };
+        draft = { type: 'photo', photoKey: key, tape: draft.tape, doodle: draft.doodle, spine: draft.spine, label: draft.label, place: draft.place, tapePos: draft.tapePos, doodlePos: draft.doodlePos };
       } else if (draft.type === 'photo') {
-        draft = { type: 'custom', ...lastColors, tape: draft.tape, doodle: draft.doodle, tapePos: draft.tapePos, doodlePos: draft.doodlePos };
+        draft = { type: 'custom', ...lastColors, tape: draft.tape, doodle: draft.doodle, spine: draft.spine, label: draft.label, place: draft.place, tapePos: draft.tapePos, doodlePos: draft.doodlePos };
       }
+    } else if (set === 'color' && draft.type === 'photo') {
+      // Picking a color while a photo is on: back to a color cover (with the last pattern you had).
+      draft = { type: 'custom', color: value, pattern: lastColors.pattern, tape: draft.tape, doodle: draft.doodle, spine: draft.spine, label: draft.label, place: draft.place, tapePos: draft.tapePos, doodlePos: draft.doodlePos };
     } else {
       draft = { ...draft, [set]: value };
     }
