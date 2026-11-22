@@ -1,5 +1,10 @@
 # Bring-People-Together
 
+## Try Keepsake
+
+- **Live prototype: https://keepsake2.netlify.app/** Type your name, then click **Join** and enter the code **IXD415** to join our class book.
+- **Visitor stats: https://plausible.io/keepsake2.netlify.app**
+
 ## Our idea: a shared scrapbook for your friend group
 
 **A book your friend group makes together, one book per year.** Page 1 of the book is the group's bucket list, the things you keep saying "we should do." When the group actually does one, it turns into a scrapbook spread with everyone's photos, notes and stickers. The bucket list works like a table of contents: tap a finished plan and it jumps to its spread.
