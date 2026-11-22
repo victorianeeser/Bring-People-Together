@@ -2,10 +2,11 @@
 
 import { myBooks, getBook, deleteBook, leaveBook, resetDemo, subscribe, addMember, onlyMeLeft } from './state.js';
 import { openJoinBooks, inviteText } from './join.js';
-import { ROOM } from './sync.js'; // Reset wipes every book for everyone, so it's hidden in the real class room
+import { ROOM, onPresence } from './sync.js';
+import { ME } from './identity.js'; // Reset wipes every book for everyone, so it's hidden in the real class room
 import { isEmail } from './model.js';
 import { bookHtml, hydrateCovers, pagesLabel } from './covers.js';
-import { ICONS, esc, toast, announce, confirmDialog, isTyping, dialogOpen, avatarStack } from './ui.js';
+import { ICONS, esc, toast, announce, confirmDialog, isTyping, dialogOpen, avatarStack, brandColor, inkFor } from './ui.js';
 import { isAnimating } from './animation.js';
 import { openBookForm } from './bookform.js';
 
@@ -153,13 +154,52 @@ export function mountLibrary(root, { focus = true } = {}) {
     main.querySelector('#sel-title').textContent = current.title;
     main.querySelector('#sel-members').innerHTML = `
       <div class="member-row">
-        ${avatarStack(current.members)}
+        <button type="button" class="people-btn" data-action="people" aria-haspopup="true" aria-expanded="false"
+          aria-label="See everyone in ${esc(current.title)} (${current.members.length} ${current.members.length === 1 ? 'person' : 'people'})">${avatarStack(current.members)}</button>
+        <div class="people-pop" id="people-pop" hidden></div>
         <button type="button" class="add-person" data-action="add-person" aria-label="Add someone to ${esc(current.title)}" title="Add someone">${ICONS.plus}</button>
         <button type="button" class="invite-code" data-action="copy-code" aria-label="Invite code ${esc(current.code || '')}. Copy it" title="Copy the invite code">
           Code <strong>${esc(current.code || '')}</strong>${ICONS.copy}
         </button>
       </div>`;
   }
+
+  // Click the circles: a list of everyone in the book, with who's online and who's in it right now (11/21).
+  let people = {};
+  const peopleOpen = () => Boolean(main.querySelector('#people-pop')) && !main.querySelector('#people-pop').hidden;
+  const stopPresence = onPresence((next) => { people = next || {}; if (peopleOpen()) renderPeople(); });
+  function renderPeople() {
+    const pop = main.querySelector('#people-pop');
+    const book = getBook(ui.selectedId);
+    if (!pop || !book) return;
+    const status = (m) => (people[m.id]?.book === book.id ? 'here' : people[m.id] ? 'online' : '');
+    const rank = (m) => (m.id === ME ? 0 : status(m) === 'here' ? 1 : status(m) === 'online' ? 2 : 3);
+    const list = [...book.members].sort((a, b) => rank(a) - rank(b) || String(a.name).localeCompare(String(b.name)));
+    const here = list.filter((m) => status(m)).length;
+    pop.innerHTML = `
+      <h2>${list.length} ${list.length === 1 ? 'person' : 'people'} in ${esc(book.title)}${here ? ` <span>${here} online</span>` : ''}</h2>
+      <ul>
+        ${list.map((m) => {
+          const c = brandColor(m.color);
+          const s = status(m);
+          return `<li>
+            <span class="avatar" style="--avatar:${esc(c)};--avatar-ink:${inkFor(c)}" aria-hidden="true">${esc(String(m.name || '?').trim().charAt(0).toUpperCase())}</span>
+            <span class="people-name">${esc(m.name || 'Someone')}${m.id === ME ? ' <em>(you)</em>' : ''}</span>
+            ${s ? `<span class="people-status is-${s}">${s === 'here' ? 'in this book now' : 'online'}</span>` : ''}
+          </li>`;
+        }).join('')}
+      </ul>`;
+  }
+  function setPeople(open) {
+    const pop = main.querySelector('#people-pop');
+    const btn = main.querySelector('.people-btn');
+    if (!pop || !btn) return;
+    pop.hidden = !open;
+    btn.setAttribute('aria-expanded', String(open));
+    if (open) renderPeople();
+  }
+  const onPeopleOutside = (event) => { if (peopleOpen() && !event.target.closest('.people-pop, .people-btn')) setPeople(false); };
+  document.addEventListener('pointerdown', onPeopleOutside);
 
   // Add someone to the selected book by name and email.
   function addPerson() {
@@ -333,6 +373,7 @@ export function mountLibrary(root, { focus = true } = {}) {
     more: () => setMenu(!ui.menuOpen),
     reset,
     share,
+    people: () => setPeople(!peopleOpen()),
     delete: remove,
     leave,
     'copy-code': copyCode,
@@ -388,6 +429,7 @@ export function mountLibrary(root, { focus = true } = {}) {
     if (isAnimating() || dialogOpen()) return;
     if (event.key === 'Escape') {
       if (ui.menuOpen) { setMenu(false); root.querySelector('[data-action="more"]').focus(); return; }
+      if (peopleOpen()) { setPeople(false); main.querySelector('.people-btn')?.focus(); return; }
       if (event.target === search && search.value) { search.value = ''; setQuery(''); }
       return;
     }
@@ -439,7 +481,9 @@ export function mountLibrary(root, { focus = true } = {}) {
 
   return () => {
     document.removeEventListener('keydown', onKeydown);
+    document.removeEventListener('pointerdown', onPeopleOutside);
     window.removeEventListener('resize', onResize);
+    stopPresence();
     unsubscribe();
   };
 }

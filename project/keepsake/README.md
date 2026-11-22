@@ -2,7 +2,7 @@
 
 Victoria's 11/21 version of the [Keepsake scrapbook](../2026-11-18-keepsake/) (Maya's 11/18–11/19 folder is unchanged). What's new is listed under **Edit cover and a simpler home page (11/21, Victoria)** below: two fonts only, a simpler home page, Edit cover, brand colors for everyone, the Edit panel in tabs, layouts, snap guides, multi-select, note labels, locking, more page backgrounds, and new places to add and remove pages.
 
-**To put it online:** this folder isn't on the Netlify link yet. Drag this `2026-11-21` folder onto the **scrapbook-proto** site's **Deploys** page in Netlify (the books in Firebase stay as they are).
+**To update the live link:** drag this `keepsake` folder onto the site's **Deploys** page in Netlify (the books in Firebase stay as they are). This folder was called `2026-11-21` until 11/22.
 
 Originally: a copy of the [live scrapbook](../2026-11-13-live/) (with Leandra's safety features), branded as **Keepsake** using Maya's handmade brand boards in Figma (Branding page: the Keepsake board, the sticker set and the multiplayer states).
 
@@ -230,7 +230,9 @@ People who used the 11/13 version before invite codes were added to every book a
 - **Simpler home page.** No decorations around the edges, tagline, "start a new book" arrow or title underline, and no box behind the buttons. The logo, book title and buttons are smaller.
 - **No paper grain (noise)** on the background, covers or pages.
 - **Removed:** the circle around the page numbers, the stitched line across the top of each page, and the **invite friends** button in an open book.
-- **Smaller buttons** across the site.
+- **Sizes:** text, buttons and people circles were made a couple of steps bigger, with more room at the bottom of the screen.
+- **Who's in a book:** click the people circles on the home page for a list of everyone in the book, with who's online and who's in it now.
+- **Smaller buttons** across the site (later made bigger again, see Sizes).
 - **Edit panel in tabs** (Photos, Text, Stickers, Layouts, Page) with Undo/Redo up top and a Selected card; `PANEL_TABS` in [`js/editor.js`](js/editor.js) switches back to the old list.
 - **New editing tools:** **Add pages** (the arrow under the book turns into **+ Add pages** on the last spread, and there's an **Add pages** tile at the end of the All spreads overview), **Remove pages** (the trash on a spread in the overview, or **Remove these pages** at the bottom of the Page tab; only when everything on them is yours, or it's your book), **page layouts** in the Layouts tab (one per page to start it; swap freely until you fill something in) with photo boxes you fill by double-clicking or dropping a photo ([`js/layouts.js`](js/layouts.js)), **snap guides** and **Center on page**, **Shift-click** to select several things and move or remove them together, note **alignment** and **labels** (paper, tag, rose, tape), and a **lock** next to the × to keep something in place.
 - **Page backgrounds:** 24 papers in groups, with Opacity and Size sliders.
