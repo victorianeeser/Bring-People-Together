@@ -97,7 +97,17 @@ const coverBits = (style) => `
 const coverItemsHtml = (cover) => (cover?.items?.length ? `<span class="cover-items">${pageItemsHtml({ items: cover.items })}</span>` : '');
 
 // Each preset is its own notebook: spiral rings, a cloth spine, or no spine; and a label style and spot.
-const lookClasses = (style) => `spine-${style.spine || 'rings'} lbl-${style.label || 'paper'} at-${style.place || 'bottom'}`;
+const lookClasses = (style) => `spine-${style.spine || 'rings'} lbl-${style.label || 'paper'} at-${style.place || 'bottom'}${style.titleAlign ? ` ta-${style.titleAlign}` : ''}${style.labelColor ? ' has-label-bg' : ''}`;
+// The title's size and color, the label's color, and how strong / big the background pattern is (11/22).
+const lookVars = (style) => [
+  style.titleSize && style.titleSize !== 1 ? `--title-scale:${style.titleSize}` : '',
+  style.titleColor ? `--title-ink:${style.titleColor}` : '',
+  style.labelColor ? `--label-bg:${style.labelColor}` : '',
+  style.bgOpacity !== undefined && style.bgOpacity !== 1 ? `--cov-op:${style.bgOpacity}` : '',
+  style.bgSize && style.bgSize !== 1 ? `--cov-scale:${style.bgSize}` : '',
+].filter(Boolean).map((v) => `;${v}`).join('');
+// The background: a cover pattern, or one of the page papers. In its own layer so it can fade and scale.
+const backgroundHtml = (style) => `<span class="cover-bg" aria-hidden="true">${style.paper ? `<span class="cover-paper" data-bg="${esc(style.paper)}"></span>` : patternSvg(style)}</span>`;
 const spineHtml = (style) => (style.spine === 'none' ? '' : `<span class="cover-spine" aria-hidden="true">${style.spine === 'cloth' ? '' : RINGS}</span>`);
 
 // Just the cover art (pattern or photo, spiral spine, tape, and the handwritten title label).
@@ -106,7 +116,7 @@ export function coverHtml(book) {
   const style = coverStyle(cover, book.id || book.title || 'cover');
   if (cover.type === 'photo') {
     return `
-      <span class="cover photo-cover ${lookClasses(style)}" data-photo-key="${esc(cover.photoKey)}" style="--cover-bg:#510C0D;--cover-ink:#510C0D">
+      <span class="cover photo-cover ${lookClasses(style)}" data-photo-key="${esc(cover.photoKey)}" style="--cover-bg:#510C0D;--cover-ink:#510C0D${lookVars(style)}">
         <img class="cover-photo" alt="" hidden>
         ${coverBits(style)}
         ${coverItemsHtml(cover)}
@@ -115,8 +125,8 @@ export function coverHtml(book) {
       </span>`;
   }
   return `
-    <span class="cover ${lookClasses(style)}" style="--cover-bg:${style.color};--cover-ink:${style.ink}">
-      ${patternSvg(style)}
+    <span class="cover ${lookClasses(style)}" style="--cover-bg:${style.color};--cover-ink:${style.ink}${lookVars(style)}">
+      ${backgroundHtml(style)}
       ${coverBits(style)}
       ${coverItemsHtml(cover)}
         <span class="cover-label"><span class="cover-title">${esc(book.title)}</span></span>

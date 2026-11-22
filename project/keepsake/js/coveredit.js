@@ -4,7 +4,7 @@
 // then drag, resize, rotate or remove them. The back arrow (top left) goes back to the library.
 // It opens on top of the New book / Book settings form and hands the finished cover back to it.
 
-import { COVER_COLORS, COVER_PATTERNS, COVER_TAPES, COVER_DOODLES, TEXT_COLORS, coverStyle, uid } from './model.js';
+import { COVER_COLORS, COVER_PATTERNS, PAGE_BG_GROUPS, TEXT_COLORS, coverStyle, uid } from './model.js';
 import { coverHtml, patternSvg, hydrateCovers } from './covers.js';
 import { putPhoto, resizeImage, deletePhotos } from './storage.js';
 import { STICKERS, TRAY, ELEMENT_TRAY } from './stickers.js';
@@ -16,6 +16,18 @@ const UNDO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5
 const REDO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 14 5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/></svg>';
 const clamp = (n, lo, hi) => Math.min(hi, Math.max(lo, n));
 const TYPE_NAME = { photo: 'Photo', text: 'Text', sticker: 'Sticker' };
+const ALIGN_ICONS = {
+  left: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 10h10M4 14h16M4 18h10"/></svg>',
+  center: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M7 10h10M4 14h16M7 18h10"/></svg>',
+  right: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M10 10h10M4 14h16M10 18h10"/></svg>',
+};
+const TITLE_LABELS = { none: 'None', paper: 'Paper', pill: 'Pill', stamp: 'Stamp', tag: 'Tag', band: 'Band' };
+const LABEL_COLORS = { Paper: '#FBF5F1', White: '#FFFFFF', Butter: '#F4E2B4', Rose: '#F3DCD8', Blush: '#FFD6D6', Sage: '#DCE8E1', Maroon: '#510C0D' };
+// The cover's own tape and label sticker become normal stickers you can move, resize or remove (11/22).
+const PIECE_KIND = {
+  tape: { olive: 'e-tape-olive', pink: 'e-tape-pink' },
+  doodle: { 'elements/doodle-heart': 'e-heart', 'elements/doodle-sparkle': 'e-sparkle', 'elements/doodle-star': 'e-doodle-star', 'elements/star-small': 'e-star-small', 'elements/doodle-loop': 'e-loop', mark: 'e-mark' },
+};
 const TABS = [['photos', 'Photos'], ['text', 'Text'], ['stickers', 'Stickers'], ['cover', 'Cover']];
 let lastTab = 'cover'; // the panel opens on the tab you used last
 
@@ -25,19 +37,22 @@ let lastTab = 'cover'; // the panel opens on the tab you used last
 export function openCoverEditor({ cover, title = 'Your title', seed = 'cover', onDone, onBack } = {}) {
   const now = coverStyle(cover, seed);
   const startPlace = { tapePos: now.tapePos, doodlePos: now.doodlePos };
-  const look = { spine: now.spine, label: now.label, place: now.place };
+  const look = { spine: now.spine, label: now.label, place: now.place,
+    titleAlign: now.titleAlign, titleSize: now.titleSize, titleColor: now.titleColor, labelColor: now.labelColor,
+    paper: now.paper, bgOpacity: now.bgOpacity, bgSize: now.bgSize };
   const items = JSON.parse(JSON.stringify(cover?.items || []));
   let draft = cover?.type === 'photo'
     ? { type: 'photo', photoKey: cover.photoKey, tape: now.tape, doodle: now.doodle, ...look, ...startPlace, items }
     : { type: 'custom', color: now.color, pattern: now.pattern, tape: now.tape, doodle: now.doodle, ...look, ...startPlace, items };
   let lastColors = { color: now.color, pattern: cover?.type === 'photo' ? 'dots' : now.pattern };
   const uploaded = []; // photos uploaded here, removed again if they don't end up on the cover
-  const startJson = JSON.stringify(draft);
+  let startJson = JSON.stringify(draft);
   const history = { undo: [], redo: [] };
   let selectedId = null;
   let tab = lastTab;
   let done = false;
 
+  const defaultAlign = () => (['pill', 'stamp'].includes(draft.label) ? 'center' : 'left');
   const record = () => { history.undo.push(JSON.stringify(draft)); if (history.undo.length > 60) history.undo.shift(); history.redo = []; };
   const findItem = (id) => draft.items.find((i) => i.id === id) || null;
   const topZ = () => Math.max(0, ...draft.items.map((i) => i.z || 0));
@@ -102,26 +117,51 @@ export function openCoverEditor({ cover, title = 'Your title', seed = 'cover', o
           <p class="panel-hint">Or make a photo the whole cover on the Cover tab.</p>
         </div>`;
       case 'text': return `
+        <h4 class="bg-group">Book title</h4>
+        <div class="ce-title-opts">
+          <h4 class="sel-sub">Align</h4>
+          <div class="align-row">${['left', 'center', 'right'].map((a) => `<button type="button" class="align-btn" data-title="titleAlign" data-value="${a}" aria-label="Align ${a}" aria-pressed="${(draft.titleAlign || defaultAlign()) === a}">${ALIGN_ICONS[a]}</button>`).join('')}</div>
+          <label class="slider-row"><span>Size</span><input type="range" class="ce-title-size" min="60" max="160" step="5" value="${Math.round((draft.titleSize || 1) * 100)}"><output>${Math.round((draft.titleSize || 1) * 100)}%</output></label>
+          <h4 class="sel-sub">Color</h4>
+          <div class="swatch-row ce-two">${Object.entries({ ...TEXT_COLORS, White: '#FBF5F1' }).map(([name, hex]) => `<button type="button" class="color-chip" data-title="titleColor" data-value="${hex}" aria-pressed="${String((draft.titleColor || '').toLowerCase() === hex.toLowerCase())}"><span class="swatch-dot" style="background:${hex}"></span>${name}</button>`).join('')}</div>
+          <h4 class="sel-sub">Behind the title</h4>
+          <div class="label-row ce-labels">${Object.entries(TITLE_LABELS).map(([id, name]) => `<button type="button" class="label-chip" data-title="label" data-value="${id}" aria-pressed="${(draft.label || 'paper') === id}"><span class="label-sample ce-lbl-${id}">Aa</span>${name}</button>`).join('')}</div>
+          ${draft.label !== 'none' ? `<h4 class="sel-sub">Label color</h4>
+          <div class="swatch-row ce-two">${Object.entries(LABEL_COLORS).map(([name, hex]) => `<button type="button" class="color-chip" data-title="labelColor" data-value="${hex}" aria-pressed="${String((draft.labelColor || '').toLowerCase() === hex.toLowerCase())}"><span class="swatch-dot" style="background:${hex}"></span>${name}</button>`).join('')}</div>` : ''}
+          <h4 class="sel-sub">Where</h4>
+          <div class="align-row ce-where">${[['top', 'Top'], ['center', 'Middle'], ['bottom', 'Bottom']].map(([id, name]) => `<button type="button" class="align-btn ce-where-btn" data-title="place" data-value="${id}" aria-pressed="${(draft.place || 'bottom') === id}">${name}</button>`).join('')}</div>
+        </div>
+        <h4 class="bg-group">More text</h4>
         <button type="button" class="pill-btn" data-edit="add-text">+ Add text box</button>
-        <p class="panel-hint">Type in the box under Selected. The book's title is already on its label.</p>`;
+        <p class="panel-hint">Type in the box under Selected.</p>`;
       case 'stickers': return `
         <div class="sticker-grid">${TRAY.map(trayBtn).join('')}</div>
         <h3 class="tray-sub">Tape &amp; doodles</h3>
         <div class="sticker-grid element-grid">${ELEMENT_TRAY.map(trayBtn).join('')}</div>
         <p class="panel-hint">Click a sticker to add it. Drag anything on the cover to move it.</p>`;
-      default: return `
+      default: {
+        // Laid out like the Page tab: opacity and size on top, then groups of tiles.
+        const hasPattern = !photo && (draft.paper || (draft.pattern && draft.pattern !== 'none'));
+        const op = Math.round((draft.bgOpacity ?? 1) * 100);
+        const size = Math.round((draft.bgSize || 1) * 100);
+        return `
+        ${hasPattern ? `<div class="bg-adjust">
+          <label class="slider-row"><span>Opacity</span><input type="range" class="ce-bg-op" min="10" max="100" step="5" value="${op}"><output>${op}%</output></label>
+          <label class="slider-row"><span>Size</span><input type="range" class="ce-bg-size" min="50" max="250" step="10" value="${size}"><output>${size}%</output></label>
+          <button type="button" class="link-btn" data-edit="bg-reset">Reset opacity and size</button>
+        </div>` : ''}
         <h4 class="bg-group">Color</h4>
-        <div class="bg-row">${Object.entries(COVER_COLORS).map(([name, hex]) => tile('color', hex, name, swatch(`background:${hex}`), !photo && draft.color === hex)).join('')}</div>
+        <div class="bg-row">${Object.entries(COVER_COLORS).map(([name, hex]) => tile('color', hex, name, swatch(`background:${hex}`), !photo && !draft.paper && draft.color === hex)).join('')}</div>
         <h4 class="bg-group">Pattern</h4>
         ${photo ? '<p class="panel-hint">Photo covers don\'t have a pattern. Pick a color to use one.</p>' : `<div class="bg-row">${Object.entries(COVER_PATTERNS).map(([id, name]) => tile('pattern', id, name,
-          swatch(`background:${esc(base)}`, patternSvg({ id: seed, pattern: id, ink: '#510C0D' })), draft.pattern === id)).join('')}</div>`}
+          swatch(`background:${esc(base)}`, patternSvg({ id: seed, pattern: id, ink: '#510C0D' })), !draft.paper && draft.pattern === id)).join('')}</div>`}
+        ${PAGE_BG_GROUPS.map(([group, papers]) => `
+          <h4 class="bg-group">${group} paper</h4>
+          <div class="bg-row">${Object.entries(papers).map(([id, name]) => tile('paper', id, name, `<span class="bg-swatch" data-bg="${id}"></span>`, !photo && draft.paper === id)).join('')}</div>`).join('')}
         <h4 class="bg-group">Photo cover</h4>
         <div class="bg-row">${tile('kind', 'photo', draft.photoKey ? 'Your photo' : 'Upload photo', swatch('background:#FFFFFF', `<span class="ce-upload">${UPLOAD_ICON}</span>`), photo)}</div>
-        ${photo ? '<button type="button" class="link-btn ce-link" data-set="upload">Choose a different photo</button>' : ''}
-        <h4 class="bg-group">Tape</h4>
-        <div class="bg-row">${Object.entries(COVER_TAPES).map(([id, name]) => tile('tape', id, name, id === 'none' ? none : img(`./brand/elements/tape-${id}.svg`), draft.tape === id)).join('')}</div>
-        <h4 class="bg-group">Label sticker</h4>
-        <div class="bg-row">${Object.entries(COVER_DOODLES).map(([id, name]) => tile('doodle', id, name, id === 'none' ? none : img(`./brand/${id}.svg`), draft.doodle === id)).join('')}</div>`;
+        ${photo ? '<button type="button" class="link-btn ce-link" data-set="upload">Choose a different photo</button>' : ''}`;
+      }
     }
   }
 
@@ -138,8 +178,8 @@ export function openCoverEditor({ cover, title = 'Your title', seed = 'cover', o
       <div class="ce-stage">
         <button type="button" class="icon-btn glass ce-back" data-edit="back" aria-label="Back to the library">${ICONS.back}</button>
         <div class="ce-preview"><span class="book"></span></div>
-        <p class="ce-hint">Click anything on the cover to move it. Drag the tape and label sticker too.</p>
-        <button type="button" class="link-btn ce-reset" data-set="reset">Put the tape and sticker back</button>
+        <p class="ce-hint">Click anything on the cover to select it, then drag to move it.</p>
+
       </div>
       <aside class="edit-panel tabs-mode ce-panel" aria-labelledby="ce-title">
         <div class="panel-head">
@@ -160,7 +200,6 @@ export function openCoverEditor({ cover, title = 'Your title', seed = 'cover', o
   const controls = form.querySelector('.ce-controls');
   const coverFile = form.querySelector('.ce-file-cover');
   const itemFiles = form.querySelector('.ce-file-items');
-  const resetBtn = form.querySelector('.ce-reset');
 
   // ---- Drawing ----
   function renderPreview() {
@@ -172,7 +211,7 @@ export function openCoverEditor({ cover, title = 'Your title', seed = 'cover', o
       el.classList.toggle('selected', el.dataset.id === selectedId);
       el.tabIndex = 0;
     });
-    resetBtn.hidden = JSON.stringify([draft.tapePos || null, draft.doodlePos || null]) === JSON.stringify([startPlace.tapePos || null, startPlace.doodlePos || null]);
+
   }
   function renderPanel({ focus } = {}) {
     const scroll = controls.closest('.ce-panel').scrollTop;
@@ -253,6 +292,7 @@ export function openCoverEditor({ cover, title = 'Your title', seed = 'cover', o
     undo: () => step(history.undo, history.redo),
     redo: () => step(history.redo, history.undo),
     back: () => goBack(),
+    'bg-reset': () => { record(); draft = { ...draft, bgOpacity: 1, bgSize: 1 }; render(); },
   };
   function restack(dir) {
     const it = findItem(selectedId);
@@ -278,6 +318,14 @@ export function openCoverEditor({ cover, title = 'Your title', seed = 'cover', o
   controls.addEventListener('click', (event) => {
     const tabBtn = event.target.closest('[data-ce-tab]');
     if (tabBtn) { tab = tabBtn.dataset.ceTab; lastTab = tab; renderPanel({ focus: `[data-ce-tab="${tab}"]` }); return; }
+    const titleBtn = event.target.closest('[data-title]');
+    if (titleBtn) {
+      const { title: field, value } = titleBtn.dataset;
+      record();
+      draft = { ...draft, [field]: draft[field] === value && (field === 'titleColor' || field === 'labelColor') ? null : value };
+      render({ focus: `[data-title="${field}"][data-value="${CSS.escape(value)}"]` });
+      return;
+    }
     const edit = event.target.closest('[data-edit]');
     if (edit) { actions[edit.dataset.edit]?.(edit); return; }
     const btn = event.target.closest('[data-set]');
@@ -292,6 +340,11 @@ export function openCoverEditor({ cover, title = 'Your title', seed = 'cover', o
       if (!key) { history.undo.pop(); coverFile.click(); return; }
       const { color, pattern, ...rest } = draft;
       draft = { ...rest, type: 'photo', photoKey: key };
+    } else if (set === 'paper') {
+      const { photoKey, ...rest } = draft;
+      draft = { ...rest, type: 'custom', paper: value };
+    } else if ((set === 'color' || set === 'pattern') && draft.paper) {
+      draft = { ...draft, paper: null, [set]: value };
     } else if (set === 'color' && draft.type === 'photo') {
       const { photoKey, ...rest } = draft;
       draft = { ...rest, type: 'custom', color: value, pattern: lastColors.pattern };
@@ -312,10 +365,20 @@ export function openCoverEditor({ cover, title = 'Your title', seed = 'cover', o
   // Sliders and the text box change things live; one undo step per drag / typing session.
   let liveSnap = null;
   controls.addEventListener('input', (event) => {
+    const t = event.target;
+    // Book title size and the background's opacity / size
+    const coverSlider = { 'ce-title-size': 'titleSize', 'ce-bg-op': 'bgOpacity', 'ce-bg-size': 'bgSize' };
+    const field = Object.entries(coverSlider).find(([cls]) => t.classList.contains(cls))?.[1];
+    if (field) {
+      if (!liveSnap) liveSnap = JSON.stringify(draft);
+      draft[field] = Number(t.value) / 100;
+      t.nextElementSibling.textContent = `${t.value}%`;
+      renderPreview();
+      return;
+    }
     const it = findItem(selectedId);
     if (!it) return;
     if (!liveSnap) liveSnap = JSON.stringify(draft);
-    const t = event.target;
     if (t.classList.contains('ce-size')) { it.width = Number(t.value); t.nextElementSibling.textContent = `${t.value}%`; }
     else if (t.classList.contains('ce-rotate')) { it.rotation = Number(t.value); t.nextElementSibling.textContent = `${t.value}°`; }
     else if (t.classList.contains('ce-text-input')) { it.content = t.value; }
@@ -425,5 +488,28 @@ export function openCoverEditor({ cover, title = 'Your title', seed = 'cover', o
 
   render();
   dialog.showModal();
+  piecesToStickers();
   controls.querySelector(`[data-ce-tab="${tab}"]`)?.focus();
+
+  // The tape and label sticker drawn on presets become normal stickers, right where they are,
+  // so they can be selected, moved, resized or removed like anything else.
+  function piecesToStickers() {
+    const box = preview.querySelector('.cover')?.getBoundingClientRect();
+    if (!box || !box.width) return;
+    let z = topZ();
+    for (const [field, cls, deg] of [['tape', '.cover-tape', -7], ['doodle', '.cover-doodle', 8]]) {
+      const kind = PIECE_KIND[field][draft[field]];
+      const el = preview.querySelector(cls);
+      if (!kind || !el) continue;
+      const r = el.getBoundingClientRect();
+      const width = (r.width / box.width) * 100 * 0.94; // its unrotated width, about
+      const h = width * 0.75 * (STICKER_ASPECT[kind] || 1);
+      const cx = ((r.left + r.width / 2 - box.left) / box.width) * 100;
+      const cy = ((r.top + r.height / 2 - box.top) / box.height) * 100;
+      draft.items.push({ id: uid('ci'), type: 'sticker', kind, width, x: cx - width / 2, y: cy - h / 2, rotation: deg, z: ++z });
+    }
+    draft = { ...draft, tape: 'none', doodle: 'none', tapePos: null, doodlePos: null };
+    startJson = JSON.stringify(draft); // this isn't a change you made, so Back won't ask about it
+    render();
+  }
 }

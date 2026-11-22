@@ -110,11 +110,16 @@ export function coverStyle(cover, seed = 'cover') {
   const place = { tapePos: cover?.tapePos || null, doodlePos: cover?.doodlePos || null };
   // The notebook's look (spine, label style, label spot); edited covers keep the look they started from.
   const look = { spine: cover?.spine || 'rings', label: cover?.label || 'paper', place: cover?.place || 'bottom' };
+  // 11/22: the title's format, a page paper instead of a pattern, and how strong / big the background is.
+  const fmt = {
+    titleAlign: cover?.titleAlign || null, titleSize: Number(cover?.titleSize) || 1, titleColor: cover?.titleColor || null, labelColor: cover?.labelColor || null,
+    paper: cover?.paper || null, bgOpacity: cover?.bgOpacity ?? 1, bgSize: Number(cover?.bgSize) || 1,
+  };
   if (cover?.type === 'custom') {
-    return { id: seed, color: cover.color || COVER_COLORS.Berry, pattern: cover.pattern || 'none', ink: '#510C0D', tape: cover.tape || 'olive', doodle: cover.doodle || 'none', ...look, ...place };
+    return { id: seed, color: fmt.paper ? '#FFFDFB' : (cover.color || COVER_COLORS.Berry), pattern: fmt.paper ? 'none' : (cover.pattern || 'none'), ink: '#510C0D', tape: cover.tape || 'olive', doodle: cover.doodle || 'none', ...look, ...place, ...fmt };
   }
   if (cover?.type === 'photo') {
-    return { id: seed, color: '#510C0D', pattern: 'none', ink: '#510C0D', tape: cover.tape || 'pink', doodle: cover.doodle || 'elements/doodle-heart', ...look, ...place };
+    return { id: seed, color: '#510C0D', pattern: 'none', ink: '#510C0D', tape: cover.tape || 'pink', doodle: cover.doodle || 'elements/doodle-heart', ...look, ...place, ...fmt, paper: null };
   }
   const preset = coverPreset(cover?.presetId);
   return { ...preset, tapePos: place.tapePos || preset.tapePos || null, doodlePos: place.doodlePos || preset.doodlePos || null };

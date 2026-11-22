@@ -2063,3 +2063,39 @@ body { background-image: radial-gradient(ellipse 70% 60% at 50% 46%, var(--bg-ce
 .ce-text-input { width: 100%; min-height: 54px; padding: 8px 10px; border: 1px solid #E2D2CF; border-radius: 10px; background: #FFFFFF; color: var(--ink); font: 500 var(--t-body)/1.4 var(--display); resize: vertical; }
 .ce-text-input:focus { outline: 2px solid var(--k-maroon); outline-offset: 1px; }
 .ce-panel .selected-tools .swatch-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+
+/* ------------------------------------------------------------------
+   Cover background layer and title format (11/22)
+   ------------------------------------------------------------------ */
+.cover-bg {
+  position: absolute; top: 0; left: 0; z-index: 0; pointer-events: none;
+  width: calc(100% / var(--cov-scale, 1)); height: calc(100% / var(--cov-scale, 1));
+  transform: scale(var(--cov-scale, 1)); transform-origin: 0 0; opacity: var(--cov-op, 1);
+}
+.cover-bg .cover-pattern, .cover-paper { position: absolute; inset: 0; width: 100%; height: 100%; }
+.cover-paper[data-bg] { background-color: var(--bgc); background-image: var(--bgi); background-size: var(--bgs); }
+
+/* Title: size, color and alignment */
+.cover .cover-title { font-size: calc(10cqw * var(--title-scale, 1)); color: var(--title-ink, #510C0D); }
+.cover.lbl-band .cover-title { color: var(--title-ink, #FBF5F1); }
+.cover.ta-left .cover-title { text-align: left; }
+.cover.ta-center .cover-title { text-align: center; }
+.cover.ta-right .cover-title { text-align: right; }
+/* Label behind the title: a chosen color, or none at all */
+.cover.has-label-bg .cover-label { background-color: var(--label-bg); }
+.cover.lbl-none .cover-label { padding: 2% 4%; background: none; box-shadow: none; clip-path: none; filter: none; transform: none; }
+.cover.lbl-none .cover-label::after { display: none; }
+
+/* Edit cover: book title options (Text tab) */
+.ce-title-opts { display: grid; gap: 4px; padding: 12px; border: 1px solid #EADBD8; border-radius: 12px; background: #FFFFFF; }
+.ce-title-opts .sel-sub { margin: 10px 0 6px; }
+.ce-title-opts .sel-sub:first-child { margin-top: 0; }
+.ce-panel .swatch-row.ce-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.ce-labels { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.ce-where .ce-where-btn { width: auto; padding: 0 12px; font: 600 var(--t-ui)/1 var(--display); }
+.label-sample.ce-lbl-none { padding: .35em .2em; }
+.label-sample.ce-lbl-paper { padding: .3em .6em; background: #FBF5F1; box-shadow: 0 1px 3px rgba(81, 12, 13, .25); }
+.label-sample.ce-lbl-pill { padding: .3em .8em; border-radius: 999px; background: #FBF5F1; box-shadow: 0 0 0 1px #E2D2CF; }
+.label-sample.ce-lbl-stamp { padding: .3em .6em; background: #FBF5F1; box-shadow: inset 0 0 0 2px #FBF5F1, inset 0 0 0 3px rgba(81, 12, 13, .45); }
+.label-sample.ce-lbl-tag { padding: .3em .6em .3em 1em; background: #F4E2B4; clip-path: polygon(.5em 0, 100% 0, 100% 100%, .5em 100%, 0 50%); }
+.label-sample.ce-lbl-band { padding: .3em .7em; background: #510C0D; color: #FBF5F1; }
