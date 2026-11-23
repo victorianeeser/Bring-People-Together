@@ -258,7 +258,7 @@ function arrangePanelTabs(panel) {
   show(TABS.some(([id]) => id === saved) ? saved : 'photos');
 }
 
-export function createEditor({ root, book, spreadEl, currentSpread, rerender, isEnabled = () => true, onDone, onSelect, onLive, onCameraRoll }) {
+export function createEditor({ root, book, spreadEl, currentSpread, rerender, isEnabled = () => true, onDone, onSelect, onLive, onCameraRoll, onAdded }) {
   // Editing only works on a regular spread while edit mode is on.
   const editable = () => Boolean(currentSpread()) && isEnabled();
   const panel = root.querySelector('#edit-panel');
@@ -274,6 +274,8 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
   const multiIds = new Set();
   let editingId = null;
   let activeSide = null;
+  // Phones (11/23) show one page at a time: 'left' or 'right' is the page on screen, null on bigger screens.
+  let singleSide = null;
   const history = { undo: [], redo: [] };
 
   // ---- Data helpers ----
@@ -298,6 +300,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
   const allItems = (spread) => [...spread.leftPage.items, ...spread.rightPage.items];
   const topZ = (spread) => Math.max(0, ...allItems(spread).map((i) => i.z || 0));
   function targetSide(spread) {
+    if (singleSide) return singleSide; // add to the page you can see
     if (activeSide) return activeSide;
     return spread.leftPage.items.length <= spread.rightPage.items.length ? 'left' : 'right';
   }
@@ -504,6 +507,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
     selectedId = lastId;
     redraw({ focus: true });
     announce(stored.length > 1 ? `${stored.length} added` : stored[0].video ? 'Video added' : 'Photo added');
+    onAdded?.('photo');
   }
 
   // Puts photos/videos (already saved) on the page. Returns the last one's id.
@@ -527,6 +531,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
     save();
     redraw({ focus: true });
     announce(entry.video ? 'Video added' : 'Photo added');
+    onAdded?.('photo');
     return true;
   }
 
@@ -548,6 +553,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
     placeNew(spread, targetSide(spread), item);
     save();
     selectedId = item.id;
+    onAdded?.('text'); // phones: close the sheet first, so the keyboard and the new note have the room
     redraw();
     startEditing(item.id);
   }
@@ -563,6 +569,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
     selectedId = item.id;
     redraw({ focus: true });
     announce(`${STICKERS[kind].label} added`);
+    onAdded?.('sticker');
   }
 
   function removeSelected() {
@@ -594,7 +601,7 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
     const spread = currentSpread();
     const layout = layoutById(id);
     if (!spread || !layout) return;
-    const side = activeSide || 'left';
+    const side = singleSide || activeSide || 'left';
     const page = pageOf(spread, side);
     const state = layoutState(page);
     if (state === 'full') { toast(`Layouts are for starting a page. The ${side} page already has things on it.`); return; }
@@ -925,8 +932,9 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
       const box = el.getBoundingClientRect();
       const cx = box.left + box.width / 2;
       let changedPage = false;
-      if (found.side === 'right' && cx < rect.left) changedPage = transfer(found, 'left', 100);
-      if (found.side === 'left' && cx > rect.right) changedPage = transfer(found, 'right', -100);
+      // On phones only one page shows, so things never jump onto the hidden page.
+      if (!singleSide && found.side === 'right' && cx < rect.left) changedPage = transfer(found, 'left', 100);
+      if (!singleSide && found.side === 'left' && cx > rect.right) changedPage = transfer(found, 'right', -100);
       record(snap);
       save();
       if (changedPage) redraw({ focus: true });
@@ -1407,6 +1415,8 @@ export function createEditor({ root, book, spreadEl, currentSpread, rerender, is
     },
     toggleLock,
     addFromRoll,
+    // Phones: which page is on screen ('left' / 'right'), or null to go back to the two-page spread.
+    setSingleSide(side) { singleSide = side || null; },
     destroy() {
       document.removeEventListener('pointerdown', onOutside);
     },

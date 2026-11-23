@@ -237,6 +237,19 @@ People who used the 11/13 version before invite codes were added to every book a
 - **New editing tools:** **Add pages** (the arrow under the book turns into **+ Add pages** on the last spread, and there's an **Add pages** tile at the end of the All spreads overview), **Remove pages** (the trash on a spread in the overview, or **Remove these pages** at the bottom of the Page tab; only when everything on them is yours, or it's your book), **page layouts** in the Layouts tab (one per page to start it; swap freely until you fill something in) with photo boxes you fill by double-clicking or dropping a photo ([`js/layouts.js`](js/layouts.js)), **snap guides** and **Center on page**, **Shift-click** to select several things and move or remove them together, note **alignment** and **labels** (paper, tag, rose, tape), and a **lock** next to the × to keep something in place.
 - **Page backgrounds:** 24 papers in groups, with Opacity and Size sliders.
 
+## Phones: one page at a time (11/23, Leandra)
+
+From the Figma mockups on the Mobile screens page ("Proposed: phone layout for opening a book"). Only on screens 700px wide or less; laptops and tablets keep the two-page spread.
+
+- **One page at a time.** The open book shows one page at full width, so photos, stickers and text are full size. **Swipe** left or right to turn the page (it slides instead of the 3D flip). Rotating the phone sideways, or a wider screen, shows the two-page spread again.
+- **The bucket list is a real list.** One scrolling page with full-size text, big checkboxes, who's in, a "p. 3 →" link for done plans, season chips that scroll sideways, and a big **+ Add an idea** button.
+- **A calmer header and one bottom bar.** Top: back, the book title, this page's title, and who's here. Bottom: **All pages**, **Edit page** with dots and "page 3 of 8", and **Next** (it turns into **Add pages** on the last page). The camera roll is still in the Photos tab while editing.
+- **Editing keeps the page big.** Undo, redo, "editing page 3" and **Done editing** sit across the top, and the tools (Photos, Text, Stickers, Layouts, Page) sit along the bottom. Tap a tool for a **short sheet** that covers the bottom of the screen instead of shrinking the page; tap it again or **✕** to close it. Things you add go on the page you're looking at.
+- **The sheet gets out of the way.** Adding a sticker, photo or note closes the sheet so you see the full page, with **Sticker added · + Add another** to reopen it. Turn on **Keep open** to add several in a row.
+- **Pinch to zoom while editing.** Pinch to zoom in (up to 300%) and use two fingers to move around. A pill shows the zoom level with **Fit page** to go back. Leaving Edit resets the zoom.
+
+Code: the phone parts of [`js/book.js`](js/book.js) (look for "Phones (11/23)"), `setSingleSide` and `onAdded` in [`js/editor.js`](js/editor.js), `single` in `spreadPagesHtml` in [`js/pages.js`](js/pages.js), and "Phones, one page at a time" at the end of [`styles.css`](styles.css).
+
 ## Saving fixes (11/18)
 
 - **Edit waits until it's connected.** Before, anything you did while the bottom bar said "Connecting…" was never sent, and it was wiped when the shared books loaded. Now Edit says "Still connecting…" until the books have loaded.

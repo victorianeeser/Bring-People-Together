@@ -54,6 +54,11 @@ export function mountBook(root, bookId) {
   document.title = book.title;
   let index = 0; // a book always opens to its first spread (the bucket list, when it has one)
   let turning = false;
+  // Phones (11/23): one page at a time instead of the two-page spread. `side` is the page on screen.
+  const phoneMQ = window.matchMedia('(max-width: 700px)');
+  const isSingle = () => phoneMQ.matches;
+  let side = 'left';
+  let zoom = 1; // pinch-to-zoom while editing on a phone (1 = the whole page)
 
   root.innerHTML = `
     <div class="book-view">
@@ -62,6 +67,7 @@ export function mountBook(root, bookId) {
         <div class="book-heading">
           <h1>${esc(book.title)}</h1>
           <p id="page-label" aria-live="polite"></p>
+          <p class="page-sub" id="page-sub"></p>
           <div class="book-actions">
             <button type="button" class="pill-btn edit-pill" data-action="toggle-edit" aria-pressed="false">Edit</button>
           </div>
@@ -88,6 +94,17 @@ export function mountBook(root, bookId) {
           <button type="button" class="icon-btn glass small" id="next-btn" data-action="next" aria-label="Next spread">${CHEVRON_RIGHT}</button>
         </div>
       </main>
+      <nav class="phone-bar" aria-label="Pages">
+        <button type="button" class="phone-btn" data-action="overview" aria-label="See all pages" aria-haspopup="dialog">${ICONS.grid}<span>All pages</span></button>
+        <div class="phone-mid">
+          <button type="button" class="pill-btn solid phone-edit" data-action="toggle-edit">Edit page</button>
+          <span class="phone-dots" aria-hidden="true"></span>
+          <span class="phone-page" aria-live="polite"></span>
+        </div>
+        <button type="button" class="phone-btn" id="phone-next" data-action="phone-next" aria-label="Next page">${CHEVRON_RIGHT}<span>Next</span></button>
+      </nav>
+      <div class="zoom-pill" hidden><span class="zoom-level">100%</span><button type="button" class="zoom-fit" data-action="zoom-fit">Fit page</button></div>
+      <div class="added-chip" hidden role="status"><span class="added-text">Added</span><button type="button" data-action="add-another">+ Add another</button></div>
       ${panelHtml()}
       <dialog class="overview" id="overview" aria-labelledby="overview-title"></dialog>
       <dialog class="overview roll-dialog" id="roll" aria-labelledby="roll-title"></dialog>
@@ -136,12 +153,78 @@ export function mountBook(root, bookId) {
     pill.setAttribute('aria-label', editMode ? 'Done editing' : 'Edit this spread');
     spreadEl.classList.toggle('is-editing', editMode && Boolean(currentSpread()));
     spreadEl.setAttribute('aria-label', `${spreadTitle(book, index)}, ${ppLabel(index)}`);
+    updatePhoneChrome();
+  }
+
+  // ---------- phones: one page at a time ----------
+  const viewEl = root.querySelector('.book-view');
+  function applySingle() {
+    const on = isSingle();
+    const entry = spreadsOf(book)[index];
+    if (entry?.kind === 'toc') side = 'left';
+    viewEl.classList.toggle('single', on);
+    spreadEl.dataset.side = side;
+    spreadEl.classList.toggle('is-toc', entry?.kind === 'toc');
+    editor?.setSingleSide(on && entry?.kind === 'spread' ? side : null);
+  }
+  // Page numbers count the scrapbook pages (the bucket list isn't numbered).
+  const listOffset = () => (book.hasBucketList ? 1 : 0);
+  const pageCountPhone = () => book.spreads.length * 2;
+  const pageNoPhone = () => (index - listOffset()) * 2 + (side === 'right' ? 2 : 1);
+  function updatePhoneChrome() {
+    const panelTitle = root.querySelector('#edit-panel .panel-head h2');
+    if (!isSingle()) { if (panelTitle) panelTitle.textContent = 'Edit spread'; return; }
+    const entry = spreadsOf(book)[index];
+    const isToc = entry?.kind === 'toc';
+    root.querySelector('#page-sub').textContent = isToc ? '' : String(entry?.spread.title || '').toLowerCase();
+    root.querySelector('.phone-page').textContent = isToc ? 'bucket list' : `page ${pageNoPhone()} of ${pageCountPhone()}`;
+    if (panelTitle) panelTitle.textContent = isToc ? 'Edit' : `editing page ${pageNoPhone()}`;
+    // Dots: the bucket list, then every scrapbook page. Long books show the dots around where you are.
+    const count = listOffset() + pageCountPhone();
+    const here = isToc ? 0 : listOffset() + pageNoPhone() - 1;
+    const MAX = 9;
+    const start = Math.max(0, Math.min(here - Math.floor(MAX / 2), count - MAX));
+    const dots = [];
+    for (let i = start; i < Math.min(count, start + MAX); i++) dots.push(`<span class="phone-dot${i === here ? ' is-here' : ''}"></span>`);
+    root.querySelector('.phone-dots').innerHTML = dots.join('');
+    const edit = root.querySelector('.phone-edit');
+    edit.classList.toggle('is-off', isToc);
+    edit.textContent = editMode ? 'Done' : 'Edit page';
+    const next = root.querySelector('#phone-next');
+    const atEnd = index >= total() - 1 && (isToc || side === 'right');
+    next.dataset.action = atEnd ? 'add-spread' : 'phone-next';
+    next.innerHTML = atEnd ? `${ICONS.plus}<span>Add pages</span>` : `${CHEVRON_RIGHT}<span>Next</span>`;
+    next.setAttribute('aria-label', atEnd ? 'Add two pages at the end' : 'Next page');
+    root.querySelectorAll('[data-action="prev"]').forEach((b) => { b.disabled = index === 0 && side === 'left'; });
+  }
+
+  // Turn one page: the other side of the same spread if there is one, otherwise the next or previous spread.
+  async function pageStep(dir) {
+    if (!isSingle()) { turnTo(index + dir); return; }
+    const entry = spreadsOf(book)[index];
+    if (entry?.kind === 'spread' && ((dir > 0 && side === 'left') || (dir < 0 && side === 'right'))) {
+      await slide(dir, () => { side = dir > 0 ? 'right' : 'left'; showSpread(); });
+      announce(`Page ${pageNoPhone()} of ${pageCountPhone()}`);
+      return;
+    }
+    turnTo(index + dir, { landOn: dir > 0 ? 'left' : 'right' });
+  }
+  // The page slides out and the next one slides in (phones don't do the 3D page flip).
+  async function slide(dir, swap) {
+    if (reducedMotion()) { swap(); return; }
+    turning = true;
+    try {
+      await spreadEl.animate([{ transform: 'none', opacity: 1 }, { transform: `translateX(${dir * -24}%)`, opacity: 0 }], { duration: 150, easing: 'ease-in' }).finished;
+      swap();
+      await spreadEl.animate([{ transform: `translateX(${dir * 24}%)`, opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 190, easing: 'ease-out' }).finished;
+    } finally { turning = false; }
   }
 
   let shownEntry = null; // the spread on screen, to find it again after a live update
   function showSpread() {
     shownEntry = spreadsOf(book)[index] || null;
-    const pages = spreadPagesHtml(book, index, { interactive: true, season: tocSeason });
+    applySingle();
+    const pages = spreadPagesHtml(book, index, { interactive: true, season: tocSeason, single: isSingle() });
     spreadEl.dataset.bg = spreadBg(book, index);
     for (const part of spreadBgVars(book, index).split(';')) { const [name, value] = part.split(':'); spreadEl.style.setProperty(name, value); }
     leftEl.innerHTML = pages.left;
@@ -156,8 +239,15 @@ export function mountBook(root, bookId) {
     return `<div class="leaf-face ${side} page"><div class="page-inner">${html}</div><span class="shade" aria-hidden="true"></span></div>`;
   }
 
-  async function turnTo(target) {
+  async function turnTo(target, { landOn = 'left' } = {}) {
     if (turning || isAnimating() || target === index || target < 0 || target >= total()) return;
+    if (isSingle()) {
+      popover?.close({ refocus: false });
+      editor?.deselect();
+      await slide(target > index ? 1 : -1, () => { index = target; side = landOn; showSpread(); });
+      announce(`${spreadTitle(book, index)}, ${ppLabel(index)}`);
+      return;
+    }
     turning = true;
     popover?.close({ refocus: false });
     editor?.deselect();
@@ -203,6 +293,7 @@ export function mountBook(root, bookId) {
 
   function jumpTo(target) {
     index = target;
+    side = 'left';
     showSpread();
     if (!reducedMotion()) spreadEl.animate([{ opacity: 0.2 }, { opacity: 1 }], { duration: 180, easing: 'ease-out' });
     announce(`${spreadTitle(book, index)}, ${ppLabel(index)}`);
@@ -373,7 +464,7 @@ export function mountBook(root, bookId) {
     if (on && !isSynced()) { toast('Still connecting… try Edit again in a second'); return; }
     editMode = on;
     if (liveReady) sharePlace();
-    if (!on) editor.deselect();
+    if (!on) { editor.deselect(); setSheet(false); resetZoom(); hideAdded(); }
     updateChrome();
     editor.refresh();
     announce(on ? 'Editing. The edit panel is open on the right.' : 'Done editing');
@@ -430,8 +521,11 @@ export function mountBook(root, bookId) {
     'back-to-contents': () => turnTo(0),
     'add-idea': () => openAddIdea(book, { rerender: showSpread, findAnchor }),
     'camera-roll': () => openRoll(),
-    prev: () => { stopFollow(); turnTo(index - 1); },
-    next: () => { stopFollow(); turnTo(index + 1); },
+    prev: () => { stopFollow(); pageStep(-1); },
+    next: () => { stopFollow(); pageStep(1); },
+    'phone-next': () => { stopFollow(); pageStep(1); },
+    'zoom-fit': () => resetZoom(),
+    'add-another': () => { hideAdded(); setSheet(true); },
     overview: openOverview,
     'close-overview': () => overview.close(),
     jump: (btn) => {
@@ -494,8 +588,8 @@ export function mountBook(root, bookId) {
     }
     if (editor.handleKey(event)) return;
     if (isTyping(event.target)) return;
-    if (event.key === 'ArrowRight' || event.key === 'PageDown') { event.preventDefault(); stopFollow(); turnTo(index + 1); }
-    if (event.key === 'ArrowLeft' || event.key === 'PageUp') { event.preventDefault(); stopFollow(); turnTo(index - 1); }
+    if (event.key === 'ArrowRight' || event.key === 'PageDown') { event.preventDefault(); stopFollow(); pageStep(1); }
+    if (event.key === 'ArrowLeft' || event.key === 'PageUp') { event.preventDefault(); stopFollow(); pageStep(-1); }
     if (event.key === 'Escape') { event.preventDefault(); actions.back(); }
   }
 
@@ -503,6 +597,7 @@ export function mountBook(root, bookId) {
     root, book, spreadEl, currentSpread, rerender: showSpread, isEnabled: () => editMode, onDone: () => setEditMode(false),
     onSelect: (id) => { if (liveReady) { mySel = id; sendCursor(); } },
     onCameraRoll: () => openRoll(),
+    onAdded: (kind) => phoneAdded(kind),
     // While you drag, resize or rotate something, its position goes out with your cursor.
     onLive: (found) => {
       if (!liveReady) return;
@@ -522,6 +617,104 @@ export function mountBook(root, bookId) {
   });
   document.addEventListener('keydown', onKeydown);
   showSpread();
+
+  // ---------- phones: swipe to turn the page ----------
+  const areaEl = root.querySelector('.spread-area');
+  let swipe = null;
+  areaEl.addEventListener('touchstart', (event) => {
+    swipe = isSingle() && !editMode && event.touches.length === 1 ? { x: event.touches[0].clientX, y: event.touches[0].clientY } : null;
+  }, { passive: true });
+  areaEl.addEventListener('touchend', (event) => {
+    if (!swipe) return;
+    const t = event.changedTouches[0];
+    const dx = t.clientX - swipe.x;
+    const dy = t.clientY - swipe.y;
+    swipe = null;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.3) { stopFollow(); pageStep(dx < 0 ? 1 : -1); }
+  }, { passive: true });
+
+  // ---------- phones: the edit tools open a short sheet that never shrinks the page ----------
+  const panelEl = root.querySelector('#edit-panel');
+  const tabsEl = panelEl.querySelector('.panel-tabs');
+  tabsEl?.insertAdjacentHTML('afterend', `
+    <div class="sheet-tools">
+      <label class="keep-open"><input type="checkbox" id="keep-open"> Keep open</label>
+      <button type="button" class="icon-btn glass small sheet-close" aria-label="Close">${ICONS.close}</button>
+    </div>`);
+  let openTab = null;
+  function setSheet(open) {
+    panelEl.classList.toggle('sheet-open', open);
+    viewEl.classList.toggle('sheet-open', open);
+    if (!open) openTab = null;
+  }
+  tabsEl?.addEventListener('click', (event) => {
+    const tab = event.target.closest('.panel-tab');
+    if (!tab || !isSingle()) return;
+    const same = openTab === tab.dataset.tab && panelEl.classList.contains('sheet-open');
+    setSheet(!same);
+    openTab = same ? null : tab.dataset.tab;
+    hideAdded();
+  });
+  panelEl.querySelector('.sheet-close')?.addEventListener('click', () => setSheet(false));
+  const addedEl = root.querySelector('.added-chip');
+  let addedTimer = null;
+  function hideAdded() { addedEl.hidden = true; clearTimeout(addedTimer); }
+  // Tap a sticker (or a photo, or Text) and the sheet gets out of the way so you see the full page.
+  function phoneAdded(kind) {
+    if (!isSingle() || panelEl.querySelector('#keep-open')?.checked) return;
+    const tab = openTab;
+    setSheet(false);
+    openTab = tab;
+    if (kind === 'text') return; // you're typing the note now
+    addedEl.querySelector('.added-text').textContent = kind === 'photo' ? 'Photo added' : 'Sticker added';
+    addedEl.hidden = false;
+    clearTimeout(addedTimer);
+    addedTimer = setTimeout(hideAdded, 5000);
+  }
+
+  // ---------- phones: pinch to zoom while editing ----------
+  const zoomPill = root.querySelector('.zoom-pill');
+  let panX = 0, panY = 0, pinch = null;
+  function applyZoom() {
+    areaEl.style.transformOrigin = '0 0';
+    areaEl.style.transform = zoom > 1.01 ? `translate(${panX}px, ${panY}px) scale(${zoom})` : '';
+    zoomPill.hidden = zoom <= 1.01;
+    zoomPill.querySelector('.zoom-level').textContent = `${Math.round(zoom * 100)}%`;
+    requestAnimationFrame(() => { paintLive(); showBy(); });
+  }
+  function resetZoom() { zoom = 1; panX = 0; panY = 0; pinch = null; applyZoom(); }
+  const fingers = (event) => {
+    const [a, b] = event.touches;
+    return { d: Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY), x: (a.clientX + b.clientX) / 2, y: (a.clientY + b.clientY) / 2 };
+  };
+  areaEl.addEventListener('touchstart', (event) => {
+    if (!isSingle() || !editMode || event.touches.length !== 2) return;
+    event.preventDefault();
+    const f = fingers(event);
+    const box = areaEl.parentElement.getBoundingClientRect();
+    pinch = { ...f, zoom, panX, panY, ox: box.left + areaEl.offsetLeft, oy: box.top + areaEl.offsetTop };
+  }, { passive: false });
+  areaEl.addEventListener('touchmove', (event) => {
+    if (!pinch || event.touches.length !== 2) return;
+    event.preventDefault();
+    const f = fingers(event);
+    const z = Math.min(3, Math.max(1, pinch.zoom * (f.d / pinch.d)));
+    // Keep the spot between your fingers under your fingers, and follow them as they move (two-finger pan).
+    const px = (pinch.x - pinch.ox - pinch.panX) / pinch.zoom;
+    const py = (pinch.y - pinch.oy - pinch.panY) / pinch.zoom;
+    zoom = z;
+    panX = f.x - pinch.ox - px * z;
+    panY = f.y - pinch.oy - py * z;
+    applyZoom();
+  }, { passive: false });
+  areaEl.addEventListener('touchend', (event) => {
+    if (event.touches.length < 2) pinch = null;
+    if (zoom < 1.05 && zoom !== 1) resetZoom();
+  });
+
+  // Rotating a phone (or resizing a window) switches between one page and the two-page spread.
+  const onPhoneChange = () => { resetZoom(); setSheet(false); hideAdded(); showSpread(); };
+  phoneMQ.addEventListener('change', onPhoneChange);
 
   // Live: someone else changed the book. Redraw, but never in the middle of a page turn,
   // a drag, or while you're typing; those wait until you're done.
@@ -591,7 +784,8 @@ export function mountBook(root, bookId) {
     let top = r.bottom - area.top + 6;
     if (top + h > area.height - 4) top = r.top - area.top - h - 6; // near the bottom: show it above instead
     const left = Math.min(Math.max(r.left - area.left, 4), area.width - w - 4);
-    byTag.style.transform = `translate(${Math.round(left)}px, ${Math.round(Math.max(4, top))}px)`;
+    // The layer is inside the zoomed area, so screen distances shrink back by the zoom.
+    byTag.style.transform = `translate(${Math.round(left / zoom)}px, ${Math.round(Math.max(4, top) / zoom)}px)`;
   }
   // The × to remove what's selected. It sits on the item's top-left corner, above everything, and is kept
   // inside the book so it's never cut off by the page edge or hidden under tape.
@@ -611,7 +805,7 @@ export function mountBook(root, bookId) {
     const size = selX.offsetWidth || 26;
     const left = Math.min(Math.max(r.left - area.left - size / 2, 2), area.width - size - 2);
     const top = Math.min(Math.max(r.top - area.top - size / 2, 2), area.height - size - 2);
-    selX.style.transform = `translate(${Math.round(left)}px, ${Math.round(top)}px)`;
+    selX.style.transform = `translate(${Math.round(left / zoom)}px, ${Math.round(top / zoom)}px)`;
     // The lock sits right next to the × (11/21). A locked item hides the × until it's unlocked.
     selLock.hidden = !sel.canLock;
     selX.hidden = sel.locked;
@@ -620,7 +814,7 @@ export function mountBook(root, bookId) {
     selLock.setAttribute('aria-label', sel.locked ? 'Unlock' : 'Lock in place');
     selLock.title = sel.locked ? 'Locked. Click to unlock' : 'Lock in place';
     const lockLeft = sel.locked ? left : Math.min(left + size + 4, area.width - size - 2);
-    selLock.style.transform = `translate(${Math.round(lockLeft)}px, ${Math.round(top)}px)`;
+    selLock.style.transform = `translate(${Math.round(lockLeft / zoom)}px, ${Math.round(top / zoom)}px)`;
   }
   selX.addEventListener('pointerdown', (event) => event.stopPropagation());
   selX.addEventListener('click', (event) => { event.stopPropagation(); editor.removeSelected(); requestAnimationFrame(placeX); });
@@ -697,8 +891,8 @@ export function mountBook(root, bookId) {
           : `<span class="live-tag is-sel" data-for="${esc(c.sel)}" style="${style}">${esc(name)}</span>`;
       }
       if (c.x != null && c.y != null) {
-        const left = r.left - area.left + c.x * r.width;
-        const top = r.top - area.top + c.y * r.height;
+        const left = (r.left - area.left + c.x * r.width) / zoom;
+        const top = (r.top - area.top + c.y * r.height) / zoom;
         // With something selected, their name sits on the selection (like the mockup), so the arrow goes without it.
         html += `<span class="live-cursor${el ? ' no-tag' : ''}" data-id="${esc(id)}" style="${style};transform:translate(${left}px,${top}px)">${CURSOR}<span class="live-tag">${esc(name)}</span></span>`;
       }
@@ -729,8 +923,8 @@ export function mountBook(root, bookId) {
       const el = spreadEl.querySelector(`.page-inner .pi[data-id="${CSS.escape(tag.dataset.for)}"]`);
       if (!el) { tag.hidden = true; return; }
       const b = el.getBoundingClientRect();
-      tag.style.left = `${b.right - area.left}px`;
-      tag.style.top = `${b.bottom - area.top}px`;
+      tag.style.left = `${(b.right - area.left) / zoom}px`;
+      tag.style.top = `${(b.bottom - area.top) / zoom}px`;
     });
     if (performance.now() < tagLoopUntil) requestAnimationFrame(placeTags);
   }
@@ -807,6 +1001,8 @@ export function mountBook(root, bookId) {
       offPeople();
       offFollow();
       window.removeEventListener('resize', onResizeLive);
+      phoneMQ.removeEventListener('change', onPhoneChange);
+      clearTimeout(addedTimer);
       setCursor(null);
       popover.close({ refocus: false });
       editor.destroy();

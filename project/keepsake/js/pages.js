@@ -149,10 +149,12 @@ function seasonTabsHtml(season, interactive) {
   return `<div class="season-tabs" role="group" aria-label="Show ideas for">${tab(null, 'All')}${SEASONS.map((s) => tab(s, s)).join('')}</div>`;
 }
 
-function tocHtml(book, interactive, season = null) {
+// single (phones, 11/23): one page at a time, so the whole bucket list goes on one scrolling page.
+function tocHtml(book, interactive, season = null, single = false) {
   const items = sortedIdeas(book, season);
-  const left = items.slice(0, TOC_LEFT);
-  const right = items.slice(TOC_LEFT);
+  const split = single ? Infinity : TOC_LEFT;
+  const left = items.slice(0, split);
+  const right = items.slice(split);
   const add = interactive
     ? '<button type="button" class="toc-add" data-action="add-idea">+ Add an idea</button>'
     : '<span class="toc-add">+ Add an idea</span>';
@@ -160,16 +162,16 @@ function tocHtml(book, interactive, season = null) {
     ? `<p class="toc-empty">${season ? `Nothing for ${season.toLowerCase() === 'someday' ? 'someday' : season} yet.` : 'Nothing here yet. Add the first thing your group wants to do.'}</p>`
     : '';
   return {
-    left: `<div class="toc"><h2 class="toc-heading">Our bucket list</h2>${book.bucketList.length ? seasonTabsHtml(season, interactive) : ''}${empty}<ul class="toc-list">${left.map((i) => tocEntryHtml(book, i, interactive)).join('')}</ul>${items.length < TOC_LEFT ? add : ''}</div>`,
-    right: `<div class="toc toc-right"><ul class="toc-list">${right.map((i) => tocEntryHtml(book, i, interactive)).join('')}</ul>${items.length >= TOC_LEFT ? add : ''}</div>`,
+    left: `<div class="toc"><h2 class="toc-heading">Our bucket list</h2>${book.bucketList.length ? seasonTabsHtml(season, interactive) : ''}${empty}<ul class="toc-list">${left.map((i) => tocEntryHtml(book, i, interactive)).join('')}</ul>${items.length < split ? add : ''}</div>`,
+    right: `<div class="toc toc-right"><ul class="toc-list">${right.map((i) => tocEntryHtml(book, i, interactive)).join('')}</ul>${items.length >= split ? add : ''}</div>`,
   };
 }
 
 // HTML for both pages of spread `index`.
-export function spreadPagesHtml(book, index, { interactive = false, season = null } = {}) {
+export function spreadPagesHtml(book, index, { interactive = false, season = null, single = false } = {}) {
   const entry = spreadsOf(book)[index];
   if (!entry) return { left: '', right: '' };
-  if (entry.kind === 'toc') return tocHtml(book, interactive, season);
+  if (entry.kind === 'toc') return tocHtml(book, interactive, season, single);
   const { spread } = entry;
   // Finished spreads link back to the table of contents.
   const back = book.hasBucketList && spread.linkedItemId
