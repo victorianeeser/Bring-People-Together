@@ -89,4 +89,4 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 
 ## Nov 23
 
-- **Maya:** user tested [Keepsake](https://keepsake2.netlify.app/) with Lily (7 people so far). [Notes and recordings](notes/maya/2026-11-22/maya-user-testing.md#lily-1123)
+- **Maya:** user tested [Keepsake](https://keepsake2.netlify.app/) with Lily and Cami (8 people so far). [Notes and recordings](notes/maya/2026-11-22/maya-user-testing.md#lily-1123)

@@ -1,6 +1,6 @@
 # 11/22–11/23 | Keepsake user testing
 
-7 of 10–15 testers so far · on their phones · screen recordings
+8 of 10–15 testers so far · on their phones · screen recordings
 
 Tested the [live Keepsake site](https://keepsake2.netlify.app/), joining the class book with the code **IXD415**.
 
@@ -13,6 +13,7 @@ Tested the [live Keepsake site](https://keepsake2.netlify.app/), joining the cla
 - [Max (1.5 min)](max-keepsake-test-recording.mp4)
 - [Mom (3 min)](mom-keepsake-test-recording.mp4)
 - [Lily (2 min, 11/23)](../2026-11-23/lily-keepsake-test-recording.mp4)
+- [Cami (3.7 min, 11/23)](../2026-11-23/cami-keepsake-test-recording.mp4)
 
 Audrey's and Mom's camera rolls are blurred for the few seconds their phone's photo picker is open.
 
@@ -144,17 +145,41 @@ Audrey's and Mom's camera rolls are blurred for the few seconds their phone's ph
   <img src="../2026-11-23/lily-all-spreads-with-her-page.jpg" alt="All spreads, with her page as pp. 15 and 16" width="200">
 </p>
 
+## Cami (11/23)
+
+**What she said:** It's looking good. Her biggest feedback is to make the undo button more obvious, or add a confirmation step before deleting or adding something. She tried to add a caption to the dog picture and accidentally deleted the picture of Stormi.
+
+**From the recording (3.7 min, Snapchat's in-app browser):**
+- Typed her name. Snapchat popped up its own "Autofill this form?" and "Save info?" sheets over the page, like it did for Chris.
+- Tapped **Join with a code** and joined with **IXD415** on the first try ("Joined IxD 415" showed).
+- Flipped through every spread and pinched to zoom in on the photo collage on pages 9–10, like Mason, Chris and Mom.
+- Opened the live bar's **Here now** list, which showed her, lean and maya with **follow** buttons.
+- Tapped **Edit** on pages 9–10 and tapped one of Victoria's photos. The message "Only Victoria can remove this. You can report it if it's not OK." showed, so she left it alone.
+- Opened **Add an idea** on the bucket list but closed it without adding one, then looked at the shelf and **All spreads**.
+- Went to pages 11–12, tapped **Edit**, looked at **Layouts**, then went to **Text** and tapped **+ Add text box**. She typed "Hello Stormi 💗" right next to the photo of Stormi.
+- When the caption was selected, its delete (X) and lock buttons sat right on top of the edge of Stormi's photo. A second later the Stormi photo was gone, and only her caption was left on the page.
+- She tapped undo and redo, but the photo didn't come back. The caption was removed too, so the left page ended up empty. Nothing asked "Are you sure?" before the photo was deleted.
+
+<p>
+  <img src="../2026-11-23/cami-only-victoria-can-remove-message.jpg" alt="The message saying only Victoria can remove this photo" width="200">
+  <img src="../2026-11-23/cami-hello-stormi-caption-next-to-photo.jpg" alt="Typing Hello Stormi next to the photo of Stormi" width="200">
+  <img src="../2026-11-23/cami-caption-controls-on-top-of-stormi-photo.jpg" alt="The caption's delete and lock buttons sitting on top of the Stormi photo" width="200">
+  <img src="../2026-11-23/cami-stormi-photo-gone-caption-left.jpg" alt="The Stormi photo is gone and only the caption is left" width="200">
+  <img src="../2026-11-23/cami-left-page-empty-after-undo.jpg" alt="Pages 11 and 12 with the left page empty" width="200">
+</p>
+
 ## Patterns so far
 
-1. **Flipping through the book works.** All 7 got into the class book and flipped pages with no help. Mason called out the page flip.
+1. **Flipping through the book works.** All 8 got into the class book and flipped pages with no help. Mason called out the page flip.
 2. **Save in the photo editor gets lost on phones.** Cancel and Save are at the very bottom and are easy to lose under Safari's toolbar, so cropping can't be saved.
 3. **No next step after joining.** Mason and Chris never found **Edit**. Max found it but opened it 4 times without adding anything, which fits him not understanding it at first.
 4. **Joining a book is confusing at first.** Lily tried to add a book on her first try and couldn't, and Max needed 3 tries to type the invite code. Both got in after that.
-5. **Things are small on a phone.** Mason, Chris and Mom pinched to zoom in to read pages and the bucket list.
-6. **Everyone liked the idea and the look.** All 7 said it was easy to use, fun, or a cool concept, and Chris and Mason called out the look and the page flip.
-7. **The guys looked around more than they made things.** Audrey jumped into editing and tried every photo option, Mom added a photo, sticker and note, Lily added a sticker, note and background, and Maya Zech knew right away that the point was to add to the book, while Mason, Chris and Max mostly looked around. Keepsake will probably appeal more to girls, but testing with guys still showed where the app doesn't explain itself.
+5. **Things are small on a phone.** Mason, Chris, Mom and Cami pinched to zoom in to read pages and the bucket list.
+6. **Everyone liked the idea and the look.** All 8 said it was easy to use, fun, a cool concept, or looking good, and Chris and Mason called out the look and the page flip.
+7. **The guys looked around more than they made things.** Audrey jumped into editing and tried every photo option, Mom added a photo, sticker and note, Lily added a sticker, note and background, Cami added a caption, and Maya Zech knew right away that the point was to add to the book, while Mason, Chris and Max mostly looked around. Keepsake will probably appeal more to girls, but testing with guys still showed where the app doesn't explain itself.
 8. **Layouts don't say why they're off.** Once a page has anything on it, the layouts fade out, and the reason is hidden below them. Mom couldn't pick one and didn't know why. Lily saw the same faded layouts (the message was on screen for her) and moved on.
 9. **Tabs don't switch while something is selected.** Mom tapped Text and Stickers with her photo selected and kept seeing the photo's settings. Lily tapped Layouts with her sticker selected and kept seeing the sticker's settings.
+10. **It's too easy to delete something by accident.** Cami lost the Stormi photo while adding a caption next to it. Nothing asked her to confirm, and undo didn't bring it back.
 
 ## Ideas to fix
 
@@ -165,3 +190,5 @@ Audrey's and Mom's camera rolls are blurred for the few seconds their phone's ph
 - Make page text and the bucket list bigger on phones.
 - Put the "page already has things on it" message above the layouts, or let layouts work on a page that has things on it.
 - Switching tabs should deselect the photo or sticker so the tab's tools show.
+- Make undo bigger and easier to find, and make sure it brings back a deleted photo.
+- Ask "Are you sure?" before deleting a photo, and keep the delete button from landing on top of other things on the page.
