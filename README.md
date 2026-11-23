@@ -33,7 +33,7 @@ Friend groups first, like college roommates and friends from a team or club. Fam
 - **Try it live:** [scrapbook-proto.netlify.app/?room=class](https://scrapbook-proto.netlify.app/?room=class), the [Keepsake version](project/2026-11-18-keepsake/). Join the class book with the code **IXD415**.
 - **Analytics:** [our public Plausible dashboard](https://plausible.io/scrapbook-proto.netlify.app): visitors to the live site and what they do (joining, adding ideas, "I'm in", adding to pages). No cookies, and no names or anything people type.
 - **Prototype:** [project/2026-11-10-rough-draft](project/2026-11-10-rough-draft/), started from Victoria's 11/8 prototype
-- **User testing:** [Victoria's 5 tests](notes/victoria/2026-11-08/victoria-bucketlist-user-testing.md), [Maya's Keepsake tests](notes/maya/keepsake-user-testing/README.md)
+- **User testing:** [Victoria's 5 tests](notes/victoria/2026-11-08/victoria-bucketlist-user-testing.md), [Maya's Keepsake tests](notes/maya/2026-11-22-keepsake-user-testing/user-test-thoughts.md)
 - **Multiplayer demo:** [notes/multiplayer-poc](notes/multiplayer-poc/), a shared whiteboard anyone can join from a link
 - **Threats:** [threats.md](threats.md): how the book could be used to bully or leave someone out, and what we would build to prevent it
 - **Research, inspo, persona and wireframes:** [our Figma file](https://www.figma.com/design/eXyBNM0n3Ky0jqW9cRPPvq/Bring-People-Together)

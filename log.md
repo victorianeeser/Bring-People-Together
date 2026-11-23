@@ -85,8 +85,8 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 
 - **Victoria:** updated the [Keepsake prototype](project/keepsake/) for class ([live link](https://keepsake2.netlify.app/))
 - **Victoria:** made two [TikTok videos](notes/tiktok-videos/) (due Nov 23)
-- **Maya:** user tested [Keepsake](https://keepsake2.netlify.app/) with 6 people so far. [Notes and recordings](notes/maya/keepsake-user-testing/README.md)
+- **Maya:** user tested [Keepsake](https://keepsake2.netlify.app/) with 6 people so far. [Notes and recordings](notes/maya/2026-11-22-keepsake-user-testing/user-test-thoughts.md)
 
 ## Nov 23
 
-- **Maya:** user tested [Keepsake](https://keepsake2.netlify.app/) with Lily and Cami (8 people so far). [Notes and recordings](notes/maya/keepsake-user-testing/README.md#lily-1123)
+- **Maya:** user tested [Keepsake](https://keepsake2.netlify.app/) with Lily and Cami (8 people so far). [Notes and recordings](notes/maya/2026-11-22-keepsake-user-testing/user-test-thoughts.md#lily-1123)
