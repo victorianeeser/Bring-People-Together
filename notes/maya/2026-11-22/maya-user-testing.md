@@ -1,4 +1,4 @@
-# 11/22–11/23 | Keepsake user testing (round 1)
+# 11/22–11/23 | Keepsake user testing
 
 7 of 10–15 testers so far · on their phones · screen recordings
 
