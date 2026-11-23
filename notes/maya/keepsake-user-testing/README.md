@@ -6,14 +6,14 @@ Tested the [live Keepsake site](https://keepsake2.netlify.app/), joining the cla
 
 ## Screen recordings
 
-- [Maya Zech (33 sec)](maya-zech-keepsake-test-recording.mp4)
-- [Audrey (2.5 min)](audrey-keepsake-test-recording.mp4)
-- [Mason (1 min)](mason-keepsake-test-recording.mp4)
-- [Chris (1.3 min)](chris-keepsake-test-recording.mp4)
-- [Max (1.5 min)](max-keepsake-test-recording.mp4)
-- [Mom (3 min)](mom-keepsake-test-recording.mp4)
-- [Lily (2 min, 11/23)](../2026-11-23/lily-keepsake-test-recording.mp4)
-- [Cami (3.7 min, 11/23)](../2026-11-23/cami-keepsake-test-recording.mp4)
+- [Maya Zech (33 sec)](recordings/maya-zech-keepsake-test-recording.mp4)
+- [Audrey (2.5 min)](recordings/audrey-keepsake-test-recording.mp4)
+- [Mason (1 min)](recordings/mason-keepsake-test-recording.mp4)
+- [Chris (1.3 min)](recordings/chris-keepsake-test-recording.mp4)
+- [Max (1.5 min)](recordings/max-keepsake-test-recording.mp4)
+- [Mom (3 min)](recordings/mom-keepsake-test-recording.mp4)
+- [Lily (2 min, 11/23)](recordings/lily-keepsake-test-recording.mp4)
+- [Cami (3.7 min, 11/23)](recordings/cami-keepsake-test-recording.mp4)
 
 Audrey's and Mom's camera rolls are blurred for the few seconds their phone's photo picker is open.
 
@@ -30,8 +30,8 @@ Audrey's and Mom's camera rolls are blurred for the few seconds their phone's ph
 - She said her task was to add to the scrapbook, but adding isn't in this clip. It may have happened before or after the recording.
 
 <p>
-  <img src="maya-zech-full-photo-collage-spread.jpg" alt="A spread full of photos, stickers and doodles" width="200">
-  <img src="maya-zech-face-sticker-page.jpg" alt="A page with a face cut-out sticker" width="200">
+  <img src="images/maya-zech-full-photo-collage-spread.jpg" alt="A spread full of photos, stickers and doodles" width="200">
+  <img src="images/maya-zech-face-sticker-page.jpg" alt="A page with a face cut-out sticker" width="200">
 </p>
 
 ## Audrey
@@ -47,9 +47,9 @@ Audrey's and Mom's camera rolls are blurred for the few seconds their phone's ph
 - Confirmed in Chris's recording: her dog photo is still on pages 11–12 as a plain, uncropped polaroid, so none of her edits were saved.
 
 <p>
-  <img src="audrey-crop-editor-save-button-showing.jpg" alt="The crop editor with Cancel and Save showing at the bottom" width="200">
-  <img src="audrey-crop-editor-save-button-hidden.jpg" alt="The crop editor scrolled so Save is hidden" width="200">
-  <img src="audrey-heart-cutout-sticker-preview.jpg" alt="Her dog photo as a heart cut-out sticker in the preview" width="200">
+  <img src="images/audrey-crop-editor-save-button-showing.jpg" alt="The crop editor with Cancel and Save showing at the bottom" width="200">
+  <img src="images/audrey-crop-editor-save-button-hidden.jpg" alt="The crop editor scrolled so Save is hidden" width="200">
+  <img src="images/audrey-heart-cutout-sticker-preview.jpg" alt="Her dog photo as a heart cut-out sticker in the preview" width="200">
 </p>
 
 ## Mason
@@ -64,8 +64,8 @@ Audrey's and Mom's camera rolls are blurred for the few seconds their phone's ph
 - Never tapped **Edit**, **New book** or anything that adds to the book. After joining, nothing tells you what to do next, which matches his confusion.
 
 <p>
-  <img src="mason-zoomed-in-on-page.jpg" alt="Zoomed in on a spread with stickers and photos" width="200">
-  <img src="mason-book-shelf-grid-view.jpg" alt="The book shelf in grid view" width="200">
+  <img src="images/mason-zoomed-in-on-page.jpg" alt="Zoomed in on a spread with stickers and photos" width="200">
+  <img src="images/mason-book-shelf-grid-view.jpg" alt="The book shelf in grid view" width="200">
 </p>
 
 ## Chris
@@ -81,8 +81,8 @@ Audrey's and Mom's camera rolls are blurred for the few seconds their phone's ph
 - Ended on pages 13–14 without tapping **Edit**, the same as Mason.
 
 <p>
-  <img src="chris-zoomed-in-on-bucket-list.jpg" alt="Zoomed in on the bucket list" width="200">
-  <img src="chris-sees-audreys-photo-uncropped.jpg" alt="Audrey's dog photo still uncropped on pages 11 and 12" width="200">
+  <img src="images/chris-zoomed-in-on-bucket-list.jpg" alt="Zoomed in on the bucket list" width="200">
+  <img src="images/chris-sees-audreys-photo-uncropped.jpg" alt="Audrey's dog photo still uncropped on pages 11 and 12" width="200">
 </p>
 
 ## Max
@@ -96,8 +96,8 @@ Audrey's and Mom's camera rolls are blurred for the few seconds their phone's ph
 - Ended on the Edit spread panel for pages 15–16 without adding a photo, note or sticker.
 
 <p>
-  <img src="max-wrong-invite-code-message.jpg" alt="The Join a book screen saying there is no book with that code" width="200">
-  <img src="max-edit-spread-panel-open.jpg" alt="The Edit spread panel open on pages 5 and 6" width="200">
+  <img src="images/max-wrong-invite-code-message.jpg" alt="The Join a book screen saying there is no book with that code" width="200">
+  <img src="images/max-edit-spread-panel-open.jpg" alt="The Edit spread panel open on pages 5 and 6" width="200">
 </p>
 
 ## Mom
@@ -115,10 +115,10 @@ Audrey's and Mom's camera rolls are blurred for the few seconds their phone's ph
 - Tapped **Done editing**. Her photo, sticker and note all stayed on the page.
 
 <p>
-  <img src="mom-text-tab-still-showing-photo-settings.jpg" alt="The Text tab is picked but the panel still shows the photo's settings" width="200">
-  <img src="mom-layouts-faded-because-page-has-a-photo.jpg" alt="The Layouts tab with every layout faded out" width="200">
-  <img src="mom-typing-merry-christmas-note.jpg" alt="Typing Merry Christmas in a text box above the dog photo" width="200">
-  <img src="mom-finished-spread-dogs-note-sticker.jpg" alt="The finished page with her dog photo, note and sticker" width="200">
+  <img src="images/mom-text-tab-still-showing-photo-settings.jpg" alt="The Text tab is picked but the panel still shows the photo's settings" width="200">
+  <img src="images/mom-layouts-faded-because-page-has-a-photo.jpg" alt="The Layouts tab with every layout faded out" width="200">
+  <img src="images/mom-typing-merry-christmas-note.jpg" alt="Typing Merry Christmas in a text box above the dog photo" width="200">
+  <img src="images/mom-finished-spread-dogs-note-sticker.jpg" alt="The finished page with her dog photo, note and sticker" width="200">
 </p>
 
 ## Lily (11/23)
@@ -138,11 +138,11 @@ Audrey's and Mom's camera rolls are blurred for the few seconds their phone's ph
 - Tapped **Done editing**. The star, note and green background all stayed. She ended in **All spreads**, where her page shows up as pp. 15–16.
 
 <p>
-  <img src="../2026-11-23/lily-layouts-tab-still-showing-sticker-settings.jpg" alt="The Layouts tab is picked but the panel still shows the star sticker's settings" width="200">
-  <img src="../2026-11-23/lily-layouts-faded-left-page-has-a-sticker.jpg" alt="Every layout faded, with the message that the left page already has things on it" width="200">
-  <img src="../2026-11-23/lily-hi-note-in-figma-hand-rose-label.jpg" alt="Her hiiiiiiii note in Figma Hand with a Rose label under the star on a green page" width="200">
-  <img src="../2026-11-23/lily-finished-spread-star-and-note.jpg" alt="The finished green page with her star and note" width="200">
-  <img src="../2026-11-23/lily-all-spreads-with-her-page.jpg" alt="All spreads, with her page as pp. 15 and 16" width="200">
+  <img src="images/lily-layouts-tab-still-showing-sticker-settings.jpg" alt="The Layouts tab is picked but the panel still shows the star sticker's settings" width="200">
+  <img src="images/lily-layouts-faded-left-page-has-a-sticker.jpg" alt="Every layout faded, with the message that the left page already has things on it" width="200">
+  <img src="images/lily-hi-note-in-figma-hand-rose-label.jpg" alt="Her hiiiiiiii note in Figma Hand with a Rose label under the star on a green page" width="200">
+  <img src="images/lily-finished-spread-star-and-note.jpg" alt="The finished green page with her star and note" width="200">
+  <img src="images/lily-all-spreads-with-her-page.jpg" alt="All spreads, with her page as pp. 15 and 16" width="200">
 </p>
 
 ## Cami (11/23)
@@ -161,11 +161,11 @@ Audrey's and Mom's camera rolls are blurred for the few seconds their phone's ph
 - She tapped undo and redo, but the photo didn't come back. The caption was removed too, so the left page ended up empty. Nothing asked "Are you sure?" before the photo was deleted.
 
 <p>
-  <img src="../2026-11-23/cami-only-victoria-can-remove-message.jpg" alt="The message saying only Victoria can remove this photo" width="200">
-  <img src="../2026-11-23/cami-hello-stormi-caption-next-to-photo.jpg" alt="Typing Hello Stormi next to the photo of Stormi" width="200">
-  <img src="../2026-11-23/cami-caption-controls-on-top-of-stormi-photo.jpg" alt="The caption's delete and lock buttons sitting on top of the Stormi photo" width="200">
-  <img src="../2026-11-23/cami-stormi-photo-gone-caption-left.jpg" alt="The Stormi photo is gone and only the caption is left" width="200">
-  <img src="../2026-11-23/cami-left-page-empty-after-undo.jpg" alt="Pages 11 and 12 with the left page empty" width="200">
+  <img src="images/cami-only-victoria-can-remove-message.jpg" alt="The message saying only Victoria can remove this photo" width="200">
+  <img src="images/cami-hello-stormi-caption-next-to-photo.jpg" alt="Typing Hello Stormi next to the photo of Stormi" width="200">
+  <img src="images/cami-caption-controls-on-top-of-stormi-photo.jpg" alt="The caption's delete and lock buttons sitting on top of the Stormi photo" width="200">
+  <img src="images/cami-stormi-photo-gone-caption-left.jpg" alt="The Stormi photo is gone and only the caption is left" width="200">
+  <img src="images/cami-left-page-empty-after-undo.jpg" alt="Pages 11 and 12 with the left page empty" width="200">
 </p>
 
 ## Patterns so far
