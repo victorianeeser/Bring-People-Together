@@ -122,10 +122,12 @@ Audrey's and Mom's camera rolls are blurred for the few seconds their phone's ph
 
 ## Lily (11/23)
 
-**What she said:** _Comments coming soon._
+**What she said:** She understood the concept but was super confused at first about how to join a book. Overall she thought it was a cute concept, and once she got in she picked it up right away.
+
+**Her first try (recording not included):** In her first screen recording, she tried to add a book and couldn't get it to work. This recording is her second try.
 
 **From the recording (2 min, Safari private tab opened from Messages):**
-- Typed her name and joined with **IXD415** on the first try ("Joined IxD 415" showed).
+- On this second try she typed her name and joined with **IXD415** with no trouble ("Joined IxD 415" showed).
 - Flipped from the bucket list through every spread to the blank pages 15–16, then tapped **Edit** right away. Unlike Mason and Chris, she found it on her own.
 - Looked at **Photos**, then went to **Stickers** and added the smiley star. She made it bigger (22% to 47%) and looked at the tape and doodle stickers too.
 - With the star still selected, she tapped **Layouts**, but the panel kept showing the sticker's settings, the same thing that happened to Mom. She tapped **Done editing** and **Edit** again to get out of it.
@@ -147,16 +149,18 @@ Audrey's and Mom's camera rolls are blurred for the few seconds their phone's ph
 1. **Flipping through the book works.** All 7 got into the class book and flipped pages with no help. Mason called out the page flip.
 2. **Save in the photo editor gets lost on phones.** Cancel and Save are at the very bottom and are easy to lose under Safari's toolbar, so cropping can't be saved.
 3. **No next step after joining.** Mason and Chris never found **Edit**. Max found it but opened it 4 times without adding anything, which fits him not understanding it at first.
-4. **Things are small on a phone.** Mason, Chris and Mom pinched to zoom in to read pages and the bucket list.
-5. **Everyone liked the idea and the look.** All 6 said it was easy to use, fun, or a cool concept, and Chris and Mason called out the look and the page flip.
-6. **The guys looked around more than they made things.** Audrey jumped into editing and tried every photo option, Mom added a photo, sticker and note, Lily added a sticker, note and background, and Maya Zech knew right away that the point was to add to the book, while Mason, Chris and Max mostly looked around. Keepsake will probably appeal more to girls, but testing with guys still showed where the app doesn't explain itself.
-7. **Layouts don't say why they're off.** Once a page has anything on it, the layouts fade out, and the reason is hidden below them. Mom couldn't pick one and didn't know why. Lily saw the same faded layouts (the message was on screen for her) and moved on.
-8. **Tabs don't switch while something is selected.** Mom tapped Text and Stickers with her photo selected and kept seeing the photo's settings. Lily tapped Layouts with her sticker selected and kept seeing the sticker's settings.
+4. **Joining a book is confusing at first.** Lily tried to add a book on her first try and couldn't, and Max needed 3 tries to type the invite code. Both got in after that.
+5. **Things are small on a phone.** Mason, Chris and Mom pinched to zoom in to read pages and the bucket list.
+6. **Everyone liked the idea and the look.** All 7 said it was easy to use, fun, or a cool concept, and Chris and Mason called out the look and the page flip.
+7. **The guys looked around more than they made things.** Audrey jumped into editing and tried every photo option, Mom added a photo, sticker and note, Lily added a sticker, note and background, and Maya Zech knew right away that the point was to add to the book, while Mason, Chris and Max mostly looked around. Keepsake will probably appeal more to girls, but testing with guys still showed where the app doesn't explain itself.
+8. **Layouts don't say why they're off.** Once a page has anything on it, the layouts fade out, and the reason is hidden below them. Mom couldn't pick one and didn't know why. Lily saw the same faded layouts (the message was on screen for her) and moved on.
+9. **Tabs don't switch while something is selected.** Mom tapped Text and Stickers with her photo selected and kept seeing the photo's settings. Lily tapped Layouts with her sticker selected and kept seeing the sticker's settings.
 
 ## Ideas to fix
 
 - Keep **Cancel** and **Save** pinned to the top or bottom of the photo editor so they're always visible.
 - Show the photo preview while cropping, or crop right on the preview.
+- Make **Join with a code** the clear first step when someone opens Keepsake, so it's obvious how to get into a friend's book.
 - After joining, show a short hint like "Tap Edit to add a photo to a page."
 - Make page text and the bucket list bigger on phones.
 - Put the "page already has things on it" message above the layouts, or let layouts work on a page that has things on it.
