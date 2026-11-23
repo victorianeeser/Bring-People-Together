@@ -1,6 +1,6 @@
-# 11/22 | Keepsake user testing (round 1)
+# 11/22–11/23 | Keepsake user testing (round 1)
 
-6 of 10–15 testers so far · on their phones · screen recordings
+7 of 10–15 testers so far · on their phones · screen recordings
 
 Tested the [live Keepsake site](https://keepsake2.netlify.app/), joining the class book with the code **IXD415**.
 
@@ -12,6 +12,7 @@ Tested the [live Keepsake site](https://keepsake2.netlify.app/), joining the cla
 - [Chris (1.3 min)](chris-keepsake-test-recording.mp4)
 - [Max (1.5 min)](max-keepsake-test-recording.mp4)
 - [Mom (3 min)](mom-keepsake-test-recording.mp4)
+- [Lily (2 min, 11/23)](../2026-11-23/lily-keepsake-test-recording.mp4)
 
 Audrey's and Mom's camera rolls are blurred for the few seconds their phone's photo picker is open.
 
@@ -119,16 +120,38 @@ Audrey's and Mom's camera rolls are blurred for the few seconds their phone's ph
   <img src="mom-finished-spread-dogs-note-sticker.jpg" alt="The finished page with her dog photo, note and sticker" width="200">
 </p>
 
+## Lily (11/23)
+
+**What she said:** _Comments coming soon._
+
+**From the recording (2 min, Safari private tab opened from Messages):**
+- Typed her name and joined with **IXD415** on the first try ("Joined IxD 415" showed).
+- Flipped from the bucket list through every spread to the blank pages 15–16, then tapped **Edit** right away. Unlike Mason and Chris, she found it on her own.
+- Looked at **Photos**, then went to **Stickers** and added the smiley star. She made it bigger (22% to 47%) and looked at the tape and doodle stickers too.
+- With the star still selected, she tapped **Layouts**, but the panel kept showing the sticker's settings, the same thing that happened to Mom. She tapped **Done editing** and **Edit** again to get out of it.
+- On **Layouts**, every layout was faded because the left page had her star on it. This time the message ("The left page already has things on it. Layouts are for starting a blank page.") was on screen under the layouts. She didn't try the blank right page and moved on to **Page**.
+- Tried the page backgrounds Paper, Rose and Butter, and picked Sage (green).
+- Tapped **+ Add text box** and typed "HIIIIIIII". The keyboard covered most of the page while typing. Then she changed the font to Figma Hand and added the Rose label.
+- Tapped **Done editing**. The star, note and green background all stayed. She ended in **All spreads**, where her page shows up as pp. 15–16.
+
+<p>
+  <img src="../2026-11-23/lily-layouts-tab-still-showing-sticker-settings.jpg" alt="The Layouts tab is picked but the panel still shows the star sticker's settings" width="200">
+  <img src="../2026-11-23/lily-layouts-faded-left-page-has-a-sticker.jpg" alt="Every layout faded, with the message that the left page already has things on it" width="200">
+  <img src="../2026-11-23/lily-hi-note-in-figma-hand-rose-label.jpg" alt="Her hiiiiiiii note in Figma Hand with a Rose label under the star on a green page" width="200">
+  <img src="../2026-11-23/lily-finished-spread-star-and-note.jpg" alt="The finished green page with her star and note" width="200">
+  <img src="../2026-11-23/lily-all-spreads-with-her-page.jpg" alt="All spreads, with her page as pp. 15 and 16" width="200">
+</p>
+
 ## Patterns so far
 
-1. **Flipping through the book works.** All 6 got into the class book and flipped pages with no help. Mason called out the page flip.
+1. **Flipping through the book works.** All 7 got into the class book and flipped pages with no help. Mason called out the page flip.
 2. **Save in the photo editor gets lost on phones.** Cancel and Save are at the very bottom and are easy to lose under Safari's toolbar, so cropping can't be saved.
 3. **No next step after joining.** Mason and Chris never found **Edit**. Max found it but opened it 4 times without adding anything, which fits him not understanding it at first.
 4. **Things are small on a phone.** Mason, Chris and Mom pinched to zoom in to read pages and the bucket list.
 5. **Everyone liked the idea and the look.** All 6 said it was easy to use, fun, or a cool concept, and Chris and Mason called out the look and the page flip.
-6. **The guys looked around more than they made things.** Audrey jumped into editing and tried every photo option, Mom added a photo, sticker and note, and Maya Zech knew right away that the point was to add to the book, while Mason, Chris and Max mostly looked around. Keepsake will probably appeal more to girls, but testing with guys still showed where the app doesn't explain itself.
-7. **Layouts don't say why they're off.** Once a page has anything on it, the layouts fade out, and the reason is hidden below them. Mom couldn't pick one and didn't know why.
-8. **Tabs don't switch while something is selected.** Mom tapped Text and Stickers with her photo selected and kept seeing the photo's settings.
+6. **The guys looked around more than they made things.** Audrey jumped into editing and tried every photo option, Mom added a photo, sticker and note, Lily added a sticker, note and background, and Maya Zech knew right away that the point was to add to the book, while Mason, Chris and Max mostly looked around. Keepsake will probably appeal more to girls, but testing with guys still showed where the app doesn't explain itself.
+7. **Layouts don't say why they're off.** Once a page has anything on it, the layouts fade out, and the reason is hidden below them. Mom couldn't pick one and didn't know why. Lily saw the same faded layouts (the message was on screen for her) and moved on.
+8. **Tabs don't switch while something is selected.** Mom tapped Text and Stickers with her photo selected and kept seeing the photo's settings. Lily tapped Layouts with her sticker selected and kept seeing the sticker's settings.
 
 ## Ideas to fix
 
