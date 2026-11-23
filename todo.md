@@ -4,7 +4,7 @@ Due by Monday, November 23
 
 - **Leandra:** get some kind of analytics running on our project (the minimum metric is the # of users) ([visitor stats](https://plausible.io/keepsake2.netlify.app)) ✅ **Done**
 - **Leandra:** user test with 10–15 people
-- **Maya:** user test with 10–15 people (5 so far: [notes and recordings](notes/maya/2026-11-22/maya-user-testing.md))
+- **Maya:** user test with 10–15 people (6 so far: [notes and recordings](notes/maya/2026-11-22/maya-user-testing.md))
 - **Maya:** polish the prototype: add more stickers and branding elements that look like real scrapbook pieces, and fix any bugs ✅ **Done**
 - **Victoria:** user test with 10–15 people
 - **Victoria:** edit a TikTok that promotes our project ([videos](notes/tiktok-videos/)) ✅ **Done**
