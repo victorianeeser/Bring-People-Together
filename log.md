@@ -95,4 +95,4 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 
 ## Nov 24
 
-- **Leandra:** user tested the new phone layout on [Keepsake](https://keepsake2.netlify.app/) with 2 people on their phones. [Photos](notes/leandra/2026-11-24/leandra-phone-testing.md)
+- **Leandra:** user tested the new phone layout on [Keepsake](https://keepsake2.netlify.app/) with 2 people on their phones. They found it self-explanatory, jumped straight into adding stickers and photos, and loved seeing things move live and who's on the page. Zooming felt a little choppy. [Notes and photos](notes/leandra/2026-11-24/leandra-phone-testing.md)
