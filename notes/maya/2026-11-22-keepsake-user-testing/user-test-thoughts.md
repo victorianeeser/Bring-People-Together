@@ -1,6 +1,6 @@
 # 11/22–11/23 | Keepsake user testing
 
-9 of 10–15 testers so far · on their phones · screen recordings
+10 of 10–15 testers so far · on their phones · screen recordings
 
 Tested the [live Keepsake site](https://keepsake2.netlify.app/), joining the class book with the code **IXD415**.
 
@@ -15,6 +15,7 @@ Tested the [live Keepsake site](https://keepsake2.netlify.app/), joining the cla
 - [Lily (2 min, 11/23)](recordings/lily-keepsake-test-recording.mp4)
 - [Cami (3.7 min, 11/23)](recordings/cami-keepsake-test-recording.mp4)
 - [Emmie (2.3 min, 11/23)](recordings/emmie-keepsake-test-recording.mp4)
+- [Alyssa (4.3 min, 11/23)](recordings/alyssa-keepsake-test-recording.mp4)
 
 Audrey's and Mom's camera rolls are blurred for the few seconds their phone's photo picker is open.
 
@@ -190,19 +191,41 @@ Audrey's and Mom's camera rolls are blurred for the few seconds their phone's ph
   <img src="images/emmie-added-taco-crawl-to-bucket-list.jpg" alt="Taco crawl added to her bucket list" width="200">
 </p>
 
+## Alyssa (11/23)
+
+**What she said:** It took her a second to get familiar with everything since it was new, but once she started clicking through everything she liked it. She enjoyed the pictures and the run-through of each bucket list plan, with its location and cost.
+
+**From the recording (4.3 min, Snapchat's in-app browser, the new phone layout that shows one page at a time):**
+- Typed her name. Snapchat popped up its own "Autofill this form?" and "Save info?" sheets, like it did for Chris and Cami.
+- Tapped **Join with a code** and joined with **IXD415** on the first try ("Joined IxD 415" showed).
+- Tried the shelf's grid view, then opened the class book to the bucket list and tapped through the season filters. Spring said "Nothing for Spring yet."
+- Opened almost every plan to read the details: Group photo after final crit (Studio, Finals week, Free), Coffee run between work sessions (Campus cafe, Any Wednesday, $, Matt and Maya in), End of quarter celebration, End of Yera Christmas Party and pizza party!. This matches what she said she enjoyed.
+- Flipped through every page one at a time, from page 2 to page 18, and opened **All spreads** to see them all at once.
+- Opened the **More** menu (Book settings, Leave book) and the member list ("26 people in IxD 415"). The list shows some names more than once, like Maya, Tori and Victoria, probably from testers joining more than once.
+- She never tapped **Edit page**, **I'm in** or **+ Add an idea**. She spent the whole test reading and looking.
+
+<p>
+  <img src="images/alyssa-group-photo-plan-details.jpg" alt="The Group photo after final crit plan with where, when, cost and season" width="200">
+  <img src="images/alyssa-flipping-to-page-7-collage.jpg" alt="Page 7, the photo collage, in the one-page phone layout" width="200">
+  <img src="images/alyssa-all-spreads-view.jpg" alt="All spreads showing every page at once" width="200">
+  <img src="images/alyssa-coffee-run-plan-where-when-cost.jpg" alt="The Coffee run plan with Campus cafe, Any Wednesday, $ and who's in" width="200">
+  <img src="images/alyssa-member-list-same-names-repeated.jpg" alt="The member list with Maya, Tori and Victoria each listed more than once" width="200">
+</p>
+
 ## Patterns so far
 
-1. **Flipping through the book works.** All 9 got into the class book and flipped pages with no help. Mason called out the page flip.
+1. **Flipping through the book works.** All 10 got into the class book and flipped pages with no help. Mason called out the page flip.
 2. **Save in the photo editor gets lost on phones.** Cancel and Save are at the very bottom and are easy to lose under Safari's toolbar, so cropping can't be saved.
-3. **No next step after joining.** Mason and Chris never found **Edit**. Max found it but opened it 4 times without adding anything, which fits him not understanding it at first.
+3. **No next step after joining.** Mason and Chris never found **Edit**. Max found it but opened it 4 times without adding anything, which fits him not understanding it at first. Alyssa read every plan and page but never tapped **Edit page**.
 4. **Joining a book is confusing at first.** Lily tried to add a book on her first try and couldn't, Max needed 3 tries to type the invite code, and Emmie opened **New book** before finding **Join with a code**. All three got in after that.
 5. **Things are small on a phone.** Mason, Chris, Mom and Cami pinched to zoom in to read pages and the bucket list.
-6. **Everyone liked the idea and the look.** All 9 said it was easy to use, fun, a cool concept, looking good, or self-explanatory, and Chris and Mason called out the look and the page flip.
-7. **The guys looked around more than they made things.** Audrey jumped into editing and tried every photo option, Mom added a photo, sticker and note, Lily added a sticker, note and background, Cami added a caption, Emmie made her own book and bucket list idea, and Maya Zech knew right away that the point was to add to the book, while Mason, Chris and Max mostly looked around. Keepsake will probably appeal more to girls, but testing with guys still showed where the app doesn't explain itself.
+6. **Everyone liked the idea and the look.** All 10 said it was easy to use, fun, a cool concept, looking good, or self-explanatory, and Chris and Mason called out the look and the page flip.
+7. **The guys looked around more than they made things.** Audrey jumped into editing and tried every photo option, Mom added a photo, sticker and note, Lily added a sticker, note and background, Cami added a caption, Emmie made her own book and bucket list idea, and Maya Zech knew right away that the point was to add to the book, while Mason, Chris and Max mostly looked around. Alyssa mostly looked around too, but she still said she enjoyed it. Keepsake will probably appeal more to girls, but testing with guys still showed where the app doesn't explain itself.
 8. **Layouts don't say why they're off.** Once a page has anything on it, the layouts fade out, and the reason is hidden below them. Mom couldn't pick one and didn't know why. Lily saw the same faded layouts (the message was on screen for her) and moved on.
 9. **Tabs don't switch while something is selected.** Mom tapped Text and Stickers with her photo selected and kept seeing the photo's settings. Lily tapped Layouts with her sticker selected and kept seeing the sticker's settings.
 10. **It's too easy to delete or change something by accident.** Cami lost the Stormi photo while adding a caption next to it. Nothing asked her to confirm, and undo didn't bring it back. Emmie tapped **We did it!** on Tori's plan, which crossed it off and added a spread to the whole class book, also with no confirm.
 11. **People want to share the bucket list.** Emmie asked for a way to share the bucket list by itself.
+12. **The plan details are a highlight.** Alyssa opened almost every plan and said she enjoyed seeing each one's location and cost.
 
 ## Ideas to fix
 
@@ -216,4 +239,5 @@ Audrey's and Mom's camera rolls are blurred for the few seconds their phone's ph
 - Make undo bigger and easier to find, and make sure it brings back a deleted photo.
 - Add a way to share the bucket list by itself, like a share button on the bucket list page.
 - Ask "Are you sure?" before marking someone else's plan as done.
+- Combine repeat names in the member list (Maya, Tori and Victoria each show up more than once).
 - Ask "Are you sure?" before deleting a photo, and keep the delete button from landing on top of other things on the page.
