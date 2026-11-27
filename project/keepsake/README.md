@@ -13,7 +13,7 @@ Join the class book with the invite code **IXD415**. Change `class` to a new roo
 
 It uses the same Firebase rooms as the 11/13 live version, so the books there show up here in the Keepsake look.
 
-**Analytics:** visits to the live site are counted with [Plausible](https://plausible.io) (Leandra's account). **Public dashboard: https://plausible.io/scrapbook-proto.netlify.app** (anyone can view it; nobody can change it). Plausible uses no cookies and doesn't collect personal data. The script is in the `<head>` of [`index.html`](index.html). It only counts visits on scrapbook-proto.netlify.app, not when you run the site on your own computer.
+**Analytics:** visits to the live site are counted with [Plausible](https://plausible.io) (Leandra's account). **Public dashboard: https://plausible.io/keepsake2.netlify.app** (anyone can view it; nobody can change it). Plausible uses no cookies and doesn't collect personal data. The script is in the `<head>` of [`index.html`](index.html). It only counts visits on keepsake2.netlify.app, not when you run the site on your own computer.
 
 The site also sends these events ([`js/analytics.js`](js/analytics.js)). Each one only shows up in Plausible once it's added as a goal (**Site settings > Goals > Add goal > Custom event**, with the name exactly as written):
 

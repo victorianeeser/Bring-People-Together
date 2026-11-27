@@ -1,6 +1,6 @@
 // Counts what people do, with Plausible (the script is in index.html).
 // Only the event name and a few plain labels are sent: never names, invite codes, room names,
-// text, or photos. Plausible only records these on scrapbook-proto.netlify.app, not on your computer.
+// text, or photos. Plausible only records these on keepsake2.netlify.app, not on your computer.
 // To see an event in the dashboard, add its name as a goal in Plausible (Site settings > Goals).
 
 export const EVENTS = {
