@@ -2,7 +2,7 @@
 
 Victoria's 11/21 version of the [Keepsake scrapbook](../2026-11-18-keepsake/) (Maya's 11/18–11/19 folder is unchanged). What's new is listed under **Edit cover and a simpler home page (11/21, Victoria)** below: two fonts only, a simpler home page, Edit cover, brand colors for everyone, the Edit panel in tabs, layouts, snap guides, multi-select, note labels, locking, more page backgrounds, and new places to add and remove pages.
 
-**To update the live link:** drag this `keepsake` folder onto the site's **Deploys** page in Netlify (the books in Firebase stay as they are). This folder was called `2026-11-21` until 11/22.
+**To update the live link:** push your changes to `main` on GitHub. [keepsake2.netlify.app](https://keepsake2.netlify.app/) updates itself from this folder (see [Updating the live site](#updating-the-live-site)). This folder was called `2026-11-21` until 11/22.
 
 Originally: a copy of the [live scrapbook](../2026-11-13-live/) (with Leandra's safety features), branded as **Keepsake** using Maya's handmade brand boards in Figma (Branding page: the Keepsake board, the sticker set and the multiplayer states).
 
@@ -36,6 +36,8 @@ Book events carry one label, `book`: either "IxD 415 class book" or "other book"
 ## To do for Leandra (11/19): put the new changes online
 
 Two steps. Both need Leandra's logins, so nobody else can do them.
+
+Step 1 was for the old scrapbook-proto site. The live site is now keepsake2, which updates itself when changes are pushed to GitHub (see [Updating the live site](#updating-the-live-site)).
 
 **1. Update the live site (Netlify).** This puts all of the 11/19 changes online: the 11/18 crit fixes (invite-only books, delete only for you, editable bucket list, backgrounds, the × remove button, videos, recently uploaded, camera roll, photo editor, tape colors, brand fonts, following someone), the cleaned-up edit panel and home page, and the paper textures.
 
@@ -125,13 +127,15 @@ To check it worked: open the live link, go to a page, click **Edit**, and add a 
 
 ## Updating the live site
 
-Keepsake replaced the 11/13 version at scrapbook-proto.netlify.app on 11/18. The site was made with Netlify Drop, so it doesn't update itself when this folder changes. To put new changes online:
+The live site is [keepsake2.netlify.app](https://keepsake2.netlify.app/). Netlify builds it from this `keepsake` folder on the `main` branch, so it updates itself. Nobody needs to drag anything into Netlify anymore.
 
-1. Update **[keepsake-netlify-drop.zip](../2026-11-19/keepsake-netlify-drop.zip)**, or `git pull` and use this folder.
-2. In Netlify, open the **scrapbook-proto** site and go to **Deploys**.
-3. Drag the zip (or this folder) onto the page.
+1. Make your changes in this folder.
+2. Commit and push them to `main` on GitHub.
+3. Wait a minute or two, then reload [keepsake2.netlify.app](https://keepsake2.netlify.app/). In Netlify, the site's **Deploys** page shows **Published** when it's done.
 
-The books are saved in Firebase, so nothing is lost when the site is updated.
+The books are saved in Firebase, so nothing is lost when the site is updated. Changes to the database rules ([`database.rules.json`](database.rules.json)) still have to be pasted into the Firebase console by hand (see step 2 above).
+
+Before keepsake2, Keepsake ran at scrapbook-proto.netlify.app, a Netlify Drop site that only changed when someone dragged the folder onto it. That site isn't updated anymore.
 
 ## What the branding changed
 
