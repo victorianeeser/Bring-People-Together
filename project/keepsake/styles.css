@@ -2188,8 +2188,9 @@ body { background-image: radial-gradient(ellipse 70% 60% at 50% 46%, var(--bg-ce
    Laptops and tablets keep the two-page spread.
    ================================================================== */
 .phone-bar, .zoom-pill, .added-chip, .sheet-tools, .page-sub { display: none; }
+.pick-layer { display: none; }
 @media (max-width: 700px) {
-  /* ---- One page at a time ---- */
+  /* ---- One page at a time (while editing, and the bucket list) ---- */
   .book-view.single {
     --page-w: min(calc(100vw - 32px), calc((100vh - 220px) * 0.75));
     --page-h: calc(var(--page-w) / 0.75);
@@ -2205,20 +2206,38 @@ body { background-image: radial-gradient(ellipse 70% 60% at 50% 46%, var(--bg-ce
   .book-view.single .book-stage { align-content: start; padding: 10px 0 calc(104px + env(safe-area-inset-bottom, 0px)); }
 
   /* ---- A calmer header: back, the book title and this page title, and the people here ---- */
-  .book-view.single .book-top-right [data-action="camera-roll"],
-  .book-view.single .book-top-right [data-action="overview"],
-  .book-view.single #page-label,
-  .book-view.single .book-actions { display: none; }
-  .book-view.single .page-sub { display: block; min-height: 16px; margin-top: 2px; color: var(--on-dark-muted); font-size: 13px; }
-  body:has(.book-view.single) .presence-bar { display: none; }
+  .book-view.phone .book-top-right [data-action="camera-roll"],
+  .book-view.phone .book-top-right [data-action="overview"],
+  .book-view.phone #page-label,
+  .book-view.phone .book-actions { display: none; }
+  .book-view.phone .page-sub { display: block; min-height: 16px; margin-top: 2px; color: var(--on-dark-muted); font-size: 13px; }
+  body:has(.book-view.phone) .presence-bar { display: none; }
 
   /* ---- One bar along the bottom: all pages, Edit page and where you are, next ---- */
-  .book-view.single .phone-bar {
+  .book-view.phone .phone-bar {
     display: grid; grid-template-columns: 70px 1fr 70px; align-items: center; position: fixed; left: 0; right: 0; bottom: 0; z-index: 15;
     padding: 8px 12px calc(10px + env(safe-area-inset-bottom, 0px)); background: rgba(251, 245, 241, 0.97);
     box-shadow: 0 -4px 16px rgba(81, 12, 13, 0.08);
   }
-  .book-view.single.editing .phone-bar { display: none; }
+  .book-view.phone.editing .phone-bar { display: none; }
+  .phone-edit.is-cancel { background: var(--glass); color: var(--ink); border-color: var(--glass-line); }
+
+  /* ---- Looking through the book (11/27): the two-page spread, as wide as the screen ---- */
+  .book-view.phone:not(.single) .turn-controls, .book-view.phone:not(.single) .edges { display: none; }
+  .book-view.phone:not(.single) .book-stage { align-content: center; padding: 10px 0 calc(104px + env(safe-area-inset-bottom, 0px)); }
+
+  /* ---- Edit page: tap the page you want, and the book zooms in on it ---- */
+  .book-view.picking .pick-layer { display: grid; grid-template-columns: 1fr 1fr; position: absolute; inset: 0; z-index: 6; }
+  .pick-layer button {
+    display: grid; place-items: center; margin: 0; padding: 0; border: 2px dashed rgba(208, 107, 107, 0.85); border-radius: 6px;
+    background: rgba(251, 245, 241, 0.35); cursor: pointer; animation: pick-in 0.2s ease-out;
+  }
+  .pick-layer button span {
+    padding: 8px 12px; border-radius: 999px; background: var(--k-maroon); color: var(--k-paper);
+    font: 700 12px/1 var(--ui); box-shadow: 0 4px 12px rgba(81, 12, 13, 0.25); white-space: nowrap;
+  }
+  .pick-layer button:active { background: rgba(208, 107, 107, 0.18); }
+  @keyframes pick-in { from { opacity: 0; } }
   .phone-btn { display: grid; justify-items: center; gap: 3px; padding: 0; border: 0; background: none; color: var(--ink); font: 600 11px/1.2 var(--ui); cursor: pointer; }
   .phone-btn svg { width: 40px; height: 40px; padding: 9px; border: 1px solid var(--glass-line); border-radius: 50%; background: var(--glass); fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
   .phone-btn:disabled { opacity: 0.4; }

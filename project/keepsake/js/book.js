@@ -54,9 +54,13 @@ export function mountBook(root, bookId) {
   document.title = book.title;
   let index = 0; // a book always opens to its first spread (the bucket list, when it has one)
   let turning = false;
-  // Phones (11/23): one page at a time instead of the two-page spread. `side` is the page on screen.
+  // Phones (11/27): the book shows the two-page spread. To edit, you pick a page and the book
+  // zooms in on it, so editing is one page at a time. The bucket list is always one full-width list.
+  // `side` is the page you're editing.
   const phoneMQ = window.matchMedia('(max-width: 700px)');
-  const isSingle = () => phoneMQ.matches;
+  const isPhone = () => phoneMQ.matches;
+  const isSingle = () => isPhone() && (editMode || spreadsOf(book)[index]?.kind === 'toc');
+  let picking = false; // "Tap the page you want to edit"
   let side = 'left';
   let zoom = 1; // pinch-to-zoom while editing on a phone (1 = the whole page)
 
@@ -85,6 +89,10 @@ export function mountBook(root, bookId) {
           <div class="spread" id="spread" tabindex="-1">
             <div class="page left"><div class="page-inner" id="page-left"></div></div>
             <div class="page right"><div class="page-inner" id="page-right"></div></div>
+          </div>
+          <div class="pick-layer">
+            <button type="button" data-action="pick-page" data-side="left"><span>Edit this page</span></button>
+            <button type="button" data-action="pick-page" data-side="right"><span>Edit this page</span></button>
           </div>
           <div class="live-layer" aria-hidden="true"></div>
           <div class="by-layer"><span class="by-tag" aria-hidden="true" hidden></span><button type="button" class="sel-x" hidden aria-label="Remove">×</button><button type="button" class="sel-lock" hidden aria-label="Lock in place">${ICONS.unlock}</button></div>
@@ -162,7 +170,10 @@ export function mountBook(root, bookId) {
     const on = isSingle();
     const entry = spreadsOf(book)[index];
     if (entry?.kind === 'toc') side = 'left';
+    if (picking && (!isPhone() || entry?.kind !== 'spread' || editMode)) picking = false;
+    viewEl.classList.toggle('phone', isPhone());
     viewEl.classList.toggle('single', on);
+    viewEl.classList.toggle('picking', picking);
     spreadEl.dataset.side = side;
     spreadEl.classList.toggle('is-toc', entry?.kind === 'toc');
     editor?.setSingleSide(on && entry?.kind === 'spread' ? side : null);
@@ -173,15 +184,18 @@ export function mountBook(root, bookId) {
   const pageNoPhone = () => (index - listOffset()) * 2 + (side === 'right' ? 2 : 1);
   function updatePhoneChrome() {
     const panelTitle = root.querySelector('#edit-panel .panel-head h2');
-    if (!isSingle()) { if (panelTitle) panelTitle.textContent = 'Edit spread'; return; }
+    if (!isPhone()) { if (panelTitle) panelTitle.textContent = 'Edit spread'; return; }
     const entry = spreadsOf(book)[index];
     const isToc = entry?.kind === 'toc';
+    const first = (index - listOffset()) * 2 + 1;
     root.querySelector('#page-sub').textContent = isToc ? '' : String(entry?.spread.title || '').toLowerCase();
-    root.querySelector('.phone-page').textContent = isToc ? 'bucket list' : `page ${pageNoPhone()} of ${pageCountPhone()}`;
+    root.querySelector('.phone-page').textContent = isToc ? 'bucket list'
+      : picking ? 'tap the page you want to edit'
+      : `pages ${first}–${first + 1} of ${pageCountPhone()}`;
     if (panelTitle) panelTitle.textContent = isToc ? 'Edit' : `editing page ${pageNoPhone()}`;
-    // Dots: the bucket list, then every scrapbook page. Long books show the dots around where you are.
-    const count = listOffset() + pageCountPhone();
-    const here = isToc ? 0 : listOffset() + pageNoPhone() - 1;
+    // Dots: the bucket list, then every spread. Long books show the dots around where you are.
+    const count = total();
+    const here = index;
     const MAX = 9;
     const start = Math.max(0, Math.min(here - Math.floor(MAX / 2), count - MAX));
     const dots = [];
@@ -189,13 +203,14 @@ export function mountBook(root, bookId) {
     root.querySelector('.phone-dots').innerHTML = dots.join('');
     const edit = root.querySelector('.phone-edit');
     edit.classList.toggle('is-off', isToc);
-    edit.textContent = editMode ? 'Done' : 'Edit page';
+    edit.textContent = editMode ? 'Done' : picking ? 'Cancel' : 'Edit page';
+    edit.classList.toggle('is-cancel', picking);
     const next = root.querySelector('#phone-next');
-    const atEnd = index >= total() - 1 && (isToc || side === 'right');
+    const atEnd = index >= total() - 1 && (isToc || !isSingle() || side === 'right');
     next.dataset.action = atEnd ? 'add-spread' : 'phone-next';
     next.innerHTML = atEnd ? `${ICONS.plus}<span>Add pages</span>` : `${CHEVRON_RIGHT}<span>Next</span>`;
-    next.setAttribute('aria-label', atEnd ? 'Add two pages at the end' : 'Next page');
-    root.querySelectorAll('[data-action="prev"]').forEach((b) => { b.disabled = index === 0 && side === 'left'; });
+    next.setAttribute('aria-label', atEnd ? 'Add two pages at the end' : 'Next pages');
+    root.querySelectorAll('[data-action="prev"]').forEach((b) => { b.disabled = index === 0 && (!isSingle() || side === 'left'); });
   }
 
   // Turn one page: the other side of the same spread if there is one, otherwise the next or previous spread.
@@ -462,11 +477,15 @@ export function mountBook(root, bookId) {
   function setEditMode(on) {
     // Edits made before the shared books load would be replaced when they arrive, so wait.
     if (on && !isSynced()) { toast('Still connecting… try Edit again in a second'); return; }
+    const zoomFrom = isPhone() && currentSpread() ? zoomStart(on) : null;
     editMode = on;
+    picking = false;
     if (liveReady) sharePlace();
     if (!on) { editor.deselect(); setSheet(false); resetZoom(); hideAdded(); }
-    updateChrome();
+    if (isPhone()) showSpread(); // one page while editing, the spread when you're done
+    else updateChrome();
     editor.refresh();
+    if (zoomFrom) zoomPlay(on, zoomFrom);
     announce(on ? 'Editing. The edit panel is open on the right.' : 'Done editing');
     if (!on) root.querySelector('.edit-pill')?.focus({ preventScroll: true });
   }
@@ -509,7 +528,16 @@ export function mountBook(root, bookId) {
 
   const actions = {
     back: () => window.dispatchEvent(new CustomEvent('book:close', { detail: { id: bookId } })),
-    'toggle-edit': () => setEditMode(!editMode),
+    'toggle-edit': () => {
+      // Phones: Edit page asks which page first (then zooms in on it). Tap it again to cancel.
+      if (isPhone() && !editMode && currentSpread()) { setPicking(!picking); return; }
+      setEditMode(!editMode);
+    },
+    'pick-page': (btn) => {
+      side = btn.dataset.side === 'right' ? 'right' : 'left';
+      setEditMode(true);
+      if (!editMode) setPicking(false); // still connecting
+    },
     'toc-item': (btn) => popover.open(btn.dataset.id, btn),
     'toc-link': (btn) => turnTo(Number(btn.dataset.index)),
     'toc-season': (btn) => {
@@ -588,6 +616,7 @@ export function mountBook(root, bookId) {
     }
     if (editor.handleKey(event)) return;
     if (isTyping(event.target)) return;
+    if (picking && event.key === 'Escape') { event.preventDefault(); setPicking(false); return; }
     if (event.key === 'ArrowRight' || event.key === 'PageDown') { event.preventDefault(); stopFollow(); pageStep(1); }
     if (event.key === 'ArrowLeft' || event.key === 'PageUp') { event.preventDefault(); stopFollow(); pageStep(-1); }
     if (event.key === 'Escape') { event.preventDefault(); actions.back(); }
@@ -612,6 +641,7 @@ export function mountBook(root, bookId) {
     if (editMode) return; // in Edit mode the editor handles it
     const el = event.target.closest('.page-inner .pi-photo');
     if (!el || !currentSpread()) return;
+    if (isPhone()) side = el.closest('.page.right') ? 'right' : 'left';
     setEditMode(true);
     if (editMode) editor.editPhoto(el.dataset.id);
   });
@@ -622,7 +652,7 @@ export function mountBook(root, bookId) {
   const areaEl = root.querySelector('.spread-area');
   let swipe = null;
   areaEl.addEventListener('touchstart', (event) => {
-    swipe = isSingle() && !editMode && event.touches.length === 1 ? { x: event.touches[0].clientX, y: event.touches[0].clientY } : null;
+    swipe = isPhone() && !editMode && event.touches.length === 1 ? { x: event.touches[0].clientX, y: event.touches[0].clientY } : null;
   }, { passive: true });
   areaEl.addEventListener('touchend', (event) => {
     if (!swipe) return;
@@ -632,6 +662,35 @@ export function mountBook(root, bookId) {
     swipe = null;
     if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.3) { stopFollow(); pageStep(dx < 0 ? 1 : -1); }
   }, { passive: true });
+
+  // ---------- phones: pick a page, and the book zooms in on it ----------
+  function setPicking(on) {
+    picking = on && isPhone() && Boolean(currentSpread());
+    viewEl.classList.toggle('picking', picking);
+    updatePhoneChrome();
+    if (picking) announce('Tap the page you want to edit');
+  }
+  // Where the page is before the change: on the spread (zooming in) or the whole page (zooming out).
+  function zoomStart(on) {
+    if (reducedMotion()) return null;
+    const el = on ? spreadEl.querySelector(`.page.${side}`) : spreadEl;
+    const r = el?.getBoundingClientRect();
+    return r && r.width ? r : null;
+  }
+  // Animate from that spot to where the page is now, so it looks like the book zooms in or out.
+  function zoomPlay(on, from) {
+    const el = on ? spreadEl : spreadEl.querySelector(`.page.${side}`);
+    const to = el?.getBoundingClientRect();
+    const box = spreadEl.getBoundingClientRect();
+    if (!to || !to.width) return;
+    const s = from.width / to.width;
+    const tx = from.left - (box.left + (to.left - box.left) * s);
+    const ty = from.top - (box.top + (to.top - box.top) * s);
+    spreadEl.animate([
+      { transformOrigin: '0 0', transform: `translate(${tx}px, ${ty}px) scale(${s})` },
+      { transformOrigin: '0 0', transform: 'none' },
+    ], { duration: 320, easing: 'cubic-bezier(.2, .8, .2, 1)' });
+  }
 
   // ---------- phones: the edit tools open a short sheet that never shrinks the page ----------
   const panelEl = root.querySelector('#edit-panel');
@@ -713,7 +772,7 @@ export function mountBook(root, bookId) {
   });
 
   // Rotating a phone (or resizing a window) switches between one page and the two-page spread.
-  const onPhoneChange = () => { resetZoom(); setSheet(false); hideAdded(); showSpread(); };
+  const onPhoneChange = () => { picking = false; resetZoom(); setSheet(false); hideAdded(); showSpread(); };
   phoneMQ.addEventListener('change', onPhoneChange);
 
   // Live: someone else changed the book. Redraw, but never in the middle of a page turn,

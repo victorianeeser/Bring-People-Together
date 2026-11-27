@@ -241,6 +241,18 @@ People who used the 11/13 version before invite codes were added to every book a
 - **New editing tools:** **Add pages** (the arrow under the book turns into **+ Add pages** on the last spread, and there's an **Add pages** tile at the end of the All spreads overview), **Remove pages** (the trash on a spread in the overview, or **Remove these pages** at the bottom of the Page tab; only when everything on them is yours, or it's your book), **page layouts** in the Layouts tab (one per page to start it; swap freely until you fill something in) with photo boxes you fill by double-clicking or dropping a photo ([`js/layouts.js`](js/layouts.js)), **snap guides** and **Center on page**, **Shift-click** to select several things and move or remove them together, note **alignment** and **labels** (paper, tag, rose, tape), and a **lock** next to the × to keep something in place.
 - **Page backgrounds:** 24 papers in groups, with Opacity and Size sliders.
 
+## Phones: the spread, then zoom in to edit (11/27, Leandra)
+
+Changes the 11/23 phone layout below. Looking through a book on a phone now shows the **two-page spread** again, so it still feels like a book. Editing is still one page at a time.
+
+- **The spread, as wide as the screen.** Swipe left or right, or tap **Next**, to turn to the next two pages (the 3D page flip). The bottom bar shows "pages 3–4 of 8", with one dot for the bucket list and one for each spread.
+- **Edit page asks which page.** Tap **Edit page** and both pages get a dashed outline and an **Edit this page** button, with "tap the page you want to edit" underneath. Tap a page and the book zooms in on it. **Cancel** (or Esc) goes back.
+- **Done zooms back out** to the spread, so you can see your changes next to the other page.
+- **Double-tapping a photo** edits the page it's on.
+- **Unchanged:** the bucket list is still one full-width list, editing works the same as on 11/23 (the short sheet, + Add another, pinch to zoom), and **Add pages** still goes straight into editing the first new page. Laptops are unchanged.
+
+Code: "Phones (11/27)" and "pick a page" in [`js/book.js`](js/book.js), and "Looking through the book (11/27)" and "Edit page: tap the page you want" in [`styles.css`](styles.css).
+
 ## Phones: one page at a time (11/23, Leandra)
 
 From the Figma mockups on the Mobile screens page ("Proposed: phone layout for opening a book"). Only on screens 700px wide or less; laptops and tablets keep the two-page spread.
