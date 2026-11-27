@@ -97,6 +97,10 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 
 - **Leandra:** user tested the new phone layout on [Keepsake](https://keepsake2.netlify.app/) with 2 people on their phones. They found it self-explanatory, jumped straight into adding stickers and photos, and loved seeing things move live and who's on the page. Zooming felt a little choppy. [Notes and photos](notes/leandra/2026-11-24/leandra-phone-testing.md)
 
+## Nov 26
+
+- **Leandra:** user tested [Keepsake](https://keepsake2.netlify.app/) on phones with 5 people at Thanksgiving. Switching between tool tabs was slow, it wasn't clear that changes save automatically or whether to drag or tap to add things, the pop-up sheet felt too big and couldn't be dragged down, and they wanted more fonts and bigger text. [Notes and photo](notes/leandra/2026-11-24/leandra-phone-testing.md#1126--5-people-at-thanksgiving)
+
 ## Nov 27
 
 - **Leandra:** with Claude Code, pointed the repo to the current live site, [keepsake2.netlify.app](https://keepsake2.netlify.app/): the "Try it live" and [Plausible dashboard](https://plausible.io/keepsake2.netlify.app) links in the README, and the steps for [updating the live site](project/keepsake/README.md#updating-the-live-site) (it now updates itself when changes are pushed to GitHub, no more dragging into Netlify)
