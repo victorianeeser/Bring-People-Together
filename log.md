@@ -100,3 +100,4 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 ## Nov 27
 
 - **Leandra:** with Claude Code, pointed the repo to the current live site, [keepsake2.netlify.app](https://keepsake2.netlify.app/): the "Try it live" and [Plausible dashboard](https://plausible.io/keepsake2.netlify.app) links in the README, and the steps for [updating the live site](project/keepsake/README.md#updating-the-live-site) (it now updates itself when changes are pushed to GitHub, no more dragging into Netlify)
+- **Leandra:** with Claude Code, changed the phone version of the [live Keepsake site](https://keepsake2.netlify.app/): a book now shows the two-page spread again, so it still feels like a book. Tap **Edit page**, pick the page you want, and the book zooms in on it. **Done** zooms back out to the spread ([what changed](project/keepsake/README.md#phones-the-spread-then-zoom-in-to-edit-1127-leandra))
