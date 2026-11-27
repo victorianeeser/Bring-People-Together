@@ -1,6 +1,6 @@
 # Phone layout user testing
 
-Testing the phone layout on [keepsake2.netlify.app](https://keepsake2.netlify.app/), 7 people in all.
+Testing the phone layout on [keepsake2.netlify.app](https://keepsake2.netlify.app/), 10 people in all.
 
 ## 11/24 | 2 people
 
@@ -42,3 +42,11 @@ Tested with 5 people on their phones at Thanksgiving.
 - More font choices, and an easier way to make text bigger.
 
 ![Two people at Thanksgiving using Keepsake on their phones: one on the home page with the class book, the other editing a page with a photo and a sun sticker](thanksgiving-testers-on-phones.webp)
+
+## 11/27 | 3 people over a call
+
+Sent 3 people the link and talked them through it on a group call. I could see them add stickers and photos as they went.
+
+### What happened
+
+- They thought it was pretty easy.
