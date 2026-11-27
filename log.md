@@ -95,11 +95,7 @@ Updated at least weekly. For each entry: what we tested, with whom, what happene
 
 ## Nov 24
 
-- **Leandra:** user tested the new phone layout on [Keepsake](https://keepsake2.netlify.app/) with 2 people on their phones. They found it self-explanatory, jumped straight into adding stickers and photos, and loved seeing things move live and who's on the page. Zooming felt a little choppy. [Notes and photos](notes/leandra/2026-11-24/leandra-phone-testing.md)
-
-## Nov 26
-
-- **Leandra:** user tested [Keepsake](https://keepsake2.netlify.app/) on phones with 5 people at Thanksgiving. Switching between tool tabs was slow, it wasn't clear that changes save automatically or whether to drag or tap to add things, the pop-up sheet felt too big and couldn't be dragged down, and they wanted more fonts and bigger text. [Notes and photo](notes/leandra/2026-11-24/leandra-phone-testing.md#1126--5-people-at-thanksgiving)
+- **Leandra:** user tested the new phone layout on [Keepsake](https://keepsake2.netlify.app/) with 7 people on their phones: 2 on 11/24 and 5 at Thanksgiving (11/26). They found it self-explanatory, jumped straight into adding stickers and photos, and loved seeing things move live and who's on the page. What to fix: zooming felt a little choppy, switching between tool tabs was slow, it wasn't clear that changes save automatically or whether to drag or tap to add things, the pop-up sheet felt too big and couldn't be dragged down, and they wanted more fonts and bigger text. [Notes and photos](notes/leandra/2026-11-24/leandra-phone-testing.md)
 
 ## Nov 27
 
